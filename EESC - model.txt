@@ -1,0 +1,80 @@
+User:
+	FirstName	string <25
+	LastName	string <25
+	Username	string 5-25
+	Password	string 5-25
+	Email		email	
+	DOB			date
+	Role 		(FK)	
+	Course 		(FK)
+	Programme 	(FK)
+
+Role:	
+	Name 		string <25
+	Permission	(FK)
+	
+Permission:
+	Name		string <25
+	Role		(FK)
+	
+Programme:
+	Name		string <40
+	Desc		string <2k
+	Tag			(FK)
+	User		(FK)
+	Course		(FK)
+	Rating		(FK)
+	
+Course:
+	Name		string <40
+	Desc		string <2k
+	BeginDate	date
+	Duration	integer
+	Author		string <40
+	Tag			(FK)
+	User		(FK)
+	Rating		(FK)
+	
+Section:
+	Name		string <40
+	Desc		string <2k
+	BeginDate	date
+	Index		integer
+	NextSec		(FK)
+	Course		(FK)
+	
+Block:
+	Generic:
+		Name		string <40
+		Index		integer
+		NextBlock	(FK)
+		Section		(FK)
+		Assessment	bool
+		// POGLEDATI!! Klasa da pravi dopune
+		// INHERITANCE!
+	HTML:
+		content		string <128k
+	Video:
+		youtube		string <2k
+	Image:
+		source		django-storage
+	Quiz:
+		questions	string <128k
+
+Progress:
+	User 	(FK)
+	Block	(FK)
+	Value	string <2k
+	
+Tag:
+	Name	string <25
+	Course	(FK)
+	
+Rating: 
+	Score		int 1-5
+	User		(FK)
+	Course		(FK)
+		// Okinuti signal na change da recalculate
+		// i poslati signal na handler u Course model
+		
+// Course-Enrolment custom tablica ???
