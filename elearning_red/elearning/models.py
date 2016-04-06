@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 
 from django.contrib.auth.models import models
-
+from django.contrib.auth.models import User
 
 
 
@@ -18,14 +18,9 @@ class Role(models.Model):
  
 
    
-class User(models.Model):
-    username = models.CharField(max_length=25, blank=False, null=False)
-    password = models.CharField(max_length=25, blank=False, null=False)
-    email = models.EmailField(blank=False, null=False)
-    firstName = models.CharField(max_length=25)
-    lastName = models.CharField(max_length=25)
+class CustomUser(User):
     dob = models.DateField()
-    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True)
     pass
 
 class Tag(models.Model):
@@ -39,7 +34,7 @@ class Programme(models.Model):
     desc = models.TextField()
     avgRating = models.DecimalField(max_digits=5,decimal_places=2)
     tags = models.ManyToManyField(Tag)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(CustomUser)
     pass
 
   
@@ -50,7 +45,7 @@ class Course(models.Model):
     duration = models.PositiveSmallIntegerField()
     author = models.TextField()
     tags = models.ManyToManyField(Tag)
-    users = models.ManyToManyField(User)
+    users = models.ManyToManyField(CustomUser)
     programmes = models.ManyToManyField(Programme)
 
 
@@ -94,7 +89,7 @@ class QuizBlock(Block):
 
 class Progress(models.Model):
     serialAnswers = models.TextField(blank=False, null=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     block = models.ForeignKey(Block, on_delete=models.CASCADE)
 
 
@@ -102,7 +97,7 @@ class Progress(models.Model):
 
 class Rating(models.Model):
     value = models.PositiveSmallIntegerField(null=False, blank=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     
     
