@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{%extends '_layouts/base.html' %}
+<html>
+<head>
+<title>{% block title %}templates/status.html{% endblock %}</title>
+</head>
+<body>
+
+<div id="content">
+	{% block content %}
+		Welcome!
+	is_authenticated : {{ is_auth}}
+
+	{% if user.is_authenticated %} 
+		<p>Welcome, {{user.surname}}. </p>
+
+	{% else %}
+		<p>Log in</p>
+	{% endif %}	
+	{% endblock %}
+</div>
+
+</body>
+</html>	
