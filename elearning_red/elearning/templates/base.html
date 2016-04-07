@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<!--<head>
+	<link rel="stylesheet" href="style.css" />
+	dodat stil u html?
+</head>
+-->
+
+<body>
+<div id ="menu">
+	{% block menu %}
+		<ul>
+			<li><a href="/mainmenu">Home</a></li>
+
+			{% if user.is_authenticated %}
+				<li><a href="/account/logout">Logout</a></li>
+			{% else %}
+				<li><a href="/accounts/login">Login</a></li>
+			{% endif %}
+		</ul>
+	{% enblock %}
+</div>
+
+<div id="contect">
+	{% block contect %}{% endblock %}
+</div>
+</body>
+</html>						
+
