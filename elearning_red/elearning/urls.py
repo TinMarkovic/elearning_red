@@ -5,5 +5,6 @@ from . import views
 app_name = 'elearning'
 urlpatterns = [
     url(r'^registration/', views.registration, name='registration'),
-    url(r'^courses/', views.courses, name='courses'),
+    url(r"^courses/edit/(?P<course_id>[0-9]+)", views.course_modify, name="editCourse"),
+    url(r"^courses/new", views.course_modify, name="newCourse"),
 ]

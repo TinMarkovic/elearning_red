@@ -7,7 +7,7 @@ class UserForm(ModelForm):
         model = CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'password', 'dob')
         
-class CreateCourseForm(ModelForm):
+class CourseForm(ModelForm):
     class Meta:
         model = Course
         fields = ('name', 'desc', 'beginDate', 'duration', 'author', 'tags')
