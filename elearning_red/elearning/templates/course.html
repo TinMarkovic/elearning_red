@@ -2,19 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create Student</title>
+    <title>Courses</title>
 
 </head>
 <body>
 <form method="post" action="">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Create new user account" />
+    <input type="submit" value="Create a course" />
 </form>
-    
-
-</form>
-
 </body>
 </html>
 

@@ -18,5 +18,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^registration/', include('elearning.urls')),
+    url(r'^', include('elearning.urls')),
 ]
