@@ -3,20 +3,18 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import login
 from django.shortcuts import get_object_or_404
-from datetime import datetime
 
-from forms import UserForm, CourseForm
-from .models import CustomUser, Course
-from .models import Role
+import models as M
+import forms as F
 
 def registration(request):
     if request.method == "POST":
-        form = UserForm(request.POST)
+        form = F.UserForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('')
     else:
-        form = UserForm() 
+        form = F.UserForm() 
 
     return render(request, 'registration.html', {'form': form}) 
 
@@ -24,12 +22,12 @@ def registration(request):
 
 def course_modify(request, course_id=None):
     if course_id is not None:
-        course = get_object_or_404(Course, id=int(course_id))
+        course = get_object_or_404(M.Course, id=int(course_id))
     else:
         course = None
         
     if request.method == "POST":
-        form = CourseForm(request.POST, instance=course)
+        form = F.CourseForm(request.POST, instance=course)
         
         if form.is_valid():
             # TODO: Add the validated professor to the users - for editing
@@ -38,14 +36,14 @@ def course_modify(request, course_id=None):
         return HttpResponseRedirect('') 
         
     else: 
-        form = CourseForm(instance=course) 
+        form = F.CourseForm(instance=course) 
         
     return render(request, 'course.html', {'form': form}) 
 
 def course_show(request, course_id=None):
     if course_id is not None:
-        course = get_object_or_404(Course, id=int(course_id))
+        course = get_object_or_404(M.Course, id=int(course_id))
     else:
-        query_results = Course.objects.all()
+        query_results = M.Course.objects.all()
         return render(request, 'courses.html', {"query_results" : query_results})
     return None; # TODO: Implement display for single course
