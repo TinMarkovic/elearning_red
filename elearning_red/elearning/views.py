@@ -18,8 +18,6 @@ def registration(request):
 
     return render(request, 'registration.html', {'form': form}) 
 
-
-
 def course_modify(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -45,5 +43,13 @@ def course_show(request, course_id=None):
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
         query_results = M.Course.objects.all()
+        for item in query_results:
+            item.desc = (item.desc[:47] + '...') if len(item.desc) > 50 else item.desc
+            item.author = (item.author[:47] + '...') if len(item.author) > 50 else item.author
+            item.tagList = ""
+            for tag in item.tags.all():
+                item.tagList += tag.name + ", "
+            
         return render(request, 'courses.html', {"query_results" : query_results})
+    
     return None; # TODO: Implement display for single course

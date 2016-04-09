@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Courses</title>
-
 </head>
 <body>
+{% load bootstrap3 %}
 <form method="post" action="">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% boostrap_form form %}
     <input type="submit" value="Create a course" />
 </form>
 </body>
