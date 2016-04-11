@@ -20,7 +20,7 @@ class CourseForm(ModelForm):
 class SectionForm(ModelForm):
     class Meta:
         model = M.Course
-        fields = ('name', 'desc', 'beginDate')
+        fields = ('name', 'desc', 'beginDate', 'duration')
         widgets = {
             'beginDate': widgets.SelectDateWidget(),
         }

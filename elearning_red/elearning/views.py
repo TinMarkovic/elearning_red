@@ -58,7 +58,11 @@ def course_show(request, course_id=None):
 def course_manage(request, course_id):
     # Management screen for the course
     course = get_object_or_404(M.Course, id=int(course_id))
-    return render(request, 'courseMng.html')
+    query_results = M.Section.objects.filter(course__id=course_id)
+    if query_results is not None:
+        return render(request, 'courseMng.html', {"query_results" : query_results})
+    else:
+        return render(request, 'courseMng.html')
 
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
@@ -68,11 +72,15 @@ def section_modify(request, course_id, section_id=None):
         section = None
         
     if request.method == "POST":
-        form = F.SectionForm(request.POST, instance=section)
+        data = {
+        'course': course,
+        }
+        form = F.SectionForm(request.POST, data, instance=section)
         
         if form.is_valid():
             # TODO: Add the validated professor to the users - for editing
             form.save()
+            print "Dodana sekcija!"
         
         return HttpResponseRedirect('') 
         
