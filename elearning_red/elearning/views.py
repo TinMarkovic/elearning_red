@@ -53,3 +53,8 @@ def course_show(request, course_id=None):
         return render(request, 'courses.html', {"query_results" : query_results})
     
     return None; # TODO: Implement display for single course
+
+
+def course_manage(request, course_id=None):
+    # Management screen for the course
+    
