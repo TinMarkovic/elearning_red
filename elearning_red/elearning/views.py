@@ -55,6 +55,29 @@ def course_show(request, course_id=None):
     return None; # TODO: Implement display for single course
 
 
-def course_manage(request, course_id=None):
+def course_manage(request, course_id):
     # Management screen for the course
-    
+    course = get_object_or_404(M.Course, id=int(course_id))
+    return render(request, 'courseMng.html')
+
+def section_modify(request, course_id, section_id=None):
+    course = get_object_or_404(M.Course, id=int(course_id))
+    if section_id is not None:
+        section = get_object_or_404(M.Section, id=int(section_id))
+    else:
+        section = None
+        
+    if request.method == "POST":
+        form = F.SectionForm(request.POST, instance=section)
+        
+        if form.is_valid():
+            # TODO: Add the validated professor to the users - for editing
+            form.save()
+        
+        return HttpResponseRedirect('') 
+        
+    else: 
+        form = F.SectionForm(instance=section) 
+    # TODO: ADD a hidden input field with the section ID or something
+        
+    return render(request, 'sectionEdit.html', {'form': form}) 

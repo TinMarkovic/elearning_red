@@ -16,3 +16,12 @@ class CourseForm(ModelForm):
         widgets = {
             'beginDate': widgets.SelectDateWidget(),
         }
+        
+class SectionForm(ModelForm):
+    class Meta:
+        model = M.Course
+        fields = ('name', 'desc', 'beginDate')
+        widgets = {
+            'beginDate': widgets.SelectDateWidget(),
+        }
+        
