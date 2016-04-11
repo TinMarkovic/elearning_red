@@ -13,14 +13,50 @@ def registration(request):
     if request.method == "POST":
         form = UserForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('')
+            # bilo je, (mozda modificirati koristeci): form.save()
+            new_student = CustomUser.objects.create_user(**form.cleaned_data)
+            r = Role.objects.get(name="student")
+            new_student.role = r
+            new_student.save()
+            new_student = 'django.contrib.auth.backends.ModelBackend'
+            login(request, new_student)
+        # login(new_student)            
+        return HttpResponseRedirect('')
     else:
         form = UserForm() 
 
     return render(request, 'registration.html', {'form': form}) 
 
+def user_login(request):
+    if request.method == "POST":
+        username= request.POST ['username']
+        password = request.POST ['password']
+        user = authenticate(username=username, password=password)
 
+        return HttpResponseRedirect('')
+    else:
+        form = LoginForm()   
+
+    return render(request, 'login.html', {'form': form})
+
+
+@login_required
+def status(request):
+    
+    return render(request, 'status.html',
+        {'is_auth':request.user.is_authenticated()},
+        context_instance=RequestContext(request))
+
+@login_required
+def mainmenu(request):
+    return render(request, 'mainmenu.html',{},
+        context_instance=RequestContext(request))
+
+
+@permission_required('elearning.can_open')            #ili @user passes test?
+def studentview(request):                             #studentview.html jos ne postoji
+    return render(request, 'studentview.html', {},
+        context_instance=RequestContext(request))
 
 def course_modify(request, course_id=None):
     if course_id is not None:
@@ -49,3 +85,4 @@ def course_show(request, course_id=None):
         query_results = Course.objects.all()
         return render(request, 'courses.html', {"query_results" : query_results})
     return None; # TODO: Implement display for single course
+
