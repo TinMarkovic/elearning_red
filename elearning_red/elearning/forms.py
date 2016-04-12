@@ -9,7 +9,7 @@ class UserForm(ModelForm):
    	widgets = {
             'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
         }
-	
+
 class CourseForm(ModelForm):
     class Meta:
         model = M.Course
