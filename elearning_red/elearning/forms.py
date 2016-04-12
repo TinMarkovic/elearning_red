@@ -1,19 +1,15 @@
 from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField
 import models as M
+from datetime import datetime
 
 class UserForm(ModelForm):
     class Meta:
         model = M.CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'password', 'dob','role')
    	widgets = {
-            'dob': widgets.SelectDateWidget(), 'password': PasswordInput()
+            'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
         }
-	"""
-        def __init__(self, user):
-	    if not user.role.name == 'admin':
-		del self.field['role']   
-	"""
-
+	
 class CourseForm(ModelForm):
     class Meta:
         model = M.Course
@@ -21,6 +17,7 @@ class CourseForm(ModelForm):
         widgets = {
             'beginDate': widgets.SelectDateWidget()
         }
+
 class ProgrammeForm(ModelForm):
     class Meta:
         model = M.Programme

@@ -99,22 +99,6 @@ def programme_modify(request, programme_id=None):
         
     return render(request, 'registration.html', {'form': form}) 
 
-def user_login(request):
-    if request.method == "POST":
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = request.POST['username']
-            password = request.POST['password']
-    	    user = authenticate(username=username, password=password)       
-            if user is not None:
-		if user.is_active:
-		    login(request, user)
-                    return HttpResponseRedirect('')
-	    #TODO: else: username i password se ne poklapaju
-    else:
-	form = LoginForm()		
-    return render(request, 'index.html', {'form': form}) 
-
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/login')
