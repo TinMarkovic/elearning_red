@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+</head>
+<body>
+<ol>
+{% if query_results %}
+{% for item in query_results %}
+    <li>{{item.name}} ~ {{item.desc}}</li>
+{% endfor %}
+{% else %}
+<li>Add a new section!</li>
+{% endif %}
+<li>
+Test: {{ request.path }}
+</li><li>
+<form action="{{ request.path }}/section/new" method="get">
+    <input type="submit" value="Add a new section" id="getNewSection" />
+</form>
+</li>
+</ol>
+</body>
+</html>
+
