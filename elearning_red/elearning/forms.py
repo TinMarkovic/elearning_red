@@ -8,11 +8,6 @@ class UserForm(ModelForm):
    	widgets = {
             'dob': widgets.SelectDateWidget(), 'password': PasswordInput()
         }
-	"""
-        def __init__(self, user):
-	    if not user.role.name == 'admin':
-		del self.field['role']   
-	"""
 
 class CourseForm(ModelForm):
     class Meta:
