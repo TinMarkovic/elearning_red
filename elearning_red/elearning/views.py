@@ -72,13 +72,11 @@ def section_modify(request, course_id, section_id=None):
         section = None
         
     if request.method == "POST":
-        data = {
-        'course': course,
-        }
-        form = F.SectionForm(request.POST, data, instance=section)
+        form = F.SectionForm(request.POST, instance=section)
         
         if form.is_valid():
-            # TODO: Add the validated professor to the users - for editing
+            form.save(commit=False)
+            form.course = course
             form.save()
             print "Dodana sekcija!"
         

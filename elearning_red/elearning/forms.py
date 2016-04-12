@@ -19,8 +19,9 @@ class CourseForm(ModelForm):
         
 class SectionForm(ModelForm):
     class Meta:
-        model = M.Course
-        fields = ('name', 'desc', 'beginDate', 'duration')
+        model = M.Section
+        fields = ('name', 'desc', 'beginDate', 'index')
+        exclude = ('course', )
         widgets = {
             'beginDate': widgets.SelectDateWidget(),
         }
