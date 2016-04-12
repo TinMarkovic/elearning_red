@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 
-from forms import UserForm, CourseForm
+
+from forms import UserForm, CourseForm, LoginForm
 from .models import CustomUser, Course
 from .models import Role
 
@@ -37,26 +38,9 @@ def user_login(request):
     else:
         form = LoginForm()   
 
-    return render(request, 'login.html', {'form': form})
+    return render(request, 'index.html', {'form': form})
 
 
-@login_required
-def status(request):
-    
-    return render(request, 'status.html',
-        {'is_auth':request.user.is_authenticated()},
-        context_instance=RequestContext(request))
-
-@login_required
-def mainmenu(request):
-    return render(request, 'mainmenu.html',{},
-        context_instance=RequestContext(request))
-
-
-@permission_required('elearning.can_open')            #ili @user passes test?
-def studentview(request):                             #studentview.html jos ne postoji
-    return render(request, 'studentview.html', {},
-        context_instance=RequestContext(request))
 
 def course_modify(request, course_id=None):
     if course_id is not None:
