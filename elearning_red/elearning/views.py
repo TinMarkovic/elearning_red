@@ -29,11 +29,14 @@ def registration(request):
 
 def user_login(request):
     if request.method == "POST":
-        username= request.POST ['username']
+        form = LoginForm(request.POST)
+	username= request.POST ['username']
         password = request.POST ['password']
         user = authenticate(username=username, password=password)
-
-        return HttpResponseRedirect('')
+	if user is not None:
+	    if user.is_active:
+	    	login(request, user)
+            	return HttpResponseRedirect('')
     else:
         form = LoginForm()   
 
@@ -63,8 +66,8 @@ def course_modify(request, course_id=None):
 def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(Course, id=int(course_id))
-	query_results = Section.objects.filter(course_id=course.id)
-        return render(request, 'courses.html', {"query_results" : query_resluts})
+	sections = Section.objects.filter(course_id=course.id)
+        return render(request, 'courses_view.html', {"sections" : sections})
 
     elif request.user.is_authenticated():
         courses_inscribed = Course.objects.filter(users=request.user.id)
