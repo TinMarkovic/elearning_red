@@ -16,5 +16,5 @@ urlpatterns = [
     url(r"^programme/new", views.programme_modify, name="newProgramme"),
     url(r'^programme/edit/(?P<prorgamme_id>[0-9]+)', views.programme_modify, name="editProgramme"),
     url(r'^login/', views.user_login, name='login'),
-    url(r'^logout/', views.user_logout, name='logout'),
+    url(r'^logout/', views.user_logout, name='logout'),  
 ]

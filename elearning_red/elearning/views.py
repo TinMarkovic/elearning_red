@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from datetime import datetime
 
 from forms import UserForm, CourseForm, ProgrammeForm, LoginForm
+
 from .models import CustomUser, Course
 from .models import Role, Programme, Section
 
@@ -19,10 +20,25 @@ def registration(request):
 	    login(request, new_student)
             
             return HttpResponseRedirect('')
+
     else:
         form = UserForm() 
 
     return render(request, 'registration.html', {'form': form}) 
+
+
+def user_login(request):
+    if request.method == "POST":
+        username= request.POST ['username']
+        password = request.POST ['password']
+        user = authenticate(username=username, password=password)
+
+        return HttpResponseRedirect('')
+    else:
+        form = LoginForm()   
+
+    return render(request, 'index.html', {'form': form})
+
 
 def course_modify(request, course_id=None):
     if course_id is not None:
@@ -57,10 +73,7 @@ def course_show(request, course_id=None):
     else:    	
 	query_results = Course.objects.all()
         return render(request, 'courses.html', {"query_results" : query_results})
-    
-
-
-
+ 
 def user_modify(request, customUser_id=None):
     if customUser_id is not None:
         customUser = get_object_or_404(CustomUser, id=int(customUser_id))
@@ -102,3 +115,4 @@ def programme_modify(request, programme_id=None):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/login')
+
