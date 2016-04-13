@@ -115,6 +115,16 @@ def programme_modify(request, programme_id=None):
         
     return render(request, 'registration.html', {'form': form}) 
 
+def programmes_show(request, programme_id=None):
+    if programme_id is not None:
+	programme = get_object_or_404(Programme, id=int(programme_id))
+	query_results = Course.objects.filter(programmes=programme)
+	return render(request, 'courses.html', {'query_results' : query_results})
+    else:
+    	programmes = Programme.objects.all()
+	return render(request, 'programmes.html', {'programmes' : programmes})
+
+
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/login')
