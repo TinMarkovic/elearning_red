@@ -16,7 +16,7 @@ class CourseForm(ModelForm):
         widgets = {
             'beginDate': widgets.SelectDateWidget(),
         }
-        
+
 class SectionForm(ModelForm):
     class Meta:
         model = M.Section
@@ -26,3 +26,7 @@ class SectionForm(ModelForm):
             'beginDate': widgets.SelectDateWidget(),
         }
         
+class LoginForm(ModelForm):
+    class Meta:
+        model = M.CustomUser
+        fields = ('username', 'password')

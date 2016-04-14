@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.contrib.auth import login
+from django.contrib.auth import login, authenticate
 from django.shortcuts import get_object_or_404
 
 import models as M
@@ -11,12 +11,31 @@ def registration(request):
     if request.method == "POST":
         form = F.UserForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('')
+            # bilo je, (mozda modificirati koristeci): form.save()
+            new_student = M.CustomUser.objects.create_user(**form.cleaned_data)
+            r = M.Role.objects.get(name="student")
+            new_student.role = r
+            new_student.save()
+            new_student = 'django.contrib.auth.backends.ModelBackend'
+            login(request, new_student)
+        # login(new_student)            
+        return HttpResponseRedirect('')
     else:
         form = F.UserForm() 
 
     return render(request, 'registration.html', {'form': form}) 
+
+def user_login(request):
+    if request.method == "POST":
+        username= request.POST ['username']
+        password = request.POST ['password']
+        user = authenticate(username=username, password=password)
+
+        return HttpResponseRedirect('')
+    else:
+        form = F.LoginForm()   
+
+    return render(request, 'index.html', {'form': form})
 
 def course_modify(request, course_id=None):
     if course_id is not None:
@@ -54,7 +73,6 @@ def course_show(request, course_id=None):
     
     return None; # TODO: Implement display for single course
 
-
 def course_manage(request, course_id):
     # Management screen for the course
     course = get_object_or_404(M.Course, id=int(course_id))
@@ -86,4 +104,4 @@ def section_modify(request, course_id, section_id=None):
         form = F.SectionForm(instance=section) 
     # TODO: ADD a hidden input field with the section ID or something
         
-    return render(request, 'sectionEdit.html', {'form': form}) 
+    return render(request, 'sectionEdit.html', {'form': form})
