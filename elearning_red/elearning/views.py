@@ -1,45 +1,46 @@
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
 from datetime import datetime
 
+from forms import UserForm, CourseForm, ProgrammeForm, LoginForm
 
-from forms import UserForm, CourseForm, LoginForm
 from .models import CustomUser, Course
-from .models import Role
+from .models import Role, Programme, Section
 
 def registration(request):
     if request.method == "POST":
         form = UserForm(request.POST)
-        if form.is_valid():
-            # bilo je, (mozda modificirati koristeci): form.save()
+        #TODO:check if admin or student
+	if form.is_valid():
             new_student = CustomUser.objects.create_user(**form.cleaned_data)
-            r = Role.objects.get(name="student")
-            new_student.role = r
-            new_student.save()
-            new_student = 'django.contrib.auth.backends.ModelBackend'
-            login(request, new_student)
-        # login(new_student)            
-        return HttpResponseRedirect('')
+	    new_student.backend = 'django.contrib.auth.backends.ModelBackend'	    
+	    login(request, new_student)
+            
+            return HttpResponseRedirect('')
+
     else:
         form = UserForm() 
 
     return render(request, 'registration.html', {'form': form}) 
 
+
 def user_login(request):
     if request.method == "POST":
-        username= request.POST ['username']
+        form = LoginForm(request.POST)
+	username= request.POST ['username']
         password = request.POST ['password']
         user = authenticate(username=username, password=password)
-
-        return HttpResponseRedirect('')
+	if user is not None:
+	    if user.is_active:
+	    	login(request, user)
+            	return HttpResponseRedirect('')
     else:
         form = LoginForm()   
 
     return render(request, 'index.html', {'form': form})
-
 
 
 def course_modify(request, course_id=None):
@@ -65,8 +66,66 @@ def course_modify(request, course_id=None):
 def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(Course, id=int(course_id))
-    else:
-        query_results = Course.objects.all()
+	sections = Section.objects.filter(course_id=course.id)
+        return render(request, 'courses_view.html', {"sections" : sections})
+
+    elif request.user.is_authenticated():
+        courses_inscribed = Course.objects.filter(users=request.user.id)
+	courses_uninscribed = Course.objects.exclude(users=request.user.id)
+        return render(request, 'courses_menu.html', {"courses_inscribed" : courses_inscribed, "courses_uninscribed" : courses_uninscribed})
+    else:    	
+	query_results = Course.objects.all()
         return render(request, 'courses.html', {"query_results" : query_results})
-    return None; # TODO: Implement display for single course
+ 
+def user_modify(request, customUser_id=None):
+    if customUser_id is not None:
+        customUser = get_object_or_404(CustomUser, id=int(customUser_id))
+    else:
+        customUser = None
+        
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        
+        if form.is_valid():
+            form.save()
+        
+        return HttpResponseRedirect('') 
+        
+    else: 
+        form = UserForm(instance=customUser) 
+        
+    return render(request, 'registration.html', {'form': form}) 
+
+def programme_modify(request, programme_id=None):
+    if programme_id is not None:
+        programme = get_object_or_404(Programme, id=int(programme_id))
+    else:
+        programme = None
+        
+    if request.method == "POST":
+        form = ProgrammeForm(request.POST, instance=programme)
+        
+        if form.is_valid():
+            form.save()
+        
+        return HttpResponseRedirect('') 
+        
+    else: 
+        form = ProgrammeForm(instance=programme) 
+        
+    return render(request, 'registration.html', {'form': form}) 
+
+def programmes_show(request, programme_id=None):
+    if programme_id is not None:
+	programme = get_object_or_404(Programme, id=int(programme_id))
+	query_results = Course.objects.filter(programmes=programme)
+	return render(request, 'courses.html', {'query_results' : query_results})
+    else:
+    	programmes = Programme.objects.all()
+	return render(request, 'programmes.html', {'programmes' : programmes})
+
+
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/login')
 
