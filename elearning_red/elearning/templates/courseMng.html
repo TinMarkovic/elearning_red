@@ -5,17 +5,18 @@
     <title>Course</title>
 </head>
 <body>
+<h1> Course Management </h1>
+<a href="/courses/">Back to course list</a>
+<h2> Sections: </h2>
 <ol>
 {% if query_results %}
 {% for item in query_results %}
-    <li>{{item.name}} ~ {{item.desc}}</li>
+    <li>{{item.name}} ~ {{item.desc}} - <a href="{{ request.path }}/section/{{item.id}}">Manage!</a></li>
 {% endfor %}
 {% else %}
 <li>Add a new section!</li>
 {% endif %}
 <li>
-Test: {{ request.path }}
-</li><li>
 <form action="{{ request.path }}/section/new" method="get">
     <input type="submit" value="Add a new section" id="getNewSection" />
 </form>

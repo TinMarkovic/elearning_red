@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+</head>
+<body>
+<h1> Section Management </h1>
+<a href="/courses/manage/{{ courseid }}">Back to section list</a>
+<h2> Blocks: </h2>
+<ol>
+{% if query_results %}
+{% for item in query_results %}
+    <li>{{item.name}} ~ <a href="{{ request.path }}/block/{{item.id}}"> Edit</a></li>
+{% endfor %}
+{% else %}
+<li>Add a new block!</li>
+{% endif %}
+<li>
+<form action="{{ request.path }}/block/new" method="get">
+    <input type="submit" value="Add a new block" id="getNewBlock" />
+</form>
+</li>
+</ol>
+</body>
+</html>

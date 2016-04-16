@@ -1,4 +1,4 @@
-from django.forms import ModelForm, widgets
+from django.forms import ModelForm, widgets, Form, CharField, Textarea, IntegerField
 import models as M
 
 class UserForm(ModelForm):
@@ -20,12 +20,31 @@ class CourseForm(ModelForm):
 class SectionForm(ModelForm):
     class Meta:
         model = M.Section
-        fields = ('name', 'desc', 'beginDate', 'index')
-        exclude = ('course', )
+        fields = ('name', 'desc', 'beginDate', 'index', 'course', )
         widgets = {
             'beginDate': widgets.SelectDateWidget(),
+            'course': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
         }
         
+class HTMLBlockForm(ModelForm):
+    class Meta:
+        model = M.HTMLBlock
+        fields = ('name', 'index', 'sections', 'assessment', 'content')
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+    
+class VideoBlockForm(ModelForm):
+    pass
+    
+class ImageBlockForm(ModelForm):
+    pass
+    
+class QuizBlockForm(ModelForm):
+    pass
+
 class LoginForm(ModelForm):
     class Meta:
         model = M.CustomUser

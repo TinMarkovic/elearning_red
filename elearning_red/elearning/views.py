@@ -88,20 +88,66 @@ def section_modify(request, course_id, section_id=None):
         section = get_object_or_404(M.Section, id=int(section_id))
     else:
         section = None
-        
+    initialDict = {
+                   'course': course_id,
+                   'index': M.Section.objects.filter(course__id=course_id).count() 
+                   }
+    
     if request.method == "POST":
-        form = F.SectionForm(request.POST, instance=section)
+        form = F.SectionForm(request.POST, initial=initialDict) #  instance=section,
         
         if form.is_valid():
-            form.save(commit=False)
-            form.course = course
             form.save()
-            print "Dodana sekcija!"
-        
-        return HttpResponseRedirect('') 
+        return HttpResponseRedirect('/courses/manage/'+course_id) 
         
     else: 
-        form = F.SectionForm(instance=section) 
-    # TODO: ADD a hidden input field with the section ID or something
+        form = F.SectionForm(instance=section, initial=initialDict) 
         
     return render(request, 'sectionEdit.html', {'form': form})
+
+def section_manage(request,course_id, section_id):
+    section = get_object_or_404(M.Section, id=int(section_id))
+    query_results = M.Block.objects.filter(sections__id=section_id)
+    if query_results is not None:
+        return render(request, 'sectionMng.html', {"query_results" : query_results, 
+                                                   "courseid" : course_id})
+    else:
+        return render(request, 'sectionMng.html', {"courseid" : course_id})
+    
+def block_modify(request, course_id, section_id, block_type="html", block_id=None):
+    section = get_object_or_404(M.Section, id=int(section_id))
+    if block_id is not None:
+        block = get_object_or_404(M.Block, id=int(block_id))
+        if hasattr(block, 'htmlblock'):
+            block = block.htmlblock
+        if hasattr(block, 'videoblock'):
+            block = block.videoblock
+        if hasattr(block, 'quizblock'):
+            block = block.quizblock
+        if hasattr(block, 'imageblock'):
+            block = block.imageblock
+    else:
+        block = None
+    
+    initialDict = {
+                   'sections': section_id,
+                   'index': M.Block.objects.filter(sections__id=section_id).count() 
+                    }
+    typeForm = {
+                'html': F.HTMLBlockForm,
+                'video': F.VideoBlockForm,
+                'image': F.ImageBlockForm,
+                'quiz': F.QuizBlockForm,
+                }
+    
+    if request.method == "POST":
+        form = typeForm[block_type](request.POST, initial=initialDict)
+        
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect('/courses/manage/'+course_id+"/section/"+section_id) 
+    
+    else: 
+        form = typeForm[block_type](instance=block, initial=initialDict) 
+        
+    return render(request, 'blockEdit.html', {'form': form})
