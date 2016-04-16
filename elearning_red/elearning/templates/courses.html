@@ -17,6 +17,7 @@
         <th>Author:</th>
         <th>Tags:</th>
         <th>Details:</th>
+        <th>Manage:</th>
     </tr>
     {% for item in query_results %}
     <tr>
@@ -26,6 +27,7 @@
         <td>{{ item.desc }} </td>
         <td>{{ item.author }}</td>
         <td>{{ item.tagList }}</td>
+        <td><a href=/courses/info/{{ item.id }}>Details</a> </td>
         <td> <a href="manage/{{ item.id }}">Manage</a> </td>
     </tr>
     {% endfor %}

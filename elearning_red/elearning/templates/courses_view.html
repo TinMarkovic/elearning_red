@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses Menu</title>
+
+</head>
+<body>
+    {% csrf_token %}
+    <h1> Sections: </h1>
+    <table>
+    <tr>
+        <th>Name:</th>
+        <th>Begins:</th>
+        <th>Duration(days):</th>
+        <th>More Information:</th>
+    </tr>
+    {% for item in sections %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.beginDate }}</td>
+        <td>{{ item.duration }}</td>
+	<td><a href=/sections/{{ item.id }}>Enter</a></td>
+    </tr>
+
+    {% endfor %}
+
+</body>
+</html>
+
