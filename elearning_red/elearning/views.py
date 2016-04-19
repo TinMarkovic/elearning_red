@@ -125,9 +125,9 @@ def course_manage(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'courseMng.html', {"query_results" : query_results})
+        return render(request, 'courseMng.html', {"query_results" : query_results, "course_id" : course_id})
     else:
-        return render(request, 'courseMng.html')
+        return render(request, 'courseMng.html', {"course_id" : course_id})
 
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
@@ -135,19 +135,17 @@ def section_modify(request, course_id, section_id=None):
         section = get_object_or_404(M.Section, id=int(section_id))
     else:
         section = None
-    initialDict = {
-                   'course': course_id,
-                   'index': M.Section.objects.filter(course__id=course_id).count() 
-                   }
-    
+ 
     if request.method == "POST":
-        form = F.SectionForm(request.POST, initial=initialDict) #  instance=section,
-        
+        form = F.SectionForm(request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect('/courses/manage/'+course_id) 
-        
     else: 
+        initialDict = {
+               'course': course_id,
+               'index': M.Section.objects.filter(course__id=course_id).count() 
+               }
         form = F.SectionForm(instance=section, initial=initialDict) 
         
     return render(request, 'sectionEdit.html', {'form': form})
@@ -157,12 +155,15 @@ def section_manage(request,course_id, section_id):
     query_results = M.Block.objects.filter(sections__id=section_id)
     if query_results is not None:
         return render(request, 'sectionMng.html', {"query_results" : query_results, 
-                                                   "courseid" : course_id})
+                                                   "course_id" : course_id,
+                                                   "section_id" : section_id,})
     else:
-        return render(request, 'sectionMng.html', {"courseid" : course_id})
+        return render(request, 'sectionMng.html', {"course_id" : course_id,
+                                                   "section_id" : section_id,}) #temporary
     
 def block_modify(request, course_id, section_id, block_type="html", block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
+    
     if block_id is not None:
         block = get_object_or_404(M.Block, id=int(block_id))
         if hasattr(block, 'htmlblock'):
@@ -175,11 +176,7 @@ def block_modify(request, course_id, section_id, block_type="html", block_id=Non
             block = block.imageblock
     else:
         block = None
-    
-    initialDict = {
-                   'sections': section_id,
-                   'index': M.Block.objects.filter(sections__id=section_id).count() 
-                    }
+
     typeForm = {
                 'html': F.HTMLBlockForm,
                 'video': F.VideoBlockForm,
@@ -188,13 +185,15 @@ def block_modify(request, course_id, section_id, block_type="html", block_id=Non
                 }
     
     if request.method == "POST":
-        form = typeForm[block_type](request.POST, initial=initialDict)
-        
+        form = typeForm[block_type](request.POST)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect('/courses/manage/'+course_id+"/section/"+section_id) 
-    
     else: 
+        initialDict = {
+               'sections': section_id,
+               'index': M.Block.objects.filter(sections__id=section_id).count() 
+                }
         form = typeForm[block_type](instance=block, initial=initialDict) 
         
     return render(request, 'blockEdit.html', {'form': form})

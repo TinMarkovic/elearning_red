@@ -6,18 +6,18 @@
 </head>
 <body>
 <h1> Course Management </h1>
-<a href="/courses/">Back to course list</a>
+<a href="{% url "elearning:listCourse" %}">Back to course list</a>
 <h2> Sections: </h2>
 <ol>
 {% if query_results %}
 {% for item in query_results %}
-    <li>{{item.name}} ~ {{item.desc}} - <a href="{{ request.path }}/section/{{item.id}}">Manage!</a></li>
+    <li>{{item.name}} ~ {{item.desc}} - <a href="{% url "elearning:manageSection" course_id item.id %}">Manage!</a></li>
 {% endfor %}
 {% else %}
 <li>Add a new section!</li>
 {% endif %}
 <li>
-<form action="{{ request.path }}/section/new" method="get">
+<form action="{% url "elearning:newSection" course_id %}" method="get">
     <input type="submit" value="Add a new section" id="getNewSection" />
 </form>
 </li>

@@ -29,7 +29,7 @@ class SectionForm(ModelForm):
         }
         
 class HTMLBlockForm(ModelForm): 
-    # Testna forma - bit će prebrisana
+    # Testna forma - bit ce prebrisana
     class Meta:
         model = M.HTMLBlock
         fields = ('name', 'index', 'sections', 'assessment', 'content')
