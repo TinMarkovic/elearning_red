@@ -18,6 +18,38 @@ class CourseForm(ModelForm):
             'beginDate': widgets.SelectDateWidget()
         }
 
+class SectionForm(ModelForm):
+    class Meta:
+        model = M.Section
+        fields = ('name', 'desc', 'beginDate', 'index', 'course', )
+        widgets = {
+            'beginDate': widgets.SelectDateWidget(),
+            'course': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+        
+class HTMLBlockForm(ModelForm): 
+    # Testna forma - bit ce prebrisana
+    class Meta:
+        model = M.HTMLBlock
+        fields = ('name', 'index', 'sections', 'assessment', 'content')
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+    
+class VideoBlockForm(ModelForm):
+    # TODO: Implement
+    pass
+    
+class ImageBlockForm(ModelForm):
+    # TODO: Implement
+    pass
+    
+class QuizBlockForm(ModelForm):
+    # TODO: Implement
+    pass
+
 class ProgrammeForm(ModelForm):
     class Meta:
         model = M.Programme
@@ -26,4 +58,3 @@ class ProgrammeForm(ModelForm):
 class LoginForm(Form):
     username = CharField()
     password = CharField(widget=PasswordInput())
- 
