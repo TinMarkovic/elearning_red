@@ -204,13 +204,13 @@ def homepage(request):
 
 def students (request, course_id):
     if course_id is not None:
-        course = get_object_or_404(Course, id=int(course_id))
+        course = get_object_or_404(M.Course, id=int(course_id))
     else:
         course = None
         
-    query_results = CustomUser.objects.filter(role__name__exact="Student")     
+    query_results = M.CustomUser.objects.filter(role__name__exact="Student")     
     if request.method == "POST":
-        form = StudentToCourse(request.POST, instance=course)
+        form = F.StudentToCourse(request.POST, instance=course)
         
         if form.is_valid():
             course = form.save()
@@ -220,15 +220,15 @@ def students (request, course_id):
         return HttpResponseRedirect('') 
         
     else: 
-        form = StudentToCourse(instance=course)
+        form = F.StudentToCourse(instance=course)
         
     return render(request, 'addstudents.html', {'form': form, 'query_results': query_results})
 
 #course_details
 def detail(request, course_id):
     try:
-        course = Course.objects.get(pk=course_id)
-        coursedet =Course.objects.all()
+        course = M.Course.objects.get(pk=course_id)
+        coursedet =M.Course.objects.all()
         
     except Course.DoesNotExist:
         raise Http404("Course does not exist")
@@ -237,14 +237,14 @@ def detail(request, course_id):
 #za imagecreate
 def post_list (request):
    
-    files = ImageBlock.objects.all()
+    files = M.ImageBlock.objects.all()
 
     return render(request, 'list.html',{'files':files, })
    
 
 
 def post_create(request):
-    form = ImageForm(request.POST or None, request.FILES or None)
+    form = F.ImageForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         
             instance = form.save()
@@ -259,24 +259,24 @@ def post_create(request):
 
 def post_show(request, id=None):
     if id is not None:
-        image = get_object_or_404(ImageBlock, id=id)
+        image = get_object_or_404(M.ImageBlock, id=id)
         print image
         print image.image
 
         return render(request, 'image_show.html',{'image' : image})
     else:
-        query_results = ImageBlock.objects.all()
+        query_results = M.ImageBlock.objects.all()
         return render(request, 'image_show.html', {"query_results" : query_results})   
 
 
 
 def video_create(request, video_id=None):
     if video_id is not None:
-        video = get_object_or_404(Course, id=int(video_id))
+        video = get_object_or_404(M.Course, id=int(video_id))
     else:
         video = None
     if request.method == "POST":
-        form = VideoForm(request.POST, instance=video)
+        form = F.VideoForm(request.POST, instance=video)
         
         if form.is_valid():
             # TODO: Add the validated professor to the users - for editing
@@ -285,12 +285,12 @@ def video_create(request, video_id=None):
         return HttpResponseRedirect('video_list') 
         
     else: 
-        form = VideoForm(instance=video) 
+        form = F.VideoForm(instance=video) 
         
     return render(request, 'video_add.html', {'form': form}) 
 
 def video_list (request):
    
-    files = VideoBlock.objects.all()
+    files = M.VideoBlock.objects.all()
 
     return render(request, 'video_list.html',{'files':files, })    
