@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+
+</head>
+<body>
+    {% csrf_token %}
+    <h1> Programmes in offer: </h1>
+<table>
+   
+    {% for item in programmes %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td><a href=/programmes/{{ item.id }}>Enter</a> </td>
+    </tr>
+    {% endfor %}
+</table>
+</body>
+</html>
+

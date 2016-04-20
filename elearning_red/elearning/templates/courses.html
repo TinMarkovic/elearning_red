@@ -8,23 +8,27 @@
 <body>
     {% csrf_token %}
     <h1> Courses in offer: </h1>
-    <table>
+    <table border="1">
     <tr>
         <th>Name:</th>
         <th>Begins:</th>
         <th>Duration(days):</th>
-        <th>Professor:</th>
-        <th>More Information:</th>
-       
+        <th>Description:</th>
+        <th>Author:</th>
+        <th>Tags:</th>
+        <th>Details:</th>
+        <th>Manage:</th>
     </tr>
     {% for item in query_results %}
     <tr>
         <td>{{ item.name }}</td>
         <td>{{ item.beginDate }}</td>
         <td>{{ item.duration }}</td>
+        <td>{{ item.desc }} </td>
         <td>{{ item.author }}</td>
-
-        <td> <a href ="{% url 'detailCourse' course_id=item.id %}">{{ item.id }}</a></td>
+        <td>{{ item.tagList }}</td>
+        <td><a href=/courses/info/{{ item.id }}>Details</a> </td>
+        <td> <a href="manage/{{ item.id }}">Manage</a> </td>
     </tr>
     {% endfor %}
 </table>
