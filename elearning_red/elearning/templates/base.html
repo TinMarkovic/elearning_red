@@ -8,18 +8,19 @@
 -->
 
 <body>
+<h1>{{ message }}</h1>
 <div id ="menu">
 	{% block menu %}
 		<ul>
-			<li><a href="/mainmenu">Home</a></li>
+			<li><a href="/registration">Sign Up</a></li>
 
 			{% if user.is_authenticated %}
-				<li><a href="/account/logout">Logout</a></li>
+				<li><a href="/index">Logout</a></li>
 			{% else %}
-				<li><a href="/accounts/login">Login</a></li>
+				<li><a href="/index">Login</a></li>
 			{% endif %}
 		</ul>
-	{% enblock %}
+	{% endblock %}
 </div>
 
 <div id="contect">
