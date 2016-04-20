@@ -48,6 +48,8 @@ class Course(models.Model):
     tags = models.ManyToManyField(Tag)
     users = models.ManyToManyField(CustomUser)
     programmes = models.ManyToManyField(Programme)
+    avgRating = models.DecimalField(max_digits=5,decimal_places=2)
+    
     
     def __unicode__(self):
         return self.name
