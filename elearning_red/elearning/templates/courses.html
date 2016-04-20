@@ -13,14 +13,18 @@
         <th>Name:</th>
         <th>Begins:</th>
         <th>Duration(days):</th>
+        <th>Professor:</th>
         <th>More Information:</th>
+       
     </tr>
     {% for item in query_results %}
     <tr>
         <td>{{ item.name }}</td>
         <td>{{ item.beginDate }}</td>
         <td>{{ item.duration }}</td>
-        <td> TODO: add a view </td>
+        <td>{{ item.author }}</td>
+
+        <td> <a href ="{% url 'detailCourse' course_id=item.id %}">{{ item.id }}</a></td>
     </tr>
     {% endfor %}
 </table>
