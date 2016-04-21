@@ -27,8 +27,8 @@
         <td>{{ item.desc }} </td>
         <td>{{ item.author }}</td>
         <td>{{ item.tagList }}</td>
-        <td><a href=/courses/info/{{ item.id }}>Details</a> </td>
-        <td> <a href="manage/{{ item.id }}">Manage</a> </td>
+        <td><a href="{% url "detailsCourse" course_id=item.id %}">Details</a> </td>
+        <td> <a href="{% url "manageCourse" course_id=item.id %}">Manage</a> </td>
     </tr>
     {% endfor %}
 </table>

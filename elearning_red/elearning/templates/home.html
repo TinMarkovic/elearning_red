@@ -15,9 +15,9 @@
 			<li><a href="/registration">Sign Up</a></li>
 
 			{% if user.is_authenticated %}
-				<li><a href="/index">Logout</a></li>
+				<li><a href="/logout">Logout</a></li>
 			{% else %}
-				<li><a href="/index">Login</a></li>
+				<li><a href="/login">Login</a></li>
 			{% endif %}
 		</ul>
 	{% endblock %}

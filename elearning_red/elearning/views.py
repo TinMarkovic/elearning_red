@@ -3,14 +3,14 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
-
+from django.utils.translation import ugettext
 import models as M
 import forms as F
 
 def registration(request):
     if request.method == "POST":
         form = F.UserForm(request.POST)
-    if form.is_valid():
+        if form.is_valid():
             new_student = M.CustomUser.objects.create_user(**form.cleaned_data)
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'        
             login(request, new_student)
@@ -200,15 +200,14 @@ def block_modify(request, course_id, section_id, block_type="html", block_id=Non
 
 def homepage(request):    
     message = ugettext('Welcome to ElearningRed!')
-    return render(request, 'base.html', {'message': message})
+    return render(request, 'home.html', {'message': message})
 
-def students (request, course_id):
+def course_students (request, course_id):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
         course = None
-        
-    query_results = M.CustomUser.objects.filter(role__name__exact="Student")     
+            
     if request.method == "POST":
         form = F.StudentToCourse(request.POST, instance=course)
         
@@ -222,75 +221,9 @@ def students (request, course_id):
     else: 
         form = F.StudentToCourse(instance=course)
         
-    return render(request, 'addstudents.html', {'form': form, 'query_results': query_results})
-
-#course_details
-def detail(request, course_id):
-    try:
-        course = M.Course.objects.get(pk=course_id)
-        coursedet =M.Course.objects.all()
-        
-    except Course.DoesNotExist:
-        raise Http404("Course does not exist")
-    return render( request, 'detail.html', {"course" : course, "coursedet" : coursedet})
-
-#za imagecreate
-def post_list (request):
-   
-    files = M.ImageBlock.objects.all()
-
-    return render(request, 'list.html',{'files':files, })
-   
+    return render(request, 'addstudents.html', {'form': form})
 
 
-def post_create(request):
-    form = F.ImageForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        
-            instance = form.save()
-            instance.save()
-        
-            
-            return HttpResponseRedirect('list')
-
-    return render(request, 'image_create.html', {'form': form}) 
-
-
-
-def post_show(request, id=None):
-    if id is not None:
-        image = get_object_or_404(M.ImageBlock, id=id)
-        print image
-        print image.image
-
-        return render(request, 'image_show.html',{'image' : image})
-    else:
-        query_results = M.ImageBlock.objects.all()
-        return render(request, 'image_show.html', {"query_results" : query_results})   
-
-
-
-def video_create(request, video_id=None):
-    if video_id is not None:
-        video = get_object_or_404(M.Course, id=int(video_id))
-    else:
-        video = None
-    if request.method == "POST":
-        form = F.VideoForm(request.POST, instance=video)
-        
-        if form.is_valid():
-            # TODO: Add the validated professor to the users - for editing
-            form.save()
-        
-        return HttpResponseRedirect('video_list') 
-        
-    else: 
-        form = F.VideoForm(instance=video) 
-        
-    return render(request, 'video_add.html', {'form': form}) 
-
-def video_list (request):
-   
-    files = M.VideoBlock.objects.all()
-
-    return render(request, 'video_list.html',{'files':files, })    
+def course_details(request, course_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+    return render( request, 'course_details.html', {"course" : course})

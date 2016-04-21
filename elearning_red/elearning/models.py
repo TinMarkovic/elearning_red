@@ -4,9 +4,6 @@ from django.contrib.auth.models import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
 from django.db.models.signals import pre_save
-#from PIL import image
-
-
 
 class Permission(models.Model):
     name = models.CharField(max_length=25, blank=False, null=False)
@@ -87,13 +84,9 @@ class HTMLBlock(Block):
 class VideoBlock(Block):
     url = models.URLField(max_length=250, blank=False, null=False)
 
-
 class ImageBlock(Block):
-    title = models.CharField(max_length=40, blank=False, null=False)
-    #image = models.ImageField(upload_to="media")
+    subtitle = models.CharField(max_length=40, blank=False, null=False)
     image = models.ImageField(upload_to="", blank=True, null=True)
-
-    
 
 class QuizBlock(Block):
     serialQuestions = models.TextField(blank=False, null=False)
