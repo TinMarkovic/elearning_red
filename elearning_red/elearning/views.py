@@ -185,7 +185,7 @@ def block_modify(request, course_id, section_id, block_type="html", block_id=Non
                 }
     
     if request.method == "POST":
-        form = typeForm[block_type](request.POST)
+        form = typeForm[block_type](request.POST, instance=block)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect('/courses/manage/'+course_id+"/section/"+section_id) 
