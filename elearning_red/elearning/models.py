@@ -44,10 +44,10 @@ class Programme(models.Model):
 
 class Course(models.Model):
     name = models.CharField(max_length=40, blank=False, null=False)
-    desc = models.TextField(blank=True, null=True)
-    beginDate = models.DateField(blank=True, null=True)
-    duration = models.PositiveSmallIntegerField(blank=True, null=True)
-    author = models.TextField(blank=True, null=True)
+    desc = models.TextField()
+    beginDate = models.DateField()
+    duration = models.PositiveSmallIntegerField()
+    author = models.TextField()
     tags = models.ManyToManyField(Tag)
     users = models.ManyToManyField(CustomUser)
     programmes = models.ManyToManyField(Programme)
@@ -67,10 +67,10 @@ class Section(models.Model):
     #prevSection = models.ForeignKey(Section)
  
 class Block(models.Model): # Generic block model
-    name = models.CharField(max_length=40, blank=True, null=True)
-    index = models.PositiveSmallIntegerField(blank=True, null=True)
+    name = models.CharField(max_length=40, blank=False, null=False)
+    index = models.PositiveSmallIntegerField(blank=False, null=False)
     assessment = models.BooleanField()
-    sections = models.ForeignKey(Section, blank=True, null=True, on_delete=models.CASCADE)
+    sections = models.ForeignKey(Section, on_delete=models.CASCADE)
     
     def __unicode__(self):
         return self.name
