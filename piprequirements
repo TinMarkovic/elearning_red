@@ -3,3 +3,11 @@ djangorestframework==3.3.3
 mysql==0.0.1
 MySQL-python==1.2.5
 django-bootstrap3
+Django==1.9.5
+django-ckeditor==5.0.3
+django-registration-redux==1.4
+django-suit-ckeditor==0.0.2
+django-wysiwyg==0.7.1
+mysql==0.0.1
+MySQL-python==1.2.5
+Pillow==3.2.0

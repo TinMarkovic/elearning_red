@@ -21,7 +21,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('elearning.urls', namespace='elearning')),
-    #url(r'^$', RedirectView.as_view(url='/elearning_red/list/', permanent=True)),
 ] 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
