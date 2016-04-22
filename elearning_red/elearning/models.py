@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import models
 from django.contrib.auth.models import User
+from django.utils.text import slugify
+from django.db.models.signals import pre_save
 
 class Permission(models.Model):
     name = models.CharField(max_length=25, blank=False, null=False)
@@ -21,7 +23,8 @@ class CustomUser(User):
     role = models.ForeignKey(Role, on_delete=models.CASCADE, blank=True, null=True)
     
     def __unicode__(self):
-        return self.name
+        return self.first_name + ' ' + self.last_name
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=25, blank=False, null=False)
@@ -81,12 +84,11 @@ class HTMLBlock(Block):
     content = models.TextField(blank=False, null=False)
 
 class VideoBlock(Block):
-    youtube = models.CharField(max_length=200, blank=False, null=False)
+    url = models.URLField(max_length=250, blank=False, null=False)
 
-"""
 class ImageBlock(Block):
-    image = models.ImageField(blank=False, null=False)
-"""
+    subtitle = models.CharField(max_length=40, blank=False, null=False)
+    image = models.ImageField(upload_to="", blank=True, null=True)
 
 class QuizBlock(Block):
     serialQuestions = models.TextField(blank=False, null=False)

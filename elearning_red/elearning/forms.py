@@ -10,6 +10,10 @@ class UserForm(ModelForm):
    	widgets = {
             'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
         }
+        
+class LoginForm(Form):
+    username = CharField()
+    password = CharField(widget=PasswordInput())        
 
 class CourseForm(ModelForm):
     class Meta:
@@ -19,9 +23,49 @@ class CourseForm(ModelForm):
             'beginDate': widgets.SelectDateWidget()
         }
 
+class SectionForm(ModelForm):
+    class Meta:
+        model = M.Section
+        fields = ('name', 'desc', 'beginDate', 'index', 'course', )
+        widgets = {
+            'beginDate': widgets.SelectDateWidget(),
+            'course': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+        
+class HTMLBlockForm(ModelForm):
+    class Meta:
+	model = M.HTMLBlock
+	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
+	widgets = {
+            'content': CKEditorWidget(editor_options={'startupFocus': True}),
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+    
+class VideoBlockForm(ModelForm):
+    class Meta:
+        model = M.VideoBlock
+        fields = ('name', 'index', 'sections', 'url', 'assessment') 
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+    
+class ImageBlockForm(ModelForm):
+    class Meta:
+        model = M.ImageBlock
+        fields = ('name', 'subtitle', 'index', 'sections', 'assessment', 'image')
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
+    
+class QuizBlockForm(ModelForm):
+    # TODO: Implement
+    pass
 
 class ProgrammeForm(ModelForm):
-    #courses = CharField(widget=Select(choices=[choice.name for choice in M.Course.objects.all()]))
     courses = ModelMultipleChoiceField(queryset=None)
     class Meta:
         model = M.Programme
@@ -31,24 +75,18 @@ class ProgrammeForm(ModelForm):
 	super(ProgrammeForm, self).__init__(*args, **kwargs)
 	self.fields['courses'].queryset = M.Course.objects.all()
 
-class LoginForm(Form):
-    username = CharField()
-    password = CharField(widget=PasswordInput())
-
-class HTMLBlockForm(ModelForm):
-    class Meta:
-	model = M.HTMLBlock
-	fields = '__all__' 
-	widgets = {
-            'content': CKEditorWidget(editor_options={'startupFocus': True})
-        }
-
 class RatingForm(ModelForm):
     class Meta:
 	model = M.Rating
 	fields = ('value',)
-	"""
-	widgets = {
-	    'value': ChoiceField(choices=[(1, 1), (2, 2)])
-	}
-	"""
+
+class StudentToCourse(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(StudentToCourse, self).__init__(*args, **kwargs)
+        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")    
+    class Meta:
+        model = M.Course       
+        fields = ( 'users',)
+        widgets = {
+            'users': widgets.CheckboxSelectMultiple(),
+        }

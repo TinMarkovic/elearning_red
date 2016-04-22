@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Course info</title>
+
+</head>
+<body>
+
+    {% csrf_token %}
+
+    <table border="1">
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Beginning date</th>
+        <th>Course duration (days)</th>
+    </tr>   
+    
+    <tr>
+        <td>{{ course.name }}</td>
+        <td>{{ course.desc }}</td>
+        <td>{{ course.beginDate }}</td>
+        <td>{{ course.duration }}</td>
+    </tr>
+    </table>
+    <br>
+    <h3>Inscribed students</h3>
+        
+        <ol>  
+            {% for users in course.users.all %}
+            <li>{{ users }}</li>
+            {% endfor %}
+        </ol>
+       
+
+</body>
+</html>
