@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+<h1>{{ message }}</h1>
+<div id ="menu">
+	{% block menu %}
+		<ul>
+			<li><a href={% url "registration" %}>Sign Up</a></li>
+
+			{% if user.is_authenticated %}
+				<li><a href={% url "logout" %}>Logout</a></li>
+			{% else %}
+				<li><a href={% url "login" %}>Login</a></li>
+			{% endif %}
+		</ul>
+	{% endblock %}
+</div>
+
+<div id="contect">
+	{% block contect %}{% endblock %}
+</div>
+</body>
+</html>						
+

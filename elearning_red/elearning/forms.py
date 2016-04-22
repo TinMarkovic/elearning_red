@@ -9,6 +9,10 @@ class UserForm(ModelForm):
    	widgets = {
             'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
         }
+        
+class LoginForm(Form):
+    username = CharField()
+    password = CharField(widget=PasswordInput())        
 
 class CourseForm(ModelForm):
     class Meta:
@@ -39,12 +43,22 @@ class HTMLBlockForm(ModelForm):
         }
     
 class VideoBlockForm(ModelForm):
-    # TODO: Implement
-    pass
+    class Meta:
+        model = M.VideoBlock
+        fields = ('name', 'index', 'sections', 'url', 'assessment') 
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
     
 class ImageBlockForm(ModelForm):
-    # TODO: Implement
-    pass
+    class Meta:
+        model = M.ImageBlock
+        fields = ('name', 'subtitle', 'index', 'sections', 'assessment', 'image')
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
     
 class QuizBlockForm(ModelForm):
     # TODO: Implement
@@ -54,7 +68,16 @@ class ProgrammeForm(ModelForm):
     class Meta:
         model = M.Programme
         fields = ('name', 'desc','tags','avgRating')
-    
-class LoginForm(Form):
-    username = CharField()
-    password = CharField(widget=PasswordInput())
+
+class StudentToCourse(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(StudentToCourse, self).__init__(*args, **kwargs)
+        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")    
+    class Meta:
+        model = M.Course       
+        fields = ( 'users',)
+        
+        widgets = {
+            'users': widgets.CheckboxSelectMultiple(),
+               }
+   

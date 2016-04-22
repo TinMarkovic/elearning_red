@@ -1,16 +1,16 @@
-from django.shortcuts import render
+from django.shortcuts import render, render_to_response
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
-
+from django.utils.translation import ugettext
 import models as M
 import forms as F
 
 def registration(request):
     if request.method == "POST":
         form = F.UserForm(request.POST)
-    if form.is_valid():
+        if form.is_valid():
             new_student = M.CustomUser.objects.create_user(**form.cleaned_data)
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'        
             login(request, new_student)
@@ -34,7 +34,7 @@ def user_login(request):
     else:
         form = F.LoginForm()   
 
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'index.html', {'form': form}) 
 
 def course_modify(request, course_id=None):
     if course_id is not None:
@@ -197,3 +197,33 @@ def block_modify(request, course_id, section_id, block_type="html", block_id=Non
         form = typeForm[block_type](instance=block, initial=initialDict) 
         
     return render(request, 'blockEdit.html', {'form': form})
+
+def homepage(request):    
+    message = ugettext('Welcome to ElearningRed!')
+    return render(request, 'home.html', {'message': message})
+
+def course_students (request, course_id):
+    if course_id is not None:
+        course = get_object_or_404(M.Course, id=int(course_id))
+    else:
+        course = None
+            
+    if request.method == "POST":
+        form = F.StudentToCourse(request.POST, instance=course)
+        
+        if form.is_valid():
+            course = form.save()
+            # TODO: Add the validated professor to the users - for editing
+            course.save()
+        
+        return HttpResponseRedirect('') 
+        
+    else: 
+        form = F.StudentToCourse(instance=course)
+        
+    return render(request, 'addstudents.html', {'form': form})
+
+
+def course_details(request, course_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+    return render( request, 'course_details.html', {"course" : course})

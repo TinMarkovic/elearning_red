@@ -6,19 +6,28 @@
 </head>
 <body>
 <h1> Section Management </h1>
-<a href="{% url "elearning:manageCourse" course_id %}">Back to section list</a>
+<a href="{% url "manageCourse" course_id %}">Back to section list</a>
 <h2> Blocks: </h2>
 <ol>
 {% if query_results %}
 {% for item in query_results %}
-    <li>{{item.name}} ~ <a href="{% url "elearning:editBlock" course_id section_id item.id %}"> Edit</a></li>
+    <li>{{item.name}} ~ <a href="{% url "editBlock" course_id section_id item.id %}"> Edit</a></li>
 {% endfor %}
 {% else %}
 <li>Add a new block!</li>
 {% endif %}
 <li>
-<form action="{% url "elearning:newBlock" course_id section_id "html" %}" method="get">
-    <input type="submit" value="Add a new block" id="getNewBlock" />
+<form action="{% url "newBlock" course_id section_id "html" %}" method="get">
+    <input type="submit" value="Add a new HTML block" id="getNewBlock" />
+</form>
+<form action="{% url "newBlock" course_id section_id "video" %}" method="get">
+    <input type="submit" value="Add a new Video block" id="getNewBlock" />
+</form>
+<form action="{% url "newBlock" course_id section_id "image" %}" method="get">
+    <input type="submit" value="Add a new Image block" id="getNewBlock" />
+</form>
+<form action="{% url "newBlock" course_id section_id "quiz" %}" method="get">
+    <input type="submit" value="Add a new Quiz block" id="getNewBlock" />
 </form>
 </li>
 </ol>
