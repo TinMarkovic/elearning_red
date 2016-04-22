@@ -6,12 +6,12 @@
 <div id ="menu">
 	{% block menu %}
 		<ul>
-			<li><a href={% url "registration" %}>Sign Up</a></li>
+			<li><a href={% url "elearning:registration" %}>Sign Up</a></li>
 
 			{% if user.is_authenticated %}
-				<li><a href={% url "logout" %}>Logout</a></li>
+				<li><a href={% url "elearning:logout" %}>Logout</a></li>
 			{% else %}
-				<li><a href={% url "login" %}>Login</a></li>
+				<li><a href={% url "elearning:login" %}>Login</a></li>
 			{% endif %}
 		</ul>
 	{% endblock %}

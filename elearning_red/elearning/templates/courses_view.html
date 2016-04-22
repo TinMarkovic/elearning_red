@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Courses Menu</title>
+    <title>Courses view</title>
 
 </head>
 <body>
@@ -24,7 +24,12 @@
     </tr>
 
     {% endfor %}
-
+<form method="post" action="">
+    {% csrf_token %}
+    {{ form.value }}
+    <input type="submit" value="Rate" />
+</form>
+<p>Average rating: {{ course.avgRating }}<p>
 </body>
 </html>
 

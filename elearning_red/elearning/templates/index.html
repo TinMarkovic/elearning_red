@@ -9,14 +9,22 @@
 
 {% if user.is_authenticated %}
     <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
-    <a href="/logout">logout</a>
+    <a href="{% url "logout" %}">Logout</a>
 {% else %}
-<form method="post" action"">
+    <p>Welcome</p>
+<form method="post" action="">
     {% csrf_token %}
     {{ form }}
-    <input type="submit" value="login" />
-</form>
-    <p>Welcome, new user. Please log in.</p>
+{% if form.errors %}
+<p>Your username and password didn't match!
+Please try again!</p>
+{% endif %}
+    <input type="submit" value="Sign in" />
+</form> 
+
+<form action="{% url "registration" %}">
+    <input type="submit" value="Sign up">
+</form>     
 {% endif %}
 
 </body>

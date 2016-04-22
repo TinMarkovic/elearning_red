@@ -1,6 +1,7 @@
-from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField
+from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField
 import models as M
 from datetime import datetime
+from suit_ckeditor.widgets import CKEditorWidget
 
 class UserForm(ModelForm):
     class Meta:
@@ -32,12 +33,12 @@ class SectionForm(ModelForm):
             'index': widgets.HiddenInput(),
         }
         
-class HTMLBlockForm(ModelForm): 
-    # Testna forma - bit ce prebrisana
+class HTMLBlockForm(ModelForm):
     class Meta:
-        model = M.HTMLBlock
-        fields = ('name', 'index', 'sections', 'assessment', 'content')
-        widgets = {
+	model = M.HTMLBlock
+	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
+	widgets = {
+            'content': CKEditorWidget(editor_options={'startupFocus': True}),
             'sections': widgets.HiddenInput(),
             'index': widgets.HiddenInput(),
         }
@@ -65,9 +66,19 @@ class QuizBlockForm(ModelForm):
     pass
 
 class ProgrammeForm(ModelForm):
+    courses = ModelMultipleChoiceField(queryset=None)
     class Meta:
         model = M.Programme
         fields = ('name', 'desc','tags','avgRating')
+	
+    def __init__(self, *args, **kwargs):
+	super(ProgrammeForm, self).__init__(*args, **kwargs)
+	self.fields['courses'].queryset = M.Course.objects.all()
+
+class RatingForm(ModelForm):
+    class Meta:
+	model = M.Rating
+	fields = ('value',)
 
 class StudentToCourse(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -76,8 +87,6 @@ class StudentToCourse(ModelForm):
     class Meta:
         model = M.Course       
         fields = ( 'users',)
-        
         widgets = {
             'users': widgets.CheckboxSelectMultiple(),
-               }
-   
+        }
