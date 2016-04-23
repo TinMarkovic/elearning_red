@@ -17,15 +17,16 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
+from elearning.views import registration
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('elearning.urls', namespace='elearning')),
+    url(r'^accounts/register/$', registration, name='registration'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
 ] 
-"""
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-"""
+
 
