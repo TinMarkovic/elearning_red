@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Courses</title>
-
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %} Courses {% endblock title %}
+{% block content %}
     {% csrf_token %}
     <h1> Enrolled: </h1>
     <table>
@@ -43,6 +38,5 @@
     </tr>
     {% endfor %}
 </table>
-</body>
-</html>
+{% endblock content %}
 
