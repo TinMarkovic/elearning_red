@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'django_wysiwyg',
     'suit_ckeditor',
     'registration',
-    
 ]
 
 #redux
@@ -83,7 +82,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'elearning_red.wsgi.application'
 
-DJANGO_WYSIWYG_FLAVOR = 'ckeditor'
+DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
@@ -141,7 +140,7 @@ MEDIA_URL = '/media/'
 
 STATICFILES_DIRS =[ os.path.join(BASE_DIR, "elearning/static")
 ]
-"""
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
@@ -150,5 +149,3 @@ STATIC_URL = '/static/'
 #STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 SITE_ID = 1
-
-
