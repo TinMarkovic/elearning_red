@@ -39,10 +39,10 @@ class HTMLBlockForm(ModelForm):
     	model = M.HTMLBlock
     	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
     	widgets = {
-                'content': CKEditorWidget(),
-                'sections': widgets.HiddenInput(),
-                'index': widgets.HiddenInput(),
-            }
+            'content': CKEditorWidget(),
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+        }
                
 class VideoBlockForm(ModelForm):
     class Meta:

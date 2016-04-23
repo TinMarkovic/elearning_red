@@ -45,7 +45,12 @@ INSTALLED_APPS = [
     
 ]
 
-
+#redux
+#REGISTRATION_OPEN = True
+#ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_AUTO_LOGIN = True
+LOGIN_REDIRECT_URL = '/elearning/'
+LOGIN_URL = '/accounts/login/'
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -146,11 +151,4 @@ STATIC_URL = '/static/'
 
 SITE_ID = 1
 
-#redux
 
-
-#REGISTRATION_OPEN = True
-#ACCOUNT_ACTIVATION_DAYS = 7
-REGISTRATION_AUTO_LOGIN = True
-LOGIN_REDIRECT_URL = '/elearning/'
-LOGIN_URL = '/accounts/login/'
