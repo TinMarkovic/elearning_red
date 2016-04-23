@@ -4,20 +4,91 @@
 <h1> Course Management </h1>
 <a href="{% url "elearning:listCourse" %}">Back to course list</a> <br><br>
 <a href="{% url "elearning:manageStudents" course_id=course_id %}">Add/remove students</a>
-<h2> Sections: </h2>
-<ol>
-{% if query_results %}
-{% for item in query_results %}
-    <li>{{item.name}} ~ {{item.desc}} - <a href="{% url "elearning:manageSection" course_id item.id %}">Manage!</a></li>
-{% endfor %}
-{% else %}
-<li>Add a new section!</li>
-{% endif %}
-<li>
-<form action="{% url "elearning:newSection" course_id %}" method="get">
-    <input type="submit" value="Add a new section" id="getNewSection" />
-</form>
-</li>
-</ol>
-{% endblock content%}
+<h2> Sections: <a href="javascript:void(0)" class="btn btn-raised btn-success" id="confirmSort">CONFIRM SORT ORDER</a></h2>
 
+<div class="col-md-8">
+        <div id="sortable">
+                {% if not query_results %}
+                <div class="panel panel-default">
+                        <div class="panel-body">Add a new section!</div>
+                </div>
+                {% else %}
+                {% for item in query_results|dictsort:"index" %}
+
+                 <div class="panel panel-primary section-item" id="{{item.id}}">
+                        <div class="panel-heading">
+                                <h3 class="panel-title">{{item.name}} ~ {{item.desc}} - 
+                                <a href="{% url "elearning:manageSection" course_id item.id %}">Manage!</a></h3>
+                        </div>
+                        <div class="panel-body selection-item-body">
+                            <ul class="list-group" id="{{item.id}}l">
+                            </ul>
+                        </div>
+                </div>
+                {% endfor %}
+                {% endif %}
+        </div>
+        <div class="panel panel-default">
+                <div class="panel-body">
+                    <a href="{% url "elearning:newSection" course_id %}" class="btn btn-default btn-lg btn-block btn-raised">New Section</a>
+                </div>
+        </div>
+</div>
+{% endblock content %}
+
+{% block script %}-
+<script>
+$(document).ready(function () {
+    $("#confirmSort").hide();
+    $(".selection-item-body").hide();
+    $(function() {
+        $( "#sortable" ).sortable({
+            axis: "y",
+            cursor: "move",
+            scroll: false
+        });
+        $( "#sortable" ).disableSelection();
+    });
+    $( "#sortable" ).on( "sortstop", function( event, ui ) {
+            $("#confirmSort").show();
+    });
+    $( "#confirmSort" ).on( "click", function( event, ui ) {
+        var sortedIDs = $( "#sortable" ).sortable( "toArray" );
+            $.ajax({
+                 type:"POST",
+                 url:"/ajax/modify-section-order/",
+                 data: {
+                        'course_id' : {{course_id}},
+                        'neworder': JSON.stringify(sortedIDs)
+                        },
+                 success: function(){
+                    }
+            });
+        $("#confirmSort").hide();
+    });
+    $( ".section-item" ).on( "click", function( event, ui ) {
+        var section_id = $(this).attr('id');
+        if ( !( $(this).attr('loaded') )){
+            $(this).attr('loaded', true);
+            request = $.ajax({
+                 type:"POST",
+                 url:"/ajax/get-blocks-list/",
+                 data: {
+                        'section_id' : section_id
+                        }
+                });
+            request.done(function (response){
+                var itemset = JSON.parse(response);
+                var listID = "#"+section_id+"l";
+                $listSelector = $(listID);
+                for(item of itemset) {
+                    $listSelector.append('<li class="list-group-item"> '+item.fields.index + '. '+item.fields.name+'</li>');
+                    console.log('<li class="list-group-item"> '+item.fields.index + '. '+item.fields.name+'</li>');
+                }
+        });}
+        $(this).children(".selection-item-body").toggle();
+
+    });
+});
+</script>
+{% endblock script %}
