@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Courses view</title>
-
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %} Course {% endblock title %}
+{% block content %}
     {% csrf_token %}
     <h1> Sections: </h1>
     <table>
@@ -30,6 +25,5 @@
     <input type="submit" value="Rate" />
 </form>
 <p>Average rating: {{ course.avgRating }}<p>
-</body>
-</html>
+{% endblock content %}
 

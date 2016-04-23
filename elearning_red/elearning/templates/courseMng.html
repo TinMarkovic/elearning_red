@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Course</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %} Course {% endblock title %}
+{% block content %}
 <h1> Course Management </h1>
 <a href="{% url "elearning:listCourse" %}">Back to course list</a> <br><br>
 <a href="{% url "elearning:manageStudents" course_id=course_id %}">Add/remove students</a>
@@ -23,6 +19,5 @@
 </form>
 </li>
 </ol>
-</body>
-</html>
+{% endblock content%}
 

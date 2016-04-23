@@ -38,7 +38,7 @@ class HTMLBlockForm(ModelForm):
 	model = M.HTMLBlock
 	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
 	widgets = {
-            'content': CKEditorWidget(editor_options={'startupFocus': True}),
+            'content': CKEditorWidget(),
             'sections': widgets.HiddenInput(),
             'index': widgets.HiddenInput(),
         }
