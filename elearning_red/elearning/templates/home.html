@@ -1,25 +1,14 @@
-<!DOCTYPE html>
-<html>
-
-<body>
+{% extends "base.html" %}
+{% block title %} Test home screen {% endblock title %}
+{% block content %}
 <h1>{{ message }}</h1>
-<div id ="menu">
-	{% block menu %}
-		<ul>
-			<li><a href={% url "elearning:registration" %}>Sign Up</a></li>
-
-			{% if user.is_authenticated %}
-				<li><a href={% url "elearning:logout" %}>Logout</a></li>
-			{% else %}
-				<li><a href={% url "elearning:login" %}>Login</a></li>
-			{% endif %}
-		</ul>
-	{% endblock %}
-</div>
-
-<div id="contect">
-	{% block contect %}{% endblock %}
-</div>
-</body>
-</html>						
-
+    <ul>
+    <li><a href={% url "elearning:registration" %}>Sign Up</a></li>
+    {% if user.is_authenticated %}
+        <li><a href={% url "elearning:logout" %}>Logout</a></li>
+    {% else %}
+        <li><a href={% url "elearning:login" %}>Login</a></li>
+    {% endif %}
+    </ul>
+{% endblock content %}
+                 

@@ -202,18 +202,22 @@ def section_manage(request, course_id, section_id):
                                                    "section_id": section_id,})
 
 
-def block_modify(request, course_id, section_id, block_type="html", block_id=None):
+def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
     if block_id is not None:
         block = get_object_or_404(M.Block, id=int(block_id))
         if hasattr(block, 'htmlblock'):
+            block_type = "html";
             block = block.htmlblock
         elif hasattr(block, 'videoblock'):
+            block_type = "video";
             block = block.videoblock
         elif hasattr(block, 'quizblock'):
+            block_type = "quiz";
             block = block.quizblock
         elif hasattr(block, 'imageblock'):
+            block_type = "quiz";
             block = block.imageblock
     else:
         block = None

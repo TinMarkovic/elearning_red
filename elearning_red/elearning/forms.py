@@ -36,11 +36,13 @@ class SectionForm(ModelForm):
         
 class HTMLBlockForm(ModelForm):
     class Meta:
-        model = M.HTMLBlock
-        fields = ('name', 'index', 'sections', 'assessment', 'content')
-        widgets = {
-            'content': CKEditorWidget(),     
-        }
+    	model = M.HTMLBlock
+    	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
+    	widgets = {
+                'content': CKEditorWidget(),
+                'sections': widgets.HiddenInput(),
+                'index': widgets.HiddenInput(),
+            }
                
 class VideoBlockForm(ModelForm):
     class Meta:
