@@ -7,7 +7,7 @@ class UserForm(ModelForm):
     class Meta:
         model = M.CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'password', 'dob','role')
-   	widgets = {
+        widgets = {
             'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
         }
         
@@ -35,14 +35,12 @@ class SectionForm(ModelForm):
         
 class HTMLBlockForm(ModelForm):
     class Meta:
-	model = M.HTMLBlock
-	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
-	widgets = {
-            'content': CKEditorWidget(editor_options={'startupFocus': True}),
-            'sections': widgets.HiddenInput(),
-            'index': widgets.HiddenInput(),
+        model = M.HTMLBlock
+        fields = ('name', 'index', 'sections', 'assessment', 'content')
+        widgets = {
+            'content': CKEditorWidget(),     
         }
-    
+               
 class VideoBlockForm(ModelForm):
     class Meta:
         model = M.VideoBlock
