@@ -9,7 +9,7 @@
 
 {% if user.is_authenticated %}
     <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
-    <a href="{% url "logout" %}">Logout</a>
+    <a href="{% url "elearning:logout" %}">Logout</a>
 {% else %}
     <p>Welcome</p>
 <form method="post" action="">
@@ -22,7 +22,7 @@ Please try again!</p>
     <input type="submit" value="Sign in" />
 </form> 
 
-<form action="{% url "registration" %}">
+<form action="{% url "elearning:registration" %}">
     <input type="submit" value="Sign up">
 </form>     
 {% endif %}

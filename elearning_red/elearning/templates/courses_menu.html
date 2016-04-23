@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Courses Menu</title>
+    <title>Courses</title>
 
 </head>
 <body>
     {% csrf_token %}
-    <h1> Courses inscribed: </h1>
+    <h1> Enrolled: </h1>
     <table>
     <tr>
         <th>Name:</th>
@@ -21,12 +21,12 @@
         <td>{{ item.name }}</td>
         <td>{{ item.beginDate }}</td>
         <td>{{ item.duration }}</td>
-	<td><a href=/courses/list/{{ item.id }}>Enter</a></td>
+	<td><a href="{% url "elearning:detailsCourse" course_id=item.id %}">Enter</a></td>
     </tr>
 
     {% endfor %}
 </table>
- <h1> Courses uninscribed: </h1>
+ <h1> Available: </h1>
     <table>
     <tr>
         <th>Name:</th>
@@ -39,7 +39,7 @@
         <td>{{ item.name }}</td>
         <td>{{ item.beginDate }}</td>
         <td>{{ item.duration }}</td>
-        <td><a href=/courses/list/{{ item.id }}>Enter</a></td> 
+        <td><a href="{% url "elearning:detailsCourse" course_id=item.id %}">Enter</a></td>
     </tr>
     {% endfor %}
 </table>
