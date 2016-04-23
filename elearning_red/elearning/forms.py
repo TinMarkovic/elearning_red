@@ -1,7 +1,8 @@
-from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField
+from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField, DateField
 import models as M
 from datetime import datetime
 from suit_ckeditor.widgets import CKEditorWidget
+from registration.forms import RegistrationForm
 
 class UserForm(ModelForm):
     class Meta:
@@ -88,3 +89,8 @@ class StudentToCourse(ModelForm):
         widgets = {
             'users': widgets.CheckboxSelectMultiple(),
         }
+
+class CustomRegistrationForm(RegistrationForm):
+    first_name = CharField(max_length=100)
+    last_name = CharField(max_length=100)
+    dob = DateField(widget=widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))))
