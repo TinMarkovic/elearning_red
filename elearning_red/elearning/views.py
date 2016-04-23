@@ -15,14 +15,14 @@ import forms as F
 
 def registration(request):
     if request.method == "POST":
-        form = F.UserForm(request.POST)
+        form = F.CustomRegistrationForm(request.POST)
         if form.is_valid():
-            new_student = M.CustomUser.objects.create_user(**form.cleaned_data)
+            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'])
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
             return HttpResponseRedirect('')
     else:
-        form = F.UserForm()
+        form = F.CustomRegistrationForm()
 
     return render(request, 'registration.html', {'form': form})
 
