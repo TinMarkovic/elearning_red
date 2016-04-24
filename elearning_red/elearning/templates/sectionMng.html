@@ -3,28 +3,70 @@
 {% block content %}
 <h1> Section Management </h1>
 <a href="{% url "elearning:manageCourse" course_id %}">Back to section list</a>
-<h2> Blocks: </h2>
-<ol>
-{% if query_results %}
-{% for item in query_results %}
-    <li>{{item.name}} ~ <a href="{% url "elearning:editBlock" course_id section_id item.id %}"> Edit</a></li>
-{% endfor %}
-{% else %}
-<li>Add a new block!</li>
-{% endif %}
-</ol>
-<div>
-<form action="{% url "elearning:newBlock" course_id section_id "html" %}" method="get">
-    <input type="submit" value="Add a new HTML block" id="getNewBlock" />
-</form>
-<form action="{% url "elearning:newBlock" course_id section_id "video" %}" method="get">
-    <input type="submit" value="Add a new Video block" id="getNewBlock" />
-</form>
-<form action="{% url "elearning:newBlock" course_id section_id "image" %}" method="get">
-    <input type="submit" value="Add a new Image block" id="getNewBlock" />
-</form>
-<form action="{% url "elearning:newBlock" course_id section_id "quiz" %}" method="get">
-    <input type="submit" value="Add a new Quiz block" id="getNewBlock" />
-</form>
+<h2> Blocks: <a href="javascript:void(0)" class="btn btn-raised btn-success" id="confirmSort">CONFIRM SORT ORDER</a></h2>
+
+<div class="col-md-8">
+		<div id="sortable">
+				{% if not query_results %}
+				<div class="panel panel-default">
+						<div class="panel-body">Add a new block!</div>
+				</div>
+				{% else %}
+				{% for item in query_results|dictsort:"index" %}
+
+				 <div class="panel panel-warning" id="{{item.id}}">
+						<div class="panel-heading">
+								<h3 class="panel-title">{{item.name}} ~
+								<b><a href="{% url "elearning:editBlock" course_id section_id item.id %}"> Edit</a></b></h3>
+						</div>
+				</div>
+				{% endfor %}
+				{% endif %}
+		</div>
+		<div class="panel panel-default">
+				<div class="panel-body">
+						<h3>New:</h3>
+						<div class="btn-group btn-group-justified btn-group-raised">
+							<a href="{% url "elearning:newBlock" course_id section_id "html" %}" class="btn ">HTML</a>
+							<a href="{% url "elearning:newBlock" course_id section_id "video" %}" class="btn ">Video</a>
+							<a href="{% url "elearning:newBlock" course_id section_id "image" %}" class="btn ">Image</a>
+							<a href="{% url "elearning:newBlock" course_id section_id "quiz" %}" class="btn ">Quiz</a>
+						</div>
+				</div>
+		</div>
 </div>
 {% endblock content %}
+
+{% block script %}
+<script>
+$(document).ready(function () {
+	$("#confirmSort").hide();
+	$(function() {
+		$( "#sortable" ).sortable({
+			axis: "y",
+			cursor: "move",
+			scroll: false
+		});
+		$( "#sortable" ).disableSelection();
+	});
+	$( "#sortable" ).on( "sortstop", function( event, ui ) {
+			$("#confirmSort").show();
+	});
+	$( "#confirmSort" ).on( "click", function( event, ui ) {
+        var sortedIDs = $( "#sortable" ).sortable( "toArray" );
+            $.ajax({
+                 type:"POST",
+                 url:"/ajax/modify-block-order/",
+                 data: {
+                        'section_id' : {{section_id}},
+                        'neworder': JSON.stringify(sortedIDs)
+                        },
+                 success: function(){
+                    }
+            });
+		$("#confirmSort").hide();
+	});
+
+});
+</script>
+{% endblock script %}
