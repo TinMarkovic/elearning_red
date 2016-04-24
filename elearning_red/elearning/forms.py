@@ -1,4 +1,4 @@
-from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField, DateField
+from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField, DateField, ModelChoiceField
 import models as M
 from datetime import datetime
 from suit_ckeditor.widgets import CKEditorWidget
@@ -7,7 +7,7 @@ from registration.forms import RegistrationForm
 class UserForm(ModelForm):
     class Meta:
         model = M.CustomUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'dob','role')
+        fields = ('username', 'first_name', 'last_name', 'email', 'dob','role')
         widgets = {
             'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
         }
@@ -96,3 +96,7 @@ class CustomRegistrationForm(RegistrationForm):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     dob = DateField(widget=widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))))
+
+class CustomRegistrationFormAdmin(CustomRegistrationForm):
+    role = ModelChoiceField(queryset=M.Role.objects.all().order_by('name'))
+    

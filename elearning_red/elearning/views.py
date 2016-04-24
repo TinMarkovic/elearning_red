@@ -8,6 +8,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Avg
 from django.utils.translation import ugettext
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from .decorators import admin_only
 from json import loads
 import models as M
 import forms as F
@@ -17,7 +19,7 @@ def registration(request):
     if request.method == "POST":
         form = F.CustomRegistrationForm(request.POST)
         if form.is_valid():
-            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'])
+            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'], role=M.Role.objects.get(name='student'))
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
             return HttpResponseRedirect('')
@@ -26,6 +28,16 @@ def registration(request):
 
     return render(request, 'registration.html', {'form': form})
 
+def create_user(request):
+    if request.method == "POST":
+        form = F.CustomRegistrationFormAdmin(request.POST)
+        if form.is_valid():
+            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'], role=M.Role.objects.get(name=form.cleaned_data['role']))
+            return HttpResponseRedirect('')
+    else:
+        form = F.CustomRegistrationFormAdmin()
+
+    return render(request, 'registration.html', {'form': form})
 
 def user_login(request):
     if request.method == "POST":
@@ -105,15 +117,16 @@ def course_show(request, course_id=None):
         query_results = M.Course.objects.all()
         return render(request, 'courses.html', {"query_results": query_results})
 
-
+@login_required
+@admin_only
 def user_modify(request, customUser_id=None):
     if customUser_id is not None:
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
     else:
         customUser = None
-
+        return HttpResponseRedirect('/users/edit')
     if request.method == "POST":
-        form = F.UserForm(request.POST)
+        form = F.UserForm(request.POST, instance=customUser)
 
         if form.is_valid():
             form.save()
