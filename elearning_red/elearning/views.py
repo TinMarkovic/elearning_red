@@ -271,3 +271,6 @@ def course_students(request, course_id):
 def course_details(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     return render(request, 'course_details.html', {"course": course})
+
+def about(request):
+    return render(request, 'about.html')

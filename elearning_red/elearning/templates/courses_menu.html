@@ -3,7 +3,7 @@
 {% block content %}
     {% csrf_token %}
     <h1> Enrolled: </h1>
-    <table>
+    <table class="table table-striped table-hover ">
     <tr>
         <th>Name:</th>
         <th>Begins:</th>
@@ -22,7 +22,7 @@
     {% endfor %}
 </table>
  <h1> Available: </h1>
-    <table>
+    <table class="table table-striped table-hover ">
     <tr>
         <th>Name:</th>
         <th>Begins:</th>
