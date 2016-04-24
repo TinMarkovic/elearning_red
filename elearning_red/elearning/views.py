@@ -1,25 +1,28 @@
 from django.shortcuts import render, render_to_response
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.core.serializers import serialize
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm
 from django.db.models import Avg
 from django.utils.translation import ugettext
+from django.views.decorators.csrf import csrf_exempt
+from json import loads
 import models as M
 import forms as F
 
 
 def registration(request):
     if request.method == "POST":
-        form = F.UserForm(request.POST)
+        form = F.CustomRegistrationForm(request.POST)
         if form.is_valid():
-            new_student = M.CustomUser.objects.create_user(**form.cleaned_data)
+            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'])
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
             return HttpResponseRedirect('')
     else:
-        form = F.UserForm()
+        form = F.CustomRegistrationForm()
 
     return render(request, 'registration.html', {'form': form})
 
@@ -168,6 +171,17 @@ def course_manage(request, course_id):
         return render(request, 'courseMng.html', {"course_id": course_id})
 
 
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
+def course_reorder_sections(request):
+    course_id = request.POST['course_id']
+    new_order = loads(request.POST['neworder'])
+    for i in range(len(new_order)):
+        section = get_object_or_404(M.Section, id=int(new_order[i]), course=int(course_id))
+        section.index = i
+        section.save()
+    return HttpResponse('')
+
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
     if section_id is not None:
@@ -202,18 +216,45 @@ def section_manage(request, course_id, section_id):
                                                    "section_id": section_id,})
 
 
-def block_modify(request, course_id, section_id, block_type="html", block_id=None):
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
+def section_reorder_blocks(request):
+    section_id = request.POST['section_id']
+    new_order = loads(request.POST['neworder'])
+    for i in range(len(new_order)):
+        block = get_object_or_404(M.Block, id=int(new_order[i]), sections=int(section_id))
+        block.index = i
+        block.save()
+    return HttpResponse('')
+
+
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
+def section_list_blocks(request):
+    section_id = request.POST['section_id']
+    section = get_object_or_404(M.Section, id=int(section_id))
+    query_results = M.Block.objects.filter(sections__id=section_id)
+    response = serialize("json", query_results.order_by("index"))
+    print response
+    return HttpResponse(response)
+
+
+def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
     if block_id is not None:
         block = get_object_or_404(M.Block, id=int(block_id))
         if hasattr(block, 'htmlblock'):
+            block_type = "html";
             block = block.htmlblock
         elif hasattr(block, 'videoblock'):
+            block_type = "video";
             block = block.videoblock
         elif hasattr(block, 'quizblock'):
+            block_type = "quiz";
             block = block.quizblock
         elif hasattr(block, 'imageblock'):
+            block_type = "quiz";
             block = block.imageblock
     else:
         block = None

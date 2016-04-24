@@ -9,8 +9,8 @@
     <link href="{% static "vendor/css/ripples.min.css" %}" rel="stylesheet">
     <link href="{% static "vendor/css/tether.min.css" %}" rel="stylesheet">
     <link href="{% static "vendor/css/material.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/style.css" %}" rel="stylesheet">
     <link href="{% static "vendor/css/sidebar.css" %}" rel="stylesheet">
-    
     <title>{% block title %}Crimson Elearning{% endblock title %}</title>
 </head>
 <body>
@@ -120,19 +120,23 @@
 {% endblock navigation %}
 
 
-
 </div>
 </div>
 <div class="container">{% block content %}{% endblock content %}</div>
 </div>
 <footer class="navbar navbar-fixed-bottom">{% block footer %}<p>Done by Team Red for Extension Engine Spring Camp </br> Members: Ivan Opacak, Tajana Rozic, Tin Markovic</p>{% endblock footer %}</footer>
 
+
 <script src="{% static "vendor/js/jquery.min.js" %}"></script>
 <script src="{% static "vendor/js/bootstrap.min.js" %}"></script>
 <script src="{% static "vendor/js/ripples.min.js" %}"></script>
 <script src="{% static "vendor/js/tether.min.js" %}"></script>
 <script src="{% static "vendor/js/material.min.js" %}"></script>
+<script src="{% static "vendor/js/jquery-ui.min.js" %}"></script>
 <script src="{% static "vendor/js/sidebar.js" %}"></script>
+
+
+{% block script %}{% endblock script %}
 
 </body>
 </html>                     
