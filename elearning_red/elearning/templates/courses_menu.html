@@ -39,7 +39,7 @@
                 <li>
                     <a href={% url "elearning:programmesView" %}>Programmes</a>
                 </li>
-                {% for item in courses_uninscribed %}
+                {% for item in courses_inscribed %}
                 <li>
                     <a href={% url "elearning:CourseStudentview" course_id=item.id %}>{{item.name}}</a>
                 </li>
