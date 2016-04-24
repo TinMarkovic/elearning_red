@@ -24,7 +24,7 @@ def registration(request):
     else:
         form = F.CustomRegistrationForm()
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration/registration_form.html', {'form': form})
 
 
 def user_login(request):
@@ -139,12 +139,12 @@ def programme_modify(request, programme_id=None):
             for course in form.cleaned_data['courses']:
                 course.programmes.add(programme)
                 form.save()
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('/programmes/')
 
     else:
         form = F.ProgrammeForm(instance=programme)
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'programmes_edit.html', {'form': form})
 
 
 def programmes_show(request, programme_id=None):
@@ -308,10 +308,21 @@ def course_students(request, course_id):
 
     return render(request, 'addstudents.html', {'form': form})
 
-
+#za profesora
 def course_details(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     return render(request, 'course_details.html', {"course": course})
 
 def about(request):
     return render(request, 'about.html')
+
+#za studenta
+def section_studentview(request, course_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+
+    query_results = M.Section.objects.filter(course__id=course_id)
+    if query_results is not None:
+        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course})
+    else:
+        return render(request, 'course_sections.html', {"course_id": course_id})
+
