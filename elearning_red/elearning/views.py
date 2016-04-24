@@ -326,3 +326,18 @@ def section_studentview(request, course_id):
     else:
         return render(request, 'course_sections.html', {"course_id": course_id})
 
+def blocks_studentview(request, course_id, section_id):
+    section = get_object_or_404(M.Section, id=int(section_id))
+    video = M.VideoBlock.objects.filter(sections__id=section_id)
+    image = M.ImageBlock.objects.filter(sections__id=section_id)
+    html = M.HTMLBlock.objects.filter(sections__id=section_id)
+    if video is not None:
+        return render(request, 'blocks.html', {"video": video,
+                                                "image": image,
+                                                "html": html,
+                                                   "course_id": course_id,
+                                                   "section_id": section_id,
+                                                   })
+    else:
+        return render(request, 'blocks.html', {"course_id": course_id,
+                                                   "section_id": section_id,})
