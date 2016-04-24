@@ -20,6 +20,7 @@ urlpatterns = [
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/new", views.section_modify, name="newSection"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)$", views.course_manage, name="manageCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)/details', views.course_details, name="detailsCourse"),
+    url(r'^courses/(?P<course_id>[0-9]+)/studentview', views.section_studentview, name="CourseStudentview"),
     url(r'^courses/(?P<course_id>[0-9]+)', views.course_show, name="courseView"),
     url(r"^courses/$", views.course_show, name="listCourse"),
     url(r'^user/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
