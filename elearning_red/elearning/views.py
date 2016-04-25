@@ -238,7 +238,9 @@ def section_list_blocks(request):
     print response
     return HttpResponse(response)
 
-
+    
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
@@ -267,6 +269,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
     }
 
     if request.method == "POST":
+        print request.POST
         form = typeForm[block_type](request.POST, instance=block)
         if form.is_valid():
             form.save()
@@ -276,8 +279,13 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             'sections': section_id,
             'index': M.Block.objects.filter(sections__id=section_id).count()
         }
-        form = typeForm[block_type](instance=block, initial=initialDict)
-
+        if block is not None:
+            form = typeForm[block_type](instance=block)
+        else:
+            form = typeForm[block_type](instance=block, initial=initialDict)
+            
+    if block_type == "quiz":
+        return render(request, 'quizEdit.html', {'form': form, "course_id": course_id, "section_id": section_id, })
     return render(request, 'blockEdit.html', {'form': form})
 
 
@@ -312,3 +320,7 @@ def course_students(request, course_id):
 def course_details(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     return render(request, 'course_details.html', {"course": course})
+
+
+def test_render(request):
+    return render(request, 'quizEdit.html')

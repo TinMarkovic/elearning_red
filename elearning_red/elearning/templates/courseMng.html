@@ -15,7 +15,7 @@
                 {% else %}
                 {% for item in query_results|dictsort:"index" %}
 
-                 <div class="panel panel-primary section-item" id="{{item.id}}">
+                 <div class="panel panel-success section-item" id="{{item.id}}">
                         <div class="panel-heading">
                                 <h3 class="panel-title">{{item.name}} ~ {{item.desc}} - 
                                 <a href="{% url "elearning:manageSection" course_id item.id %}">Manage!</a></h3>
