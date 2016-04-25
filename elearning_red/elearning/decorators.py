@@ -46,7 +46,7 @@ def admin_or_course_related_prof_or_student(function):
             user = CustomUser.objects.get(id=request.user.id)
             if user.role.name == 'admin':
                 return function(request, course_id, *args, **kwargs)
-            elif user.role.name == 'professor':
+            elif user.role.name == 'professor' | user.role.name == 'student':
                 course = get_object_or_404(Course, id=int(course_id))
                 try:
                     course = Course.objects.get(id=course_id,users=user)
@@ -55,13 +55,6 @@ def admin_or_course_related_prof_or_student(function):
                 except ObjectDoesNotExist:
                     return HttpResponseRedirect('/')
                 
-            elif user.role.name == 'student':
-                try:
-                    course = Course.objects.get(id=course_id,users=user)
-                    return function(request, course_id, *args, **kwargs)
-                
-                except ObjectDoesNotExist:
-                    return HttpResponseRedirect('/')
             else:
                 return HttpResponseRedirect('/')
                

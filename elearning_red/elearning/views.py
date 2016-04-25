@@ -193,7 +193,7 @@ def course_manage(request, course_id):
 #TEMP: Until we finish testing, and implement users properly
 @login_required
 @D.admin_or_course_related_prof
-@csrf_exempt
+#@csrf_exempt
 def course_reorder_sections(request):
     course_id = request.POST['course_id']
     new_order = loads(request.POST['neworder'])
@@ -266,7 +266,7 @@ def section_list_blocks(request):
 #TEMP: Until we finish testing, and implement users properly
 @login_required
 @D.admin_or_course_related_prof
-@csrf_exempt
+#@csrf_exempt
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
