@@ -16,19 +16,6 @@ def admin_only(function):
     wrap.__name__=function.__name__
     return wrap
 
-def students_forbidden(function):
-    def wrap(request, *args, **kwargs):
-      
-        user = CustomUser.objects.get(id=request.user.id)
-        if user.role == 'student':
-            return HttpResponseRedirect('/')
-        else:
-            return function(request, *args, **kwargs)
-        
-    wrap.__doc__=function.__doc__
-    wrap.__name__=function.__name__
-    return wrap
-
 def admin_or_course_related_prof(function):
     def wrap(request, course_id=None, *args, **kwargs):
         if course_id is not None:
