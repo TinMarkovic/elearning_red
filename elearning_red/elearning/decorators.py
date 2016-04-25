@@ -74,9 +74,8 @@ def admin_or_course_related_prof_or_student(function):
                 return HttpResponseRedirect('/')
                
         else:
-            return function(request, course_id, *args, **kwargs)
+            return HttpResponseRedirect('/')
             
-
     wrap.__doc__=function.__doc__
     wrap.__name__=function.__name__
     return wrap
