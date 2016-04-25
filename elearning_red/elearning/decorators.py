@@ -32,9 +32,11 @@ def admin_or_course_related_prof(function):
                     return HttpResponseRedirect('/')
             else:
                 return HttpResponseRedirect('/')
-        else:
-            return function(request, course_id, *args, **kwargs)
-            
+        else: 
+            if user.role.name == 'admin' | user.role.name == 'profesor':
+                return function(request, course_id, *args, **kwargs)
+            else:
+                return HttpResponseRedirect('/')
 
     wrap.__doc__=function.__doc__
     wrap.__name__=function.__name__
