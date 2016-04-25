@@ -78,7 +78,6 @@ def course_modify(request, course_id=None):
 
     return render(request, 'course.html', {'form': form})
 
-
 def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -156,7 +155,7 @@ def programme_modify(request, programme_id=None):
             form.save()
             
             for course in form.cleaned_data['courses']:
-                programme.course_set.add(form.cleaned_data['courses'])
+                programme.course_set.add(course)
             
         return HttpResponseRedirect('')
 
