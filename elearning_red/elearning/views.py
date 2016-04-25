@@ -57,7 +57,7 @@ def user_login(request):
     return render(request, 'index.html', {'form': form})
 
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -180,7 +180,7 @@ def user_logout(request):
     return HttpResponseRedirect('/login')
 
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 def course_manage(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     query_results = M.Section.objects.filter(course__id=course_id)
@@ -192,7 +192,7 @@ def course_manage(request, course_id):
 
 #TEMP: Until we finish testing, and implement users properly
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 @csrf_exempt
 def course_reorder_sections(request):
     course_id = request.POST['course_id']
@@ -204,7 +204,7 @@ def course_reorder_sections(request):
     return HttpResponse('')
 
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
     if section_id is not None:
@@ -227,7 +227,7 @@ def section_modify(request, course_id, section_id=None):
     return render(request, 'sectionEdit.html', {'form': form})
 
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 def section_manage(request, course_id, section_id):
     section = get_object_or_404(M.Section, id=int(section_id))
     query_results = M.Block.objects.filter(sections__id=section_id)
@@ -265,7 +265,7 @@ def section_list_blocks(request):
 
 #TEMP: Until we finish testing, and implement users properly
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 @csrf_exempt
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
@@ -320,7 +320,7 @@ def homepage(request):
     return render(request, 'home.html', {'message': message})
 
 @login_required
-@D.admin_and_course_related_prof
+@D.admin_or_course_related_prof
 def course_students(request, course_id):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))

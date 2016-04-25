@@ -29,7 +29,7 @@ def students_forbidden(function):
     wrap.__name__=function.__name__
     return wrap
 
-def admin_and_course_related_prof(function):
+def admin_or_course_related_prof(function):
     def wrap(request, course_id=None, *args, **kwargs):
         if course_id is not None:
             user = CustomUser.objects.get(id=request.user.id)
@@ -53,7 +53,7 @@ def admin_and_course_related_prof(function):
     wrap.__name__=function.__name__
     return wrap
 
-def admin_and_course_related_prof_and_student(function):
+def admin_or_course_related_prof_or_student(function):
     def wrap(request, course_id=None, *args, **kwargs):
         if course_id is not None:
             user = CustomUser.objects.get(id=request.user.id)
