@@ -63,8 +63,14 @@ class ImageBlockForm(ModelForm):
         }
     
 class QuizBlockForm(ModelForm):
-    # TODO: Implement
-    pass
+    class Meta:
+        model = M.QuizBlock
+        fields = ('name', 'index', 'sections', 'assessment', 'serialQuestions')
+        widgets = {
+            'sections': widgets.HiddenInput(),
+            'index': widgets.HiddenInput(),
+            'serialQuestions': widgets.HiddenInput(),
+        }
 
 class ProgrammeForm(ModelForm):
     courses = ModelMultipleChoiceField(queryset=None)
