@@ -9,7 +9,7 @@ from django.db.models import Avg
 from django.utils.translation import ugettext
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from .decorators import admin_only
+import decorators as D
 from json import loads
 import models as M
 import forms as F
@@ -28,6 +28,8 @@ def registration(request):
 
     return render(request, 'registration.html', {'form': form})
 
+@login_required
+@D.admin_only
 def create_user(request):
     if request.method == "POST":
         form = F.CustomRegistrationFormAdmin(request.POST)
@@ -54,7 +56,8 @@ def user_login(request):
 
     return render(request, 'index.html', {'form': form})
 
-
+@login_required
+@D.admin_and_course_related_prof
 def course_modify(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -118,7 +121,7 @@ def course_show(request, course_id=None):
         return render(request, 'courses.html', {"query_results": query_results})
 
 @login_required
-@admin_only
+@D.admin_only
 def user_modify(request, customUser_id=None):
     if customUser_id is not None:
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
@@ -138,7 +141,8 @@ def user_modify(request, customUser_id=None):
 
     return render(request, 'registration.html', {'form': form})
 
-
+@login_required
+@D.admin_only
 def programme_modify(request, programme_id=None):
     if programme_id is not None:
         programme = get_object_or_404(M.Programme, id=int(programme_id))
@@ -147,15 +151,17 @@ def programme_modify(request, programme_id=None):
 
     if request.method == "POST":
         form = F.ProgrammeForm(request.POST, instance=programme)
-
+    
         if form.is_valid():
+            form.save()
+            
             for course in form.cleaned_data['courses']:
-                course.programmes.add(programme)
-                form.save()
+                programme.course_set.add(form.cleaned_data['courses'])
+            
         return HttpResponseRedirect('')
 
     else:
-        form = F.ProgrammeForm(instance=programme)
+        form = F.ProgrammeForm(instance=programme, programme_id=programme_id)
 
     return render(request, 'registration.html', {'form': form})
 
@@ -174,7 +180,8 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/login')
 
-
+@login_required
+@D.admin_and_course_related_prof
 def course_manage(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     query_results = M.Section.objects.filter(course__id=course_id)
@@ -185,6 +192,8 @@ def course_manage(request, course_id):
 
 
 #TEMP: Until we finish testing, and implement users properly
+@login_required
+@D.admin_and_course_related_prof
 @csrf_exempt
 def course_reorder_sections(request):
     course_id = request.POST['course_id']
@@ -195,6 +204,8 @@ def course_reorder_sections(request):
         section.save()
     return HttpResponse('')
 
+@login_required
+@D.admin_and_course_related_prof
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
     if section_id is not None:
@@ -216,7 +227,8 @@ def section_modify(request, course_id, section_id=None):
 
     return render(request, 'sectionEdit.html', {'form': form})
 
-
+@login_required
+@D.admin_and_course_related_prof
 def section_manage(request, course_id, section_id):
     section = get_object_or_404(M.Section, id=int(section_id))
     query_results = M.Block.objects.filter(sections__id=section_id)
@@ -251,7 +263,8 @@ def section_list_blocks(request):
     print response
     return HttpResponse(response)
 
-
+@login_required
+@D.admin_and_course_related_prof
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
@@ -298,7 +311,8 @@ def homepage(request):
     message = ugettext('Welcome to ElearningRed!')
     return render(request, 'home.html', {'message': message})
 
-
+@login_required
+@D.admin_and_course_related_prof
 def course_students(request, course_id):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))

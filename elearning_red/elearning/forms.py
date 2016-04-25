@@ -72,9 +72,9 @@ class ProgrammeForm(ModelForm):
         model = M.Programme
         fields = ('name', 'desc','tags','avgRating')
 	
-    def __init__(self, *args, **kwargs):
-	super(ProgrammeForm, self).__init__(*args, **kwargs)
-	self.fields['courses'].queryset = M.Course.objects.all()
+    def __init__(self, programme_id, *args, **kwargs):
+        super(ProgrammeForm, self).__init__(*args, **kwargs)                
+        self.fields['courses'].queryset = M.Course.objects.all()
 
 class RatingForm(ModelForm):
     class Meta:
