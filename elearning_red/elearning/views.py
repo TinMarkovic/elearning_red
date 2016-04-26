@@ -126,9 +126,10 @@ def user_modify(request, customUser_id=None):
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
     else:
         customUser = None
-        return HttpResponseRedirect('/users/edit')
+        return HttpResponseRedirect('/')
+    
     if request.method == "POST":
-        form = F.UserForm(request.POST, instance=customUser)
+        form = F.UserForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -282,7 +283,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             block_type = "quiz";
             block = block.quizblock
         elif hasattr(block, 'imageblock'):
-            block_type = "quiz";
+            block_type = "image";
             block = block.imageblock
     else:
         block = None
@@ -351,3 +352,29 @@ def course_details(request, course_id):
 
 def test_render(request):
     return render(request, 'quizEdit.html')
+
+def course_programme(request, programme_id):
+    if programme_id is not None:
+        programme = get_object_or_404(M.Programme, id=int(programme_id))
+    else:
+        programme = None
+        
+        return HttpResponseRedirect('/')
+        
+    if request.method == "POST":
+        form = F.CourseToProgramme(request.POST)
+       
+        if form.is_valid():
+            courses_added = request.POST.getlist['course_related']
+            courses_removed = request.POST.getlist['course_related']
+            
+            programme.course_set.add(course_added)
+                
+        else:
+            return HttpResponseRedirect('')
+
+    else:
+
+        form = F.CourseToProgramme(programme_id=programme_id)
+
+    return render(request, 'courseToProgramme.html', {'form': form})
