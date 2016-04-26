@@ -26,7 +26,7 @@ def registration(request):
     else:
         form = F.CustomRegistrationForm()
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration/registration_form.html', {'form': form})
 
 @login_required
 @D.admin_only
@@ -63,7 +63,13 @@ def course_modify(request, course_id=None):
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
         course = None
-
+        
+    if request.method == "DELETE":
+        if course is not None:
+            course.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = F.CourseForm(request.POST, instance=course)
 
@@ -156,6 +162,7 @@ def programme_modify(request, programme_id=None):
             form.save()
             
             for course in form.cleaned_data['courses']:
+
                 programme.course_set.add(course)
             
         return HttpResponseRedirect('')
@@ -163,7 +170,7 @@ def programme_modify(request, programme_id=None):
     else:
         form = F.ProgrammeForm(instance=programme, programme_id=programme_id)
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'programmes_edit.html', {'form': form})
 
 
 def programmes_show(request, programme_id=None):
@@ -204,6 +211,7 @@ def course_reorder_sections(request):
         section.save()
     return HttpResponse('')
 
+
 @login_required
 @D.admin_or_course_related_prof
 def section_modify(request, course_id, section_id=None):
@@ -212,7 +220,12 @@ def section_modify(request, course_id, section_id=None):
         section = get_object_or_404(M.Section, id=int(section_id))
     else:
         section = None
-
+    if request.method == "DELETE":
+        if section is not None:
+            section.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = F.SectionForm(request.POST)
         if form.is_valid():
@@ -294,10 +307,14 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
         'image': F.ImageBlockForm,
         'quiz': F.QuizBlockForm,
     }
-
+    if request.method == "DELETE":
+        if block is not None:
+            block.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
-        print request.POST
-        form = typeForm[block_type](request.POST, instance=block)
+        form = typeForm[block_type](request.POST, request.FILES, instance=block)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect('/courses/manage/' + course_id + "/section/" + section_id)
@@ -344,11 +361,41 @@ def course_students(request, course_id):
 
     return render(request, 'addstudents.html', {'form': form})
 
-
+#za profesora
 def course_details(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     return render(request, 'course_details.html', {"course": course})
 
+def about(request):
+    return render(request, 'about.html')
 
-def test_render(request):
-    return render(request, 'quizEdit.html')
+
+#za studenta
+def section_studentview(request, course_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+
+    query_results = M.Section.objects.filter(course__id=course_id)
+    if query_results is not None:
+        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course})
+    else:
+        return render(request, 'course_sections.html', {"course_id": course_id})
+
+def blocks_studentview(request, course_id, section_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+    section = get_object_or_404(M.Section, id=int(section_id))
+    video = M.VideoBlock.objects.filter(sections__id=section_id)
+    image = M.ImageBlock.objects.filter(sections__id=section_id)
+    html = M.HTMLBlock.objects.filter(sections__id=section_id)
+    if video is not None:
+        return render(request, 'blocks.html', {"video": video,
+                                                "image": image,
+                                                "html": html,
+                                                "course_id": course_id,
+                                                "section_id": section_id,
+                                                "course": course,
+                                                "section":section,
+                                                   })
+    else:
+        return render(request, 'blocks.html', {"course_id": course_id,
+                                                   "section_id": section_id,})
+
