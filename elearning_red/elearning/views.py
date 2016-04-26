@@ -254,7 +254,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             block_type = "quiz";
             block = block.quizblock
         elif hasattr(block, 'imageblock'):
-            block_type = "quiz";
+            block_type = "image";
             block = block.imageblock
     else:
         block = None
@@ -267,7 +267,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
     }
 
     if request.method == "POST":
-        form = typeForm[block_type](request.POST, instance=block)
+        form = typeForm[block_type](request.POST, request.FILES, instance=block)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect('/courses/manage/' + course_id + "/section/" + section_id)
@@ -327,6 +327,7 @@ def section_studentview(request, course_id):
         return render(request, 'course_sections.html', {"course_id": course_id})
 
 def blocks_studentview(request, course_id, section_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
     section = get_object_or_404(M.Section, id=int(section_id))
     video = M.VideoBlock.objects.filter(sections__id=section_id)
     image = M.ImageBlock.objects.filter(sections__id=section_id)
@@ -335,8 +336,10 @@ def blocks_studentview(request, course_id, section_id):
         return render(request, 'blocks.html', {"video": video,
                                                 "image": image,
                                                 "html": html,
-                                                   "course_id": course_id,
-                                                   "section_id": section_id,
+                                                "course_id": course_id,
+                                                "section_id": section_id,
+                                                "course": course,
+                                                "section":section,
                                                    })
     else:
         return render(request, 'blocks.html', {"course_id": course_id,
