@@ -43,6 +43,8 @@ def user_login(request):
     return render(request, 'index.html', {'form': form})
 
 
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
 def course_modify(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -188,6 +190,9 @@ def course_reorder_sections(request):
         section.save()
     return HttpResponse('')
 
+
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
     if section_id is not None:
@@ -197,7 +202,7 @@ def section_modify(request, course_id, section_id=None):
     if request.method == "DELETE":
         if section is not None:
             section.delete()
-            return HttpResponse('')
+            return HttpResponse('Success!')
         else:
             raise Http404("Section does not exist")
     if request.method == "POST":

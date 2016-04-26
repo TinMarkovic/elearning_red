@@ -18,6 +18,7 @@ urlpatterns = [
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)/block/edit/(?P<block_id>[0-9]+)", views.block_modify, name="editBlock"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)/block/new/(?P<block_type>\w+)", views.block_modify, name="newBlock"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.section_manage, name="manageSection"),
+    url(r"^courses/manage/(?P<course_id>[0-9]+)/section/edit/(?P<section_id>[0-9]+)", views.section_modify, name="editSection"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/new", views.section_modify, name="newSection"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)$", views.course_manage, name="manageCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)/details', views.course_details, name="detailsCourse"),

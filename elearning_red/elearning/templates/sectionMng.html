@@ -17,7 +17,7 @@
 				 <div class="panel panel-warning" id="{{item.id}}">
 						<div class="panel-heading">
 								<h3 class="panel-title">{{item.name}} 
-                                <i class="material-icons pull-right deleteBlock">delete</i>
+                                <a href="#"><i class="material-icons pull-right deleteBlock">delete</i></a>
 								<span class="col-md-1 pull-right"></span>  
                                 <a href="{% url "elearning:editBlock" course_id section_id item.id %}"> 
                                     <i class="material-icons pull-right">edit</i>
@@ -74,16 +74,19 @@ $(document).ready(function () {
 	$( ".deleteBlock" ).on( "click", function( event, ui ) {
         $element = $(this).parents(".panel-warning");
         var block_id = $element.attr("id");
-        console.log("Deleting block: " + block_id);
-        $.ajax({
-             type:"DELETE",
-             url:"/courses/manage/" + {{course_id}} + 
-             "/section/" + {{section_id}} + "/block/edit/" + block_id,
-             data: {},
-             success: function(){
-                    $element.remove();
+        
+        if(confirm("Are you certain you want to delete this block?")){
+            $.ajax({
+                 type:"DELETE",
+                 url:"/courses/manage/" + {{course_id}} + 
+                 "/section/" + {{section_id}} + "/block/edit/" + block_id,
+                 data: {},
+                 success: function(){
+                        $element.remove();
+                        $( "#confirmSort" ).trigger( "click" );
                 }
-        });
+            });
+        }
     });
 
 });
