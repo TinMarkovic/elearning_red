@@ -352,29 +352,3 @@ def course_details(request, course_id):
 
 def test_render(request):
     return render(request, 'quizEdit.html')
-
-def course_programme(request, programme_id):
-    if programme_id is not None:
-        programme = get_object_or_404(M.Programme, id=int(programme_id))
-    else:
-        programme = None
-        
-        return HttpResponseRedirect('/')
-        
-    if request.method == "POST":
-        form = F.CourseToProgramme(request.POST)
-       
-        if form.is_valid():
-            courses_added = request.POST.getlist['course_related']
-            courses_removed = request.POST.getlist['course_related']
-            
-            programme.course_set.add(course_added)
-                
-        else:
-            return HttpResponseRedirect('')
-
-    else:
-
-        form = F.CourseToProgramme(programme_id=programme_id)
-
-    return render(request, 'courseToProgramme.html', {'form': form})
