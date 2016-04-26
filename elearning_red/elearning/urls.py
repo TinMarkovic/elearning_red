@@ -7,7 +7,6 @@ from . import views
 
 app_name = 'elearning'
 urlpatterns = [
-    url(r'^testrender/', views.test_render, name='testrender'),
     url(r'^ajax/modify-block-order/', views.section_reorder_blocks, name='section_reorder_blocks'),
     url(r'^ajax/modify-section-order/', views.course_reorder_sections, name='course_reorder_sections'),
     url(r'^ajax/get-blocks-list/', views.section_list_blocks, name='section_list_blocks'),
@@ -18,10 +17,12 @@ urlpatterns = [
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)/block/edit/(?P<block_id>[0-9]+)", views.block_modify, name="editBlock"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)/block/new/(?P<block_type>\w+)", views.block_modify, name="newBlock"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.section_manage, name="manageSection"),
+    url(r"^courses/view/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.blocks_studentview, name="showblocks"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/edit/(?P<section_id>[0-9]+)", views.section_modify, name="editSection"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)/section/new", views.section_modify, name="newSection"),
     url(r"^courses/manage/(?P<course_id>[0-9]+)$", views.course_manage, name="manageCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)/details', views.course_details, name="detailsCourse"),
+    url(r'^courses/(?P<course_id>[0-9]+)/studentview', views.section_studentview, name="CourseStudentview"),
     url(r'^courses/(?P<course_id>[0-9]+)', views.course_show, name="courseView"),
     url(r"^courses/$", views.course_show, name="listCourse"),
     url(r'^user/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
@@ -32,5 +33,6 @@ urlpatterns = [
     url(r'^programmes/(?P<programme_id>[0-9]+)', views.programmes_show, name='programmesListCourses'),
     url(r'^login/', views.user_login, name='login'),
     url(r'^logout/', views.user_logout, name='logout'),
+    url(r'^about/', views.about, name='about'),
     url(r'^$', views.homepage, name='homepage'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

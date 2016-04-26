@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %} Create programme {% endblock title %}
+{% block content %}
+<form method="post" action="" class="form-horizontal">
+  <fieldset>
+    {% csrf_token %}
+	{{ form.as_p }}
+     
+ 
+    </fieldset>
+    <input type="submit" value="Create programme" />
+    
+</form>
+{% endblock content %}

@@ -1,8 +1,16 @@
 {% extends "base.html" %}
 {% block title %} Test home screen {% endblock title %}
+<div class="container">
 {% block content %}
+
+<div class="jumbotron">
+
 <h1>{{ message }}</h1>
-    <ul>
+ <img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" class="img-responsive" alt="Cinque Terre" width="500" height="236">
+</div>
+{% endblock content %}
+
+ </div>
     <li><a href={% url "elearning:registration" %}>Sign Up</a></li>
     {% if user.is_authenticated %}
         <li><a href={% url "elearning:logout" %}>Logout</a></li>
@@ -10,5 +18,5 @@
         <li><a href={% url "elearning:login" %}>Login</a></li>
     {% endif %}
     </ul>
-{% endblock content %}
+
                  
