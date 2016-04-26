@@ -7,7 +7,6 @@ from . import views
 
 app_name = 'elearning'
 urlpatterns = [
-    url(r'^testrender/', views.test_render, name='testrender'),
     url(r'^ajax/modify-block-order/', views.section_reorder_blocks, name='section_reorder_blocks'),
     url(r'^ajax/modify-section-order/', views.course_reorder_sections, name='course_reorder_sections'),
     url(r'^ajax/get-blocks-list/', views.section_list_blocks, name='section_list_blocks'),
