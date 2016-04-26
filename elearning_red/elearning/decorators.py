@@ -31,8 +31,8 @@ def admin_or_professor(function):
 
 def admin_or_course_related_prof(function):
     def wrap(request, course_id=None, *args, **kwargs):
+        user = CustomUser.objects.get(id=request.user.id)
         if course_id is not None:
-            user = CustomUser.objects.get(id=request.user.id)
             if user.role.name == 'admin':
                 return function(request, course_id, *args, **kwargs)
             elif user.role.name == 'professor':
@@ -46,7 +46,7 @@ def admin_or_course_related_prof(function):
             else:
                 return HttpResponseRedirect('/')
         else: 
-            if user.role.name == 'admin' | user.role.name == 'profesor':
+            if user.role.name == 'admin' or user.role.name == 'professor':               
                 return function(request, course_id, *args, **kwargs)
             else:
                 return HttpResponseRedirect('/')
@@ -61,7 +61,7 @@ def admin_or_course_related_prof_or_student(function):
             user = CustomUser.objects.get(id=request.user.id)
             if user.role.name == 'admin':
                 return function(request, course_id, *args, **kwargs)
-            elif user.role.name == 'professor' | user.role.name == 'student':
+            elif user.role.name == 'professor' or user.role.name == 'student':
                 course = get_object_or_404(Course, id=int(course_id))
                 try:
                     course = Course.objects.get(id=course_id,users=user)
@@ -74,7 +74,7 @@ def admin_or_course_related_prof_or_student(function):
                 return HttpResponseRedirect('/')
                
         else:
-            return HttpResponseRedirect('/')
+             return function(request, *args, **kwargs)
             
     wrap.__doc__=function.__doc__
     wrap.__name__=function.__name__
