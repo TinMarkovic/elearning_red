@@ -16,8 +16,13 @@
 
 				 <div class="panel panel-warning" id="{{item.id}}">
 						<div class="panel-heading">
-								<h3 class="panel-title">{{item.name}} ~
-								<b><a href="{% url "elearning:editBlock" course_id section_id item.id %}"> Edit</a></b></h3>
+								<h3 class="panel-title">{{item.name}} 
+                                <i class="material-icons pull-right deleteBlock">delete</i>
+								<span class="col-md-1 pull-right"></span>  
+                                <a href="{% url "elearning:editBlock" course_id section_id item.id %}"> 
+                                    <i class="material-icons pull-right">edit</i>
+                                </a>
+								</h3>
 						</div>
 				</div>
 				{% endfor %}
@@ -66,6 +71,20 @@ $(document).ready(function () {
             });
 		$("#confirmSort").hide();
 	});
+	$( ".deleteBlock" ).on( "click", function( event, ui ) {
+        $element = $(this).parents(".panel-warning");
+        var block_id = $element.attr("id");
+        console.log("Deleting block: " + block_id);
+        $.ajax({
+             type:"DELETE",
+             url:"/courses/manage/" + {{course_id}} + 
+             "/section/" + {{section_id}} + "/block/edit/" + block_id,
+             data: {},
+             success: function(){
+                    $element.remove();
+                }
+        });
+    });
 
 });
 </script>

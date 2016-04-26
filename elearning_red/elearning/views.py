@@ -48,7 +48,13 @@ def course_modify(request, course_id=None):
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
         course = None
-
+        
+    if request.method == "DELETE":
+        if course is not None:
+            course.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = F.CourseForm(request.POST, instance=course)
 
@@ -188,7 +194,12 @@ def section_modify(request, course_id, section_id=None):
         section = get_object_or_404(M.Section, id=int(section_id))
     else:
         section = None
-
+    if request.method == "DELETE":
+        if section is not None:
+            section.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = F.SectionForm(request.POST)
         if form.is_valid():
@@ -267,7 +278,12 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
         'image': F.ImageBlockForm,
         'quiz': F.QuizBlockForm,
     }
-
+    if request.method == "DELETE":
+        if block is not None:
+            block.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         print request.POST
         form = typeForm[block_type](request.POST, instance=block)
