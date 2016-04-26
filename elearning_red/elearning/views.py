@@ -43,12 +43,20 @@ def user_login(request):
     return render(request, 'index.html', {'form': form})
 
 
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
 def course_modify(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
         course = None
-
+        
+    if request.method == "DELETE":
+        if course is not None:
+            course.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = F.CourseForm(request.POST, instance=course)
 
@@ -182,13 +190,21 @@ def course_reorder_sections(request):
         section.save()
     return HttpResponse('')
 
+
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
     if section_id is not None:
         section = get_object_or_404(M.Section, id=int(section_id))
     else:
         section = None
-
+    if request.method == "DELETE":
+        if section is not None:
+            section.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = F.SectionForm(request.POST)
         if form.is_valid():
@@ -238,7 +254,9 @@ def section_list_blocks(request):
     print response
     return HttpResponse(response)
 
-
+    
+#TEMP: Until we finish testing, and implement users properly
+@csrf_exempt
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
@@ -265,7 +283,12 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
         'image': F.ImageBlockForm,
         'quiz': F.QuizBlockForm,
     }
-
+    if request.method == "DELETE":
+        if block is not None:
+            block.delete()
+            return HttpResponse('')
+        else:
+            raise Http404("Section does not exist")
     if request.method == "POST":
         form = typeForm[block_type](request.POST, request.FILES, instance=block)
         if form.is_valid():
@@ -276,8 +299,13 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             'sections': section_id,
             'index': M.Block.objects.filter(sections__id=section_id).count()
         }
-        form = typeForm[block_type](instance=block, initial=initialDict)
-
+        if block is not None:
+            form = typeForm[block_type](instance=block)
+        else:
+            form = typeForm[block_type](instance=block, initial=initialDict)
+            
+    if block_type == "quiz":
+        return render(request, 'quizEdit.html', {'form': form, "course_id": course_id, "section_id": section_id, })
     return render(request, 'blockEdit.html', {'form': form})
 
 
