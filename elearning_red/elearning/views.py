@@ -348,9 +348,11 @@ def about(request):
 def section_studentview(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
 
+    courses_inscribed = M.Course.objects.filter(users=request.user.id)
+    courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course})
+        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
     else:
         return render(request, 'course_sections.html', {"course_id": course_id})
 

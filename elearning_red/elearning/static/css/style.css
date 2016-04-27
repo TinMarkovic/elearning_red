@@ -1,5 +1,5 @@
-html, body {
-  height: 100%;
+body {
+  padding-bottom: 100px;
 }
 
 ul#menu.nav.navbar-nav{
@@ -12,9 +12,16 @@ ul#menu.nav.navbar-nav{
 	height: auto !important;
 	height: 100%;
 	margin:  auto 50px -155px;
+  	padding-bottom: 100px;
 }
 
 .footer.push{
 	height: 155px;
 }
 
+.breadcrumb {
+    margin-bottom: 20px;
+    list-style: none;
+    background-color: transparent;
+    border-radius: 4px;
+}
