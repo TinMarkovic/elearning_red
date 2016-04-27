@@ -9,7 +9,7 @@ class UserForm(ModelForm):
         model = M.CustomUser
         fields = ('username', 'first_name', 'last_name', 'email', 'dob','role')
         widgets = {
-            'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
+            'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))),
         }
         
 class LoginForm(Form):
@@ -21,7 +21,7 @@ class CourseForm(ModelForm):
         model = M.Course
         fields = ('name', 'desc', 'beginDate', 'duration', 'author', 'programmes', 'tags')
         widgets = {
-            'beginDate': widgets.SelectDateWidget()
+            'beginDate': widgets.SelectDateWidget(),
         }
 
 class SectionForm(ModelForm):
