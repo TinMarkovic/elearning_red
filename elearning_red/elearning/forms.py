@@ -1,4 +1,4 @@
-from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField, DateField
+from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField, DateField, ModelChoiceField
 import models as M
 from datetime import datetime
 from suit_ckeditor.widgets import CKEditorWidget
@@ -7,9 +7,9 @@ from registration.forms import RegistrationForm
 class UserForm(ModelForm):
     class Meta:
         model = M.CustomUser
-        fields = ('username', 'first_name', 'last_name', 'email', 'password', 'dob','role')
+        fields = ('username', 'first_name', 'last_name', 'email', 'dob','role')
         widgets = {
-            'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))), 'password': PasswordInput()
+            'dob': widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))),
         }
         
 class LoginForm(Form):
@@ -21,7 +21,7 @@ class CourseForm(ModelForm):
         model = M.Course
         fields = ('name', 'desc', 'beginDate', 'duration', 'author', 'programmes', 'tags')
         widgets = {
-            'beginDate': widgets.SelectDateWidget()
+            'beginDate': widgets.SelectDateWidget(),
         }
 
 class SectionForm(ModelForm):
@@ -78,9 +78,9 @@ class ProgrammeForm(ModelForm):
         model = M.Programme
         fields = ('name', 'desc','tags','avgRating')
 	
-    def __init__(self, *args, **kwargs):
-	super(ProgrammeForm, self).__init__(*args, **kwargs)
-	self.fields['courses'].queryset = M.Course.objects.all()
+    def __init__(self, programme_id, *args, **kwargs):
+        super(ProgrammeForm, self).__init__(*args, **kwargs)                
+        self.fields['courses'].queryset = M.Course.objects.all()
 
 class RatingForm(ModelForm):
     class Meta:
@@ -102,3 +102,7 @@ class CustomRegistrationForm(RegistrationForm):
     first_name = CharField(max_length=100)
     last_name = CharField(max_length=100)
     dob = DateField(widget=widgets.SelectDateWidget(years=range((datetime.now().year-90),(datetime.now().year-15))))
+
+class CustomRegistrationFormAdmin(CustomRegistrationForm):
+    role = ModelChoiceField(queryset=M.Role.objects.all().order_by('name'))
+    
