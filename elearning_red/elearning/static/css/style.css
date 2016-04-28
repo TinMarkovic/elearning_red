@@ -24,4 +24,20 @@ ul#menu.nav.navbar-nav{
     list-style: none;
     background-color: transparent;
     border-radius: 4px;
+    width: 450px;
+}
+
+.breadcrumb .btn {
+    padding: 6px 12px 6px 3px;
+}
+
+.navbar.navbar-danger {
+    background-color: #6b9abf;
+    color: rgba(255,255,255,.84);
+}
+
+.box{
+	display: block;
+	float: right;
+	margin: 0 60px 10px 10px;
 }

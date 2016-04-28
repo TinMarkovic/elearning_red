@@ -14,9 +14,9 @@
       <ul class="nav navbar-nav" id="menu">
        
              <li><ul class="breadcrumb">
-            <li><a href={% url "elearning:homepage" %} class="btn btn-danger"><b>Home</b></a></li>
-            <li><a href={% url "elearning:listCourse" %} "btn btn-link"><b>List of courses</b></a></li>
-            <li><a href={% url "elearning:CourseStudentview" course_id %} class="btn btn-danger"><b>{{course.name}}</b></a></li>
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourse" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li><a href={% url "elearning:CourseStudentview" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
             <li class="active" class="btn btn-danger"><b>{{section.name}}</b></li>
             </ul></li>
             
@@ -54,8 +54,8 @@
 				{% if video %}
 				{% for item in video %}
 
-				 <div  id="{{item.id}}"><h3 class="panel">{{item.name}}</h3></div>
-						
+				 <div  id="{{item.id}}" </div>
+						<h3 class="panel-title">{{item.name}}</h3><br></br></div>
 								<div class="panel-body">
 								<p><iframe width="500" height="300" src="{{item.url}}"></iframe></p>
 								

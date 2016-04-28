@@ -336,8 +336,15 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
 
 def homepage(request):
     message = ugettext('Welcome to ElearningRed!')
-    return render(request, 'home.html', {'message': message})
-
+    if request.user.is_authenticated():
+        courses_inscribed = M.Course.objects.filter(users=request.user.id)
+        courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
+        return render(request, 'home.html',
+                      {'message': message,"courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
+    else:
+        query_results = M.Course.objects.all()
+        return render(request, 'home.html', {'message': message, "query_results": query_results})
+    
 
 @login_required
 @D.admin_or_course_related_prof

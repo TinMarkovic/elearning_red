@@ -74,9 +74,10 @@
       <ul class="nav navbar-nav" id="menu">
        
              <li><ul class="breadcrumb">
-            <li><a href={% url "elearning:homepage" %}><b>Home</b></a></li>
-            <li><a href={% url "elearning:listCourse" %}><b>List of courses</a></b></li>
-            <li class="active"><b>{{course.name}}</b></li>
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourse" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li class="active"><b>{{course.name}}</b></a></li>
+           
             </ul></li>
             
 
