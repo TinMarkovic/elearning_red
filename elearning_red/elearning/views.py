@@ -131,8 +131,9 @@ def course_show(request, course_id=None):
         return render(request, 'courses.html', {"query_results": query_results})
     
 
-@login_required
-@D.admin_only
+#@login_required
+#@D.admin_only
+@csrf_exempt
 def user_modify(request, customUser_id=None):
     users = M.CustomUser.objects.all()
     if customUser_id is not None:
@@ -140,6 +141,13 @@ def user_modify(request, customUser_id=None):
     else:
         customUser = None
         return HttpResponseRedirect('/')
+    
+    if request.method == "DELETE":
+        if customUser is not None:
+            customUser.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("User does not exist")
     
     if request.method == "POST":
         form = F.UserForm(request.POST)

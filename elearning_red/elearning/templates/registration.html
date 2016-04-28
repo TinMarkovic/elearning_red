@@ -26,13 +26,13 @@
     </tr>
     </thead>
      {% for item in users|dictsort:"first_name" %}
-    <tr  class="success">
+    <tr  class="success success" id ="{{ item.id }}">
         <td>{{ item.first_name }}</td>
         <td>{{ item.last_name }}</td>
         <td>{{ item.role }}</td>        
         <td>{{ item.email }} </td>
         <td><a href="{% url "elearning:editUser" customUser_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
-        <td><a href="{% url "elearning:detailsCourse" course_id=item.id %}" class="btn btn-raised btn-info">Delete</a> </td>
+        <td><a class="btn btn-raised btn-info deleteBlock">Delete</a></td>
     </tr>
     {% endfor %}
 </table>
@@ -45,6 +45,24 @@
 <script>
 $(document).ready( function () {
     $('#table_1').DataTable();
+    
+    $( ".deleteBlock" ).on( "click", function( event, ui ) {
+        $element = $(this).parents(".success");
+        var user_id = $element.attr("id");
+        
+        if(confirm("Are you certain you want to delete this user?")){
+            $.ajax({
+                 type:"DELETE",
+                 url:"/user/edit/" + user_id,
+                 data: {},
+                 success: function(){
+                        $element.remove();
+
+                }
+            });
+        }
+    });
+    
 } );
 </script>
 {% endblock script %}
