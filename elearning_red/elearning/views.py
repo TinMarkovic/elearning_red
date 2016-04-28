@@ -32,6 +32,7 @@ def registration(request):
 @login_required
 @D.admin_only
 def create_user(request):
+    users = M.CustomUser.objects.all()
     if request.method == "POST":
         form = F.CustomRegistrationFormAdmin(request.POST)
         if form.is_valid():
@@ -40,7 +41,7 @@ def create_user(request):
     else:
         form = F.CustomRegistrationFormAdmin()
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration.html', {'form': form, 'users': users})
 
 def user_login(request):
     if request.method == "POST":
@@ -132,6 +133,7 @@ def course_show(request, course_id=None):
 @login_required
 @D.admin_only
 def user_modify(request, customUser_id=None):
+    users = M.CustomUser.objects.all()
     if customUser_id is not None:
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
     else:
@@ -149,7 +151,7 @@ def user_modify(request, customUser_id=None):
     else:
         form = F.UserForm(instance=customUser)
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration.html', {'form': form, 'users': users})
 
 
 @login_required
