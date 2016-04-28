@@ -62,6 +62,7 @@ def user_login(request):
 @login_required
 @D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
+    courses = M.Course.objects.all()
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
@@ -85,7 +86,7 @@ def course_modify(request, course_id=None):
     else:
         form = F.CourseForm(instance=course)
 
-    return render(request, 'course.html', {'form': form})
+    return render(request, 'course.html', {'form': form, 'courses': courses})
 
 
 def course_show(request, course_id=None):
