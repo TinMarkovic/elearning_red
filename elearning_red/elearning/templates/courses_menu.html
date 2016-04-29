@@ -28,7 +28,7 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Enrolled courses <span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
       
-                {% for item in courses_uninscribed %}
+                {% for item in courses_inscribed %}
                 
                     <li><a href={% url "elearning:showStudentsInCourse" course_id=item.id %}>{{item.name}}</a>
                     </li>

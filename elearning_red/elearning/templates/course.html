@@ -1,9 +1,10 @@
 {% extends "base.html" %}
 {% block title %} Course {% endblock title %}
 {% block content %}
+{% load bootstrap3 %}
 <form method="post" action="" >
     {% csrf_token %}
-    {{ form.as_p }}
+   {% bootstrap_form form layout='horizontal' %}
     <input type="submit" value="Submit a course" />
 </form>
 <table class="table table-striped table-hover ", id="table_1">
