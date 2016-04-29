@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Block {% endblock title %}
 {% block content %}
+<div class="col-lg-8">
 <form method="post" action="" class="form-horizontal" enctype='multipart/form-data'>
 <fieldset>
 
@@ -9,7 +10,12 @@
     {{ form.as_p }}
     
 </fieldset>
-    <button type="submit" class="btn btn-primary">Finish a block</button>
+</div>
+<div class="btn btn-success btn-fab pull-right">
+    <button style="background:none; border:none;" type="submit">
+        <i class="material-icons">save</i> 
+    </button>
+</div>
 </form>
 {% endblock content %}
 

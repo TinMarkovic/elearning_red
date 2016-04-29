@@ -374,14 +374,14 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
     if request.method == "DELETE":
         if block is not None:
             block.delete()
-            return HttpResponse('')
+            return HttpResponse('Successfully deleted.')
         else:
             raise Http404("Section does not exist")
     if request.method == "POST":
         form = typeForm[block_type](request.POST, request.FILES, instance=block)
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect('/courses/manage/' + course_id + "/section/" + section_id)
+        return HttpResponseRedirect(reverse('elearning:manageSection', kwargs={'course_id': course_id, 'section_id': section_id}))
     else:
         initialDict = {
             'sections': section_id,
@@ -392,9 +392,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
         else:
             form = typeForm[block_type](instance=block, initial=initialDict)
             
-    if block_type == "quiz": #TODO Make it better
-        return render(request, 'quizEdit.html', {'form': form, "course_id": course_id, "section_id": section_id, })
-    return render(request, 'blockEdit.html', {'form': form})
+    return form.getRender(request, course_id, section_id)
 
 
 def blocks_studentview(request, course_id, section_id):

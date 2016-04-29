@@ -3,7 +3,7 @@
 {% block content %}
 {% csrf_token %}
 <h1> Course Management </h1>
-<a href="{% url "elearning:listCourse" %}">Back to course list</a> <br><br>
+<a href="{% url "elearning:listCourses" %}">Back to course list</a> <br><br>
 <a href="{% url "elearning:manageStudents" course_id=course_id %}">Add/remove students</a>
 <h2> Sections: <a href="javascript:void(0)" class="btn btn-raised btn-success" id="confirmSort">CONFIRM SORT ORDER</a></h2>
 
