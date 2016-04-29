@@ -32,8 +32,6 @@
     {% endfor %}
   </div>
         
-    
-</table>
  <h3> Available: </h3>
     <div class="list-group">
     {% for item in courses_uninscribed %}
@@ -42,11 +40,13 @@
       <i class="material-icons">info_outline</i>
     </div>{{ item.name }}
 
-    </a></div></h4>
+    </div></h4>
     {% endfor %}
  
 </div>
 
+
+    <a href={% url "elearning:programmesView" %} class="btn btn-raised btn-success">Your programmes</a>
       
     {% else %}
     	<p><h3><a href={% url "elearning:registration" %}>Join today!</a></h3></p>
