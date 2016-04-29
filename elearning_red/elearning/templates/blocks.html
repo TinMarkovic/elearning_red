@@ -14,10 +14,10 @@
       <ul class="nav navbar-nav" id="menu">
        
              <li><ul class="breadcrumb">
-            <li><a href={% url "elearning:homepage" %}><b>Home</b></a></li>
-            <li><a href={% url "elearning:listCourse" %}><b>List of courses</b></a></li>
-            <li><a href={% url "elearning:CourseStudentview" course_id %}><b>{{course.name}}</b></a></li>
-            <li class="active"><b>{{section.name}}</b></li>
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourse" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li><a href={% url "elearning:CourseStudentview" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
+            <li class="active" class="btn btn-danger"><b>{{section.name}}</b></li>
             </ul></li>
             
 
@@ -51,39 +51,38 @@
 
 <div class="col-md-8">
 		
-				{% if not video %}
-				<div class="panel panel-default">
-						<div class="panel-body">Empty content</div>
-				</div>
-				{% else %}
+				{% if video %}
 				{% for item in video %}
 
-				 <div class="panel panel-warning" id="{{item.id}}">
-						<div class="panel-heading">
-								<h3 class="panel-title">{{item.name}}</h3></div>
+				 <div  id="{{item.id}}" </div>
+						<h3 class="panel-title">{{item.name}}</h3><br></br></div>
 								<div class="panel-body">
-								<p><iframe width="300" height="300" src="{{item.url}}"></iframe></p>
-								</div>
+								<p><iframe width="500" height="300" src="{{item.url}}"></iframe></p>
+								
 
 				</div>
 				{% endfor %}
 				{% endif %}
-<!-- for image 
 
+				{% if image %}
+				{% for item in image %}
+
+								<div class="panel-body"><img src="{{item.image.url}}"style="width:350px;height:250px;"/></div>
+								<div  id="{{item.id}}">
+								<h3 class="panel-title">{{item.subtitle}}</h3><br></br></div>
 				
--->
-				{% if not html%}
-				<div class="panel panel-default">
-						<div class="panel-body">Empty content</div>
-				</div>
-				{% else %}
+				{% endfor %}
+				{% endif %}		
+				
+
+				{% if html %}
 				{% for item in html %}
 
-				 <div class="panel panel-warning" id="{{item.id}}">
-						<div class="panel-heading">
+				 <div id="{{item.id}}">
+						
 								<h3 class="panel-title">{{item.name}}</h3></div>
 								<div class="panel-body">{{item.content}}</div>
-				</div>
+				
 				{% endfor %}
 				{% endif %}		
 		

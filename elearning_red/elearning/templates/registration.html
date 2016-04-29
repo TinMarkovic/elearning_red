@@ -2,12 +2,19 @@
 {% block title %} Create account {% endblock title %}
 {% block content %}
 
+
 <div>
-<form method="post" action="">
+
+<form method="post" action="" class="form-horizontal">
+  <fieldset>
+
     {% csrf_token %}
-     {{ form.as_p }}
-	
+	{{ form.as_p }}
+     
+ 
+    </fieldset>
     <input type="submit" value="Create new user account" />
+    
 </form>
 </div>
 
