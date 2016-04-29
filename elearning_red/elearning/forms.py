@@ -1,4 +1,5 @@
 from django.forms import ModelForm, widgets, ChoiceField, Form, CharField, PasswordInput, MultipleChoiceField, Select, IntegerField, ModelMultipleChoiceField, DateField, ModelChoiceField
+from django.shortcuts import render
 import models as M
 from datetime import datetime
 from suit_ckeditor.widgets import CKEditorWidget
@@ -34,35 +35,39 @@ class SectionForm(ModelForm):
             'index': widgets.HiddenInput(),
         }
         
-class HTMLBlockForm(ModelForm):
+class BlockForm(ModelForm):
+    def getRender(self, request, course_id = None, section_id = None):
+        return render(request, 'blockEdit.html', {'form': self})
+
+class HTMLBlockForm(BlockForm):
     class Meta:
     	model = M.HTMLBlock
-    	fields = ('name', 'index', 'sections', 'assessment', 'content',) 
+    	fields = ('name', 'index', 'sections', 'content',) 
     	widgets = {
             'content': CKEditorWidget(),
             'sections': widgets.HiddenInput(),
             'index': widgets.HiddenInput(),
         }
                
-class VideoBlockForm(ModelForm):
+class VideoBlockForm(BlockForm):
     class Meta:
         model = M.VideoBlock
-        fields = ('name', 'index', 'sections', 'url', 'assessment') 
+        fields = ('name', 'index', 'sections', 'url',) 
         widgets = {
             'sections': widgets.HiddenInput(),
             'index': widgets.HiddenInput(),
         }
     
-class ImageBlockForm(ModelForm):
+class ImageBlockForm(BlockForm):
     class Meta:
         model = M.ImageBlock
-        fields = ('name', 'subtitle', 'index', 'sections', 'assessment', 'image')
+        fields = ('name', 'subtitle', 'index', 'sections', 'image')
         widgets = {
             'sections': widgets.HiddenInput(),
             'index': widgets.HiddenInput(),
         }
     
-class QuizBlockForm(ModelForm):
+class QuizBlockForm(BlockForm):
     class Meta:
         model = M.QuizBlock
         fields = ('name', 'index', 'sections', 'assessment', 'serialQuestions')
@@ -71,16 +76,19 @@ class QuizBlockForm(ModelForm):
             'index': widgets.HiddenInput(),
             'serialQuestions': widgets.HiddenInput(),
         }
+    def getRender(self, request, course_id = None, section_id = None):
+        return render(request, 'quizEdit.html', {'form': self, "course_id": course_id, "section_id": section_id, })
 
 class ProgrammeForm(ModelForm):
-    courses = ModelMultipleChoiceField(queryset=None)
     class Meta:
         model = M.Programme
-        fields = ('name', 'desc','tags','avgRating')
-	
-    def __init__(self, programme_id, *args, **kwargs):
+        fields = ('name', 'desc','tags','avgRating','users',)
+        widgets = {
+            'users': widgets.CheckboxSelectMultiple(),
+        }
+    def __init__(self, *args, **kwargs):
         super(ProgrammeForm, self).__init__(*args, **kwargs)                
-        self.fields['courses'].queryset = M.Course.objects.all()
+        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")
 
 class RatingForm(ModelForm):
     class Meta:
