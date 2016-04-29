@@ -59,9 +59,8 @@ def user_login(request):
     return render(request, 'index.html', {'form': form})
 
 
-#@login_required
-#@D.admin_or_course_related_prof
-@csrf_exempt
+@login_required
+@D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
     courses = M.Course.objects.all()
     if course_id is not None:
@@ -133,9 +132,8 @@ def course_show(request, course_id=None):
         return render(request, 'courses.html', {"query_results": query_results})
     
 
-#@login_required
-#@D.admin_only
-@csrf_exempt
+@login_required
+@D.admin_only
 def user_modify(request, customUser_id=None):
     users = M.CustomUser.objects.all()
     if customUser_id is not None:
@@ -172,7 +170,16 @@ def programme_modify(request, programme_id=None):
         programme = get_object_or_404(M.Programme, id=int(programme_id))
     else:
         programme = None
-
+    
+    programmes = M.Programme.objects.all()
+    
+    if request.method == "DELETE":
+        if programme is not None:
+            programme.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("Programme does not exists!")
+    
     if request.method == "POST":
         form = F.ProgrammeForm(request.POST, instance=programme)
     
@@ -188,7 +195,7 @@ def programme_modify(request, programme_id=None):
     else:
         form = F.ProgrammeForm(instance=programme, programme_id=programme_id)
 
-    return render(request, 'programmes_edit.html', {'form': form})
+    return render(request, 'programmes_edit.html', {'form': form, 'programmes': programmes})
 
 
 def programmes_show(request, programme_id=None):
