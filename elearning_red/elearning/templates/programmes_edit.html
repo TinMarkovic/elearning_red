@@ -31,7 +31,7 @@
         <td>{{ item.avgRating }}</td>
         <td><a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Edit</a>
         <td><a href="" class="btn btn-raised btn-info">Details</a> </td>
-        <td><a href={% url "elearning:programmesListCourses" programme_id=item.id %} class="btn btn-raised btn-danger">Enter</a> </td>
+        <td><a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-danger">Enter</a> </td>
         <td> <a href="" class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
     </tr>
     {% endfor %}

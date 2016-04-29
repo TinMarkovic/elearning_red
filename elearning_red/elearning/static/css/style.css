@@ -46,3 +46,7 @@ ul#menu.nav.navbar-nav{
 #sections.well{
 	background-color:#F6B2B5;
 }
+
+#students.col-sm-4{
+	margin-top: 50px;
+}

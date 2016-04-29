@@ -43,8 +43,8 @@ def about(request):
     return render(request, 'about.html')
 
 
-@login_required
-@D.admin_only
+#@login_required
+#@D.admin_only
 def user_create(request):
     users = M.CustomUser.objects.all()
     if request.method == "POST":
@@ -74,8 +74,8 @@ def user_login(request):
     return render(request, 'index.html', {'form': form})
 
 
-@login_required
-@D.admin_only
+#@login_required
+#@D.admin_only
 def user_modify(request, customUser_id=None):
     users = M.CustomUser.objects.all()
     if customUser_id is not None:
@@ -110,8 +110,8 @@ def user_logout(request):
     return HttpResponseRedirect('/login')
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
     courses = M.Course.objects.all()
     if course_id is not None:
@@ -176,19 +176,19 @@ def course_show(request, course_id=None):
         return render(request, 'courses.html', {"query_results": query_results})
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def course_manage(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'courseMng.html', {"query_results": query_results, "course_id": course_id})
+        return render(request, 'courseMng.html', {"query_results": query_results, "course_id": course_id,"course":course})
     else:
-        return render(request, 'courseMng.html', {"course_id": course_id})
+        return render(request, 'courseMng.html', {"course_id": course_id,"course":course})
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def course_reorder_sections(request):
     course_id = request.POST['course_id']
     new_order = loads(request.POST['neworder'])
@@ -199,8 +199,8 @@ def course_reorder_sections(request):
     return HttpResponse('')
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def course_students(request, course_id):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -225,8 +225,8 @@ def course_details(request, course_id):
     return render(request, 'course_details.html', {"course": course})
 
 
-@login_required
-@D.admin_only
+#@login_required
+#@D.admin_only
 def programme_modify(request, programme_id=None):
     if programme_id is not None:
         programme = get_object_or_404(M.Programme, id=int(programme_id))
@@ -269,8 +269,8 @@ def programmes_show(request, programme_id=None):
         return render(request, 'programmes.html', {'programmes': programmes})
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def section_modify(request, course_id, section_id=None):
     course = get_object_or_404(M.Course, id=int(course_id))
     if section_id is not None:
@@ -298,8 +298,8 @@ def section_modify(request, course_id, section_id=None):
     return render(request, 'sectionEdit.html', {'form': form})
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def section_manage(request, course_id, section_id):
     section = get_object_or_404(M.Section, id=int(section_id))
     query_results = M.Block.objects.filter(sections__id=section_id)
@@ -344,8 +344,8 @@ def section_studentview(request, course_id):
         return render(request, 'course_sections.html', {"course_id": course_id})
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
 
