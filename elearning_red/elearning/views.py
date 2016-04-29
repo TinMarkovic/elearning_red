@@ -247,18 +247,14 @@ def programme_modify(request, programme_id=None):
         if form.is_valid():
             form.save()
             
-            for course in form.cleaned_data['courses']:
-
-                programme.course_set.add(course)
-            
         return HttpResponseRedirect('')
 
     else:
-        form = F.ProgrammeForm(instance=programme, programme_id=programme_id)
+        form = F.ProgrammeForm(instance=programme)
 
     return render(request, 'programmes_edit.html', {'form': form, 'programmes': programmes})
 
-
+                            
 def programmes_show(request, programme_id=None):
     if programme_id is not None:
         programme = get_object_or_404(M.Programme, id=int(programme_id))
@@ -287,7 +283,7 @@ def section_modify(request, course_id, section_id=None):
         form = F.SectionForm(request.POST)
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect('/courses/manage/' + course_id)
+        return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
     else:
         initialDict = {
             'course': course_id,
