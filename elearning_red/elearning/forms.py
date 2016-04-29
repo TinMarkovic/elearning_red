@@ -80,13 +80,15 @@ class QuizBlockForm(BlockForm):
         return render(request, 'quizEdit.html', {'form': self, "course_id": course_id, "section_id": section_id, })
 
 class ProgrammeForm(ModelForm):
-    courses = ModelMultipleChoiceField(queryset=None)
     class Meta:
         model = M.Programme
-        fields = ('name', 'desc','tags','avgRating')
-    def __init__(self, programme_id, *args, **kwargs):
+        fields = ('name', 'desc','tags','avgRating','users',)
+        widgets = {
+            'users': widgets.CheckboxSelectMultiple(),
+        }
+    def __init__(self, *args, **kwargs):
         super(ProgrammeForm, self).__init__(*args, **kwargs)                
-        self.fields['courses'].queryset = M.Course.objects.all()
+        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")
 
 class RatingForm(ModelForm):
     class Meta:
