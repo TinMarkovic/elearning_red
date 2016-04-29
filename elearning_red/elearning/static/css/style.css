@@ -40,4 +40,9 @@ ul#menu.nav.navbar-nav{
 	display: block;
 	float: right;
 	margin: 0 60px 10px 10px;
+	background-color: 
+}
+
+#sections.well{
+	background-color:#F6B2B5;
 }
