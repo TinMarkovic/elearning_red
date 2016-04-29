@@ -1,22 +1,62 @@
 {% extends "base.html" %}
 {% block title %} Test home screen {% endblock title %}
-<div class="container">
 {% block content %}
+
+<div class="container">
+
+<div class="col-sm-8">
 
 <div class="jumbotron">
 
 <h1>{{ message }}</h1>
- <img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" class="img-responsive" alt="Cinque Terre" width="500" height="236">
-</div>
-{% endblock content %}
+ <img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" alt="Cinque Terre" width="500" height="236">
 
- </div>
-    <li><a href={% url "elearning:registration" %}>Sign Up</a></li>
+</div>
+</div>
+<div class="col-sm-4">
+ <div class="well">
+ 
+    
     {% if user.is_authenticated %}
-        <li><a href={% url "elearning:logout" %}>Logout</a></li>
+     <h3> Your courses: </h3>
+    <div class="list-group">
+  <div class="list-group-item">
+    <div class="row-action-primary">
+      <i class="material-icons">info_outline</i>
+    </div>
+    {% for item in courses_inscribed %}
+    <div class="row-content">
+      <h2 class="list-group-item-heading">{{ item.name }}</h2>
+
+    </div>
+    {% endfor %}
+  </div>
+        
+ <h3> Available: </h3>
+    <div class="list-group">
+    {% for item in courses_uninscribed %}
+    <h4><div class="list-group-item"><a href={% url "elearning:CourseStudentview" course_id=item.id %}>
+    <div class="row-action-primary">
+      <i class="material-icons">info_outline</i>
+    </div>{{ item.name }}
+
+    </div></h4>
+    {% endfor %}
+ 
+</div>
+
+
+    <a href={% url "elearning:programmesView" %} class="btn btn-raised btn-success">Your programmes</a>
+      
     {% else %}
-        <li><a href={% url "elearning:login" %}>Login</a></li>
+    	<p><h3><a href={% url "elearning:registration" %}>Join today!</a></h3></p>
     {% endif %}
-    </ul>
+    
+</div>
+ </div>
+ </div>
+
+
 
                  
+{% endblock content %}

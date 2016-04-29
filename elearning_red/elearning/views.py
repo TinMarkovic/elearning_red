@@ -336,8 +336,15 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
 
 def homepage(request):
     message = ugettext('Welcome to ElearningRed!')
-    return render(request, 'home.html', {'message': message})
-
+    if request.user.is_authenticated():
+        courses_inscribed = M.Course.objects.filter(users=request.user.id)
+        courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
+        return render(request, 'home.html',
+                      {'message': message,"courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
+    else:
+        query_results = M.Course.objects.all()
+        return render(request, 'home.html', {'message': message, "query_results": query_results})
+    
 
 @login_required
 @D.admin_or_course_related_prof
@@ -378,9 +385,11 @@ def about(request):
 def section_studentview(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
 
+    courses_inscribed = M.Course.objects.filter(users=request.user.id)
+    courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course})
+        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
     else:
         return render(request, 'course_sections.html', {"course_id": course_id})
     

@@ -40,12 +40,15 @@
                 <li>
                     <a href={% url "elearning:about" %}>About</a>
                 </li>
-                <li>
-                    <a href={% url "elearning:programmesView" %}>Programmes</a>
+                
+                 {% if user.is_authenticated %}
+                   <li><a href={% url "elearning:programmesView" %}>Programmes</a>
                 </li>
                 <li>
-                    <a href={% url "elearning:listCourse" %}>List of courses</a>
-                </li>
+                    <a href={% url "elearning:listCourse" %}>List of courses</a></li>
+                    
+  
+                 {% endif %}
                 <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">Useful links <span class="caret"></span></a>
                   <ul class="dropdown-menu" role="menu">
@@ -83,6 +86,14 @@
 
 
     <div class="navbar-collapse collapse navbar-danger-collapse">
+    <div class="box">
+    <a href={% url "elearning:registration" %} class="btn btn-raised btn-success">Sign Up</a>
+    {% if user.is_authenticated %}
+        <a href={% url "elearning:logout"  %} class="btn btn-raised btn-primary">Logout</a>
+    {% else %}
+        <a href={% url "elearning:login" %} class="btn btn-raised btn-primary">Login</a>
+    {% endif %}
+    </div>
       <ul class="nav navbar-nav">
         <li class="col-lg-1"></li>
         <li><a href={% url "elearning:homepage" %}>Red Team</a></li>
