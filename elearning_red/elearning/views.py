@@ -32,6 +32,7 @@ def registration(request):
 @login_required
 @D.admin_only
 def create_user(request):
+    users = M.CustomUser.objects.all()
     if request.method == "POST":
         form = F.CustomRegistrationFormAdmin(request.POST)
         if form.is_valid():
@@ -40,7 +41,7 @@ def create_user(request):
     else:
         form = F.CustomRegistrationFormAdmin()
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration.html', {'form': form, 'users': users})
 
 def user_login(request):
     if request.method == "POST":
@@ -61,6 +62,7 @@ def user_login(request):
 @login_required
 @D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
+    courses = M.Course.objects.all()
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
     else:
@@ -71,7 +73,8 @@ def course_modify(request, course_id=None):
             course.delete()
             return HttpResponse('')
         else:
-            raise Http404("Section does not exist")
+            raise Http404("Course does not exist")
+        
     if request.method == "POST":
         form = F.CourseForm(request.POST, instance=course)
 
@@ -84,7 +87,7 @@ def course_modify(request, course_id=None):
     else:
         form = F.CourseForm(instance=course)
 
-    return render(request, 'course.html', {'form': form})
+    return render(request, 'course.html', {'form': form, 'courses': courses})
 
 
 def course_show(request, course_id=None):
@@ -132,11 +135,19 @@ def course_show(request, course_id=None):
 @login_required
 @D.admin_only
 def user_modify(request, customUser_id=None):
+    users = M.CustomUser.objects.all()
     if customUser_id is not None:
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
     else:
         customUser = None
         return HttpResponseRedirect('/')
+    
+    if request.method == "DELETE":
+        if customUser is not None:
+            customUser.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("User does not exist")
     
     if request.method == "POST":
         form = F.UserForm(request.POST)
@@ -149,7 +160,7 @@ def user_modify(request, customUser_id=None):
     else:
         form = F.UserForm(instance=customUser)
 
-    return render(request, 'registration.html', {'form': form})
+    return render(request, 'registration.html', {'form': form, 'users': users})
 
 
 @login_required
@@ -159,7 +170,16 @@ def programme_modify(request, programme_id=None):
         programme = get_object_or_404(M.Programme, id=int(programme_id))
     else:
         programme = None
-
+    
+    programmes = M.Programme.objects.all()
+    
+    if request.method == "DELETE":
+        if programme is not None:
+            programme.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("Programme does not exists!")
+    
     if request.method == "POST":
         form = F.ProgrammeForm(request.POST, instance=programme)
     
@@ -175,7 +195,7 @@ def programme_modify(request, programme_id=None):
     else:
         form = F.ProgrammeForm(instance=programme, programme_id=programme_id)
 
-    return render(request, 'programmes_edit.html', {'form': form})
+    return render(request, 'programmes_edit.html', {'form': form, 'programmes': programmes})
 
 
 def programmes_show(request, programme_id=None):

@@ -9,7 +9,15 @@
 <div class="jumbotron">
 
 <h1>{{ message }}</h1>
- <img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" alt="Cinque Terre" width="500" height="236">
+
+<img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" alt="Cinque Terre" width="500" height="236">
+
+<div>
+ <a href="{% url "elearning:createUser" %}" class="btn btn-raised btn-success">CREATE/EDIT USER</a>
+ <a href="{% url "elearning:newCourse" %}" class="btn btn-raised btn-success">CREATE/EDIT COURSE</a>
+ <a href="{% url "elearning:newProgramme" %}" class="btn btn-raised btn-success">CREATE/EDIT PROGRAMME</a>
+</div>
+ 
 
 </div>
 </div>
