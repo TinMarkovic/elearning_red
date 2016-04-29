@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Course {% endblock title %}
 {% block content %}
+{% csrf_token %}
 <h1> Course Management </h1>
 <a href="{% url "elearning:listCourse" %}">Back to course list</a> <br><br>
 <a href="{% url "elearning:manageStudents" course_id=course_id %}">Add/remove students</a>
@@ -46,9 +47,29 @@
 
 {% block script %}-
 <script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 $(document).ready(function () {
     $("#confirmSort").hide();
     $(".selection-item-body").hide();
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
     $(function() {
         $( "#sortable" ).sortable({
             axis: "y",
