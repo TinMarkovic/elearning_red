@@ -30,7 +30,7 @@ urlpatterns = [
     url(r"^programmes/new", views.programme_modify, name="newProgramme"),
     url(r'^programmes/edit/(?P<programme_id>[0-9]+)', views.programme_modify, name="editProgramme"),
     url(r'^programmes/(?P<programme_id>[0-9]+)', views.programmes_show, name='showProgramme'),
-    url(r'^programmes/$', views.programmes_show, name='listProgrammes'),
+    url(r'^programmes/', views.programmes_show, name='listProgrammes'),
     
     url(r'^users/register', views.registration, name='register'),
     url(r'^users/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
