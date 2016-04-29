@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %} Section {% endblock title %}
+
+{% block navigation %}
+<div class="navbar navbar-danger">
+
+
+  <div class="container-fluid">
+ 
+    
+
+
+    <div class="navbar-collapse collapse navbar-danger-collapse">
+      <ul class="nav navbar-nav" id="menu">
+       
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourse" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li><a href={% url "elearning:CourseStudentview" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
+            <li class="active" class="btn btn-danger"><b>{{section.name}}</b></li>
+            </ul></li>
+            
+
+          
+        
+      </ul>
+      
+          
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+
+          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+          <span class="hamb-top"></span>
+          <span class="hamb-middle"></span>
+          <span class="hamb-bottom"></span>
+          </button>
+         
+          </div>
+{% endblock navigation %}
+<div class="wrapper">
+{% block content %}
+
+<a href="{% url "elearning:CourseStudentview" course_id %}">Back to course</a>
+<h1> Content </h1>
+
+<div class="col-md-8">
+		
+				{% if video %}
+				{% for item in video %}
+
+				 <div  id="{{item.id}}" </div>
+						<h3 class="panel-title">{{item.name}}</h3><br></br></div>
+								<div class="panel-body">
+								<p><iframe width="500" height="300" src="{{item.url}}"></iframe></p>
+								
+
+				</div>
+				{% endfor %}
+				{% endif %}
+
+				{% if image %}
+				{% for item in image %}
+
+								<div class="panel-body"><img src="{{item.image.url}}"style="width:350px;height:250px;"/></div>
+								<div  id="{{item.id}}">
+								<h3 class="panel-title">{{item.subtitle}}</h3><br></br></div>
+				
+				{% endfor %}
+				{% endif %}		
+				
+
+				{% if html %}
+				{% for item in html %}
+
+				 <div id="{{item.id}}">
+						
+								<h3 class="panel-title">{{item.name}}</h3></div>
+								<div class="panel-body">{{item.content}}</div>
+				
+				{% endfor %}
+				{% endif %}		
+		
+		
+
+</div>
+{% endblock content %}
+
+
+

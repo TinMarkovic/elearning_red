@@ -1,11 +1,19 @@
 {% extends "base.html" %}
-{% block title %} Programmes {% endblock title %}
-
-
+{% block title %} Create programme {% endblock title %}
 {% block content %}
+<form method="post" action="" class="form-horizontal">
+  <fieldset>
     {% csrf_token %}
-    <h1> Programmes in offer: </h1>
-<table class="table table-striped table-hover ", id="table_1">
+	{{ form.as_p }}
+     
+ 
+    </fieldset>
+    <input type="submit" value="Create programme" />
+    
+</form>
+
+ <h1> Programmes in offer: </h1>
+   <table class="table table-striped table-hover ", id="table_1">
     <thead>
     <tr class="info">
         <th>Name</th>

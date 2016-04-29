@@ -1,23 +1,47 @@
 {% extends "base.html" %}
 {% block title %} Courses {% endblock title %}
+
+
 {% block content %}
 {% if user.is_authenticated %}
     <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
     <a href="{% url "elearning:logout" %}">Logout</a>
 {% else %}
     <p>Welcome</p>
-<form method="post" action="">
+<form method="post" action="" class="form-horizontal" >
     {% csrf_token %}
-    {{ form }}
+ <fieldset>
+     <div class="form-group">
+      <label for="inputUsername" class="col-md-2 control-label">Username</label>
+
+      <div class="col-md-10">
+        <input class="form-control" id="inputUsername" placeholder="Username" type="username">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="inputPassword" class="col-md-2 control-label">Password</label>
+
+      <div class="col-md-10">
+        <input class="form-control" id="inputPassword" placeholder="Password" type="password">
+        </div>
+        </div>
+        </fieldset>
+
 {% if form.errors %}
 <p>Your username and password didn't match!
 Please try again!</p>
 {% endif %}
-    <input type="submit" value="Sign in" />
-</form> 
+<div class="form-group">
+<div class="col-md-10 col-md-offset-2">
+    <button type="submit" class="btn btn-primary">Sign in</button>
+
 
 <form action="{% url "elearning:registration" %}">
-    <input type="submit" value="Sign up">
-</form>     
+<button type="submit" class="btn btn-primary">Sign up</button></form>  
+
 {% endif %}
+
+
 {% endblock content %}
+
+
