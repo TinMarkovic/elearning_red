@@ -59,8 +59,9 @@ def user_login(request):
     return render(request, 'index.html', {'form': form})
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
+@csrf_exempt
 def course_modify(request, course_id=None):
     courses = M.Course.objects.all()
     if course_id is not None:
@@ -73,7 +74,8 @@ def course_modify(request, course_id=None):
             course.delete()
             return HttpResponse('')
         else:
-            raise Http404("Section does not exist")
+            raise Http404("Course does not exist")
+        
     if request.method == "POST":
         form = F.CourseForm(request.POST, instance=course)
 
