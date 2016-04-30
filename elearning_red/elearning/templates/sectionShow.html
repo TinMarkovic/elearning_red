@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %} Section {% endblock title %}
+
+{% block navigation %}
+<div class="navbar navbar-danger">
+  <div class="container-fluid">
+    <div class="navbar-collapse collapse navbar-danger-collapse">
+      <ul class="nav navbar-nav" id="menu">
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourses" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li><a href={% url "elearning:showStudentsInCourse" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
+            <li class="active" class="btn btn-danger"><b>{{section.name}}</b></li>
+            </ul></li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+
+          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+          <span class="hamb-top"></span>
+          <span class="hamb-middle"></span>
+          <span class="hamb-bottom"></span>
+          </button>
+         
+          </div>
+{% endblock navigation %}
+
+
+{% block content %}
+<a href="{% url "elearning:showStudentsInCourse" course_id %}">Back to course</a>
+<h1> {{section.name}} </h1>
+
+<div class="col-md-12">
+	{% for block in blocks|dictsort:"index" %}
+	{% if block.type == "VideoBlock" %}
+	 <div class="panel panel-default" id="{{block.id}}">
+		<div class="panel-heading"> 
+		  <h3 class="panel-title">{{block.name}}</h3>
+		</div>
+		<div class="panel-body">
+			<p><iframe src="{{block.url}}"></iframe></p>
+        </div>
+	</div>
+	{% endif %}
+    {% if block.type == "ImageBlock" %}
+	<div id="{{block.id}}" class="well well-sm">
+	  <img src="{{block.image.url}}" class="img-responsive"/> 
+	  <div class="text-center"> <i>{{block.subtitle}}</i> </div>
+	</div>
+	{% endif %}
+    {% if block.type == "HTMLBlock" %}
+    <div id="{{block.id}}" class="well well-lg">
+      {{block.content|safe}}
+    </div>
+    {% endif %}
+    {% if block.type == "QuizBlock" %}
+	<div id="{{block.id}}">
+	  TODO - WIP <br/>
+	  {{block.name}}<br/>
+	  {{block.serialQuestions}}
+	</div>
+	{% endif %}
+    {% endfor %}
+</div>
+{% endblock content %}
+
+
+

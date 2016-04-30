@@ -1,3 +1,4 @@
+from django.apps import AppConfig
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.core.serializers import serialize
@@ -56,23 +57,6 @@ def user_create(request):
         form = F.CustomRegistrationFormAdmin()
 
     return render(request, 'registration.html', {'form': form, 'users': users})
-
-
-def user_login(request):
-    if request.method == "POST":
-        form = F.LoginForm(request.POST)
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('')
-    else:
-        form = F.LoginForm()
-
-    return render(request, 'index.html', {'form': form})
-
 
 @login_required
 @D.admin_only
@@ -146,7 +130,7 @@ def course_modify(request, course_id=None):
     else:
         form = F.CourseForm(instance=course)
 
-    return render(request, 'course.html', {'form': form, 'courses': courses})
+    return render(request, 'courseEdit.html', {'form': form, 'courses': courses})
 
 
 def course_show(request, course_id=None):
@@ -154,7 +138,6 @@ def course_show(request, course_id=None):
         course = get_object_or_404(M.Course, id=int(course_id))
         sections = M.Section.objects.filter(course_id=course.id)
         rating = M.Rating.objects.filter(user=request.user).filter(course=course_id)
-
         if len(rating) == 0:
             rating = M.Rating(user=M.CustomUser.objects.get(id=request.user.id),
                               course=M.Course.objects.get(id=course_id))
@@ -163,7 +146,8 @@ def course_show(request, course_id=None):
         else:
             rating = get_object_or_404(M.Rating, user=M.CustomUser.objects.get(id=request.user.id),
                                        course=M.Course.objects.get(id=course_id))
-
+        
+        
         if request.method == "POST":
             form = F.RatingForm(request.POST, instance=rating)
             if form.is_valid():
@@ -177,6 +161,7 @@ def course_show(request, course_id=None):
                 return HttpResponseRedirect('')
         else:
             form = F.RatingForm(instance=rating)
+            
         return render(request, 'courses_view.html', {"sections": sections, "form": form, "course": course})
 
     elif request.user.is_authenticated():
@@ -232,12 +217,6 @@ def course_students(request, course_id):
     return render(request, 'addstudents.html', {'form': form})
 
 
-#za profesora
-def course_details(request, course_id):
-    course = get_object_or_404(M.Course, id=int(course_id))
-    return render(request, 'course_details.html', {"course": course})
-
-
 @login_required
 @D.admin_only
 def programme_modify(request, programme_id=None):
@@ -265,7 +244,7 @@ def programme_modify(request, programme_id=None):
     else:
         form = F.ProgrammeForm(instance=programme)
 
-    return render(request, 'programmes_edit.html', {'form': form, 'programmes': programmes})
+    return render(request, 'programmeEdit.html', {'form': form, 'programmes': programmes})
 
                             
 def programmes_show(request, programme_id=None):
@@ -348,38 +327,25 @@ def section_studentview(request, course_id):
     courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
+        return render(request, 'courseShow.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
     else:
-        return render(request, 'course_sections.html', {"course_id": course_id})
+        return render(request, 'courseShow.html', {"course_id": course_id})
 
 
 @login_required
 @D.admin_or_course_related_prof
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
-
     if block_id is not None:
-        block = get_object_or_404(M.Block, id=int(block_id))
-        if hasattr(block, 'htmlblock'):
-            block_type = "html"
-            block = block.htmlblock
-        elif hasattr(block, 'videoblock'):
-            block_type = "video"
-            block = block.videoblock
-        elif hasattr(block, 'quizblock'):
-            block_type = "quiz"
-            block = block.quizblock
-        elif hasattr(block, 'imageblock'):
-            block_type = "image"
-            block = block.imageblock
+        try:
+            block = M.Block.objects.get_subclass(id=int(block_id))
+        except M.Block.DoesNotExist:
+            raise Http404("The object does not exist.")
+        block_type = type(block).__name__
+        formClass = getattr(F, block_type+"Form")
     else:
         block = None
-    typeForm = {
-        'html': F.HTMLBlockForm,
-        'video': F.VideoBlockForm,
-        'image': F.ImageBlockForm,
-        'quiz': F.QuizBlockForm,
-    }
+        formClass = getattr(F, block_type+"BlockForm")
     if request.method == "DELETE":
         if block is not None:
             block.delete()
@@ -387,7 +353,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
         else:
             raise Http404("Section does not exist")
     if request.method == "POST":
-        form = typeForm[block_type](request.POST, request.FILES, instance=block)
+        form = formClass(request.POST, request.FILES, instance=block)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(reverse('elearning:manageSection', kwargs={'course_id': course_id, 'section_id': section_id}))
@@ -397,9 +363,9 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             'index': M.Block.objects.filter(sections__id=section_id).count()
         }
         if block is not None:
-            form = typeForm[block_type](instance=block)
+            form = formClass(instance=block)
         else:
-            form = typeForm[block_type](instance=block, initial=initialDict)
+            form = formClass(instance=block, initial=initialDict)
             
     return form.getRender(request, course_id, section_id)
 
@@ -407,22 +373,13 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
 def blocks_studentview(request, course_id, section_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     section = get_object_or_404(M.Section, id=int(section_id))
-    video = M.VideoBlock.objects.filter(sections__id=section_id)
-    image = M.ImageBlock.objects.filter(sections__id=section_id)
-    html = M.HTMLBlock.objects.filter(sections__id=section_id)
-    quiz = M.QuizBlock.objects.filter(sections__id=section_id)
-    if video is not None:
-        return render(request, 'blocks.html', {"video": video,
-                                                "image": image,
-                                                "html": html,
-                                                "course_id": course_id,
-                                                "section_id": section_id,
-                                                "course": course,
-                                                "section":section,
-                                                "quiz":quiz,
-                                                   })
-    else:
-        return render(request, 'blocks.html', {"course_id": course_id,
-                                                   "section_id": section_id,})
+    blocks = M.Block.objects.filter(sections__id=section_id).select_subclasses()
+    
+    for block in blocks:
+        block.type = type(block).__name__
+    
+    return render(request, 'sectionShow.html', {"course_id": course_id,
+                                            "section": section,
+                                            "blocks": blocks})
 
 

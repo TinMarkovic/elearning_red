@@ -61,10 +61,10 @@
                   </ul>
                 </li>
                 <li><a href={% url "elearning:register" %}>Sign Up</a></li>
-        {% if user.is_authenticated %}
+    {% if user.is_authenticated %}
         <li><a href={% url "elearning:logout" %}>Logout</a></li>
     {% else %}
-        <li><a href={% url "elearning:login" %}>Login</a></li>
+        <li><a href={% url "redux:auth_login" %} class="btn btn-raised btn-primary">Login</a></li>
     {% endif %}
                 
             </ul>
@@ -93,7 +93,7 @@
     {% if user.is_authenticated %}
         <a href={% url "elearning:logout"  %} class="btn btn-raised btn-primary">Logout</a>
     {% else %}
-        <a href={% url "elearning:login" %} class="btn btn-raised btn-primary">Login</a>
+        <a href={% url "redux:auth_login" %}  class="btn btn-raised btn-primary">Login</a>
     {% endif %}
     </div>
       <ul class="nav navbar-nav">

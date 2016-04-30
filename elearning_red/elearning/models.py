@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
+from model_utils.managers import InheritanceManager
 # Commented out for now. Didn't see them used anywhere:
 #from django.db.models.signals import pre_save
 #from django.utils.text import slugify
@@ -80,7 +81,7 @@ class Block(models.Model): # Generic block model
     index = models.PositiveSmallIntegerField(blank=False, null=False)
     assessment = models.BooleanField(default=False)
     sections = models.ForeignKey(Section, on_delete=models.CASCADE)
-    
+    objects = InheritanceManager()
     def __unicode__(self):
         return self.name
     #prevBlock = models.ForeignKey(Block)
