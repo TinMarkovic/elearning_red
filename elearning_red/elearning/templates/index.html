@@ -20,12 +20,11 @@
 Please try again!</p>
 {% endif %}
 <div class="form-group">
+{% csrf_token %}
 <div class="col-md-10 col-md-offset-2">
-    <button type="submit" class="btn btn-primary">Sign in</button>
-
-
-<form action="{% url "elearning:register" %}">
-<button type="submit" class="btn btn-primary">Sign up</button></form>  
+   <button type="submit" class="btn btn-primary" >Sign in</button>
+</div>
+</div>
 
 {% endif %}
 
