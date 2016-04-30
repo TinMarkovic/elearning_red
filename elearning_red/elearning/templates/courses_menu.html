@@ -113,37 +113,70 @@
 {% block content %}
     {% csrf_token %}
     <h1> Enrolled: </h1>
-    <table class="table table-striped table-hover ">
+     <table class="table table-striped table-hover ">
+    <thead>
     <tr class="info">
         <th>Name:</th>
         <th>Begins:</th>
         <th>Duration(days):</th>
+        <th>Description:</th>
+        <th>Author:</th>
+        <th>Tags:</th>
+    <th>Average rating:</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+
     </tr>
+    </thead>
     {% for item in courses_inscribed %}
-
-    <tr >
-        <td class="success">{{ item.name }}</td>
-        <td class="danger">{{ item.beginDate }}</td>
-        <td class="warning">{{ item.duration }}</td>
-	
+    <tr  class="success">
+        <td>{{ item.name }}</td>
+        <td>{{ item.beginDate }}</td>
+        <td>{{ item.duration }}</td>        
+        <td>{{ item.desc }} </td>
+        <td>{{ item.author }}</td>
+        <td>{{ item.tagList }}</td>
+        <td>{{ item.avgRating }}</td>
+        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
+        <td><a href="{% url "elearning:detailsCourse" course_id=item.id %}" class="btn btn-raised btn-info">Details</a> </td>
+        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
+        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-warning">Delete</a> </td>
     </tr>
-
     {% endfor %}
 </table>
  <h1> Available: </h1>
-    <table class="table table-striped table-hover ">
+     <table class="table table-striped table-hover ">
+    <thead>
     <tr class="info">
         <th>Name:</th>
         <th>Begins:</th>
         <th>Duration(days):</th>
-       
-    </tr >
+        <th>Description:</th>
+        <th>Author:</th>
+        <th>Tags:</th>
+    <th>Average rating:</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+
+    </tr>
+    </thead>
     {% for item in courses_uninscribed %}
-    <tr >
-        <td class="success">{{ item.name }}</td>
-        <td class="danger">{{ item.beginDate }}</td>
-        <td class="warning">{{ item.duration }}</td>
-       
+    <tr  class="success">
+        <td>{{ item.name }}</td>
+        <td>{{ item.beginDate }}</td>
+        <td>{{ item.duration }}</td>        
+        <td>{{ item.desc }} </td>
+        <td>{{ item.author }}</td>
+        <td>{{ item.tagList }}</td>
+        <td>{{ item.avgRating }}</td>
+        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
+        <td><a href="{% url "elearning:detailsCourse" course_id=item.id %}" class="btn btn-raised btn-info">Details</a> </td>
+        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
+        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-warning">Delete</a> </td>
     </tr>
     {% endfor %}
 </table>
