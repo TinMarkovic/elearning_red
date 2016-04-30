@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Create account {% endblock title %}
 {% block content %}
-
+{% load bootstrap3 %}
 
 <div>
 
@@ -9,7 +9,8 @@
   <fieldset>
 
     {% csrf_token %}
-    {{ form.as_p }}
+
+	{% bootstrap_form form layout='horizontal' %}
      
  
     </fieldset>

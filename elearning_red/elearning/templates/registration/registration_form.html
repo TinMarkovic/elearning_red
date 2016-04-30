@@ -1,17 +1,21 @@
 {% extends "base.html" %}
 {% load i18n %}
-
+{% load bootstrap3 %}
 
 {% block content %}
 <div class='row'>
 <div class='col-sm-6 col-sm-offset-3'>
 <h1>Register for free!</h1>
-<form method="post" action=".">
+<form method="post" action="." class="horizontal-form">
   {% csrf_token %}
-  {{ form.as_p }}
-
+  <formfield>
+  <div class="col-md-10">
+   {% bootstrap_form form layout='horizontal' %}
+</formfield>
   <input class='btn btn-block btn-primary' type="submit" value="{% trans 'Join' %}" />
+  
 </form>
+
 </div>
 </div>
 
@@ -21,6 +25,8 @@
 <p>Need to <a href="{% url 'auth_login' %}">Login</a>?</p>
 </div>
 </div>
-
-
 {% endblock %}
+
+
+
+ 

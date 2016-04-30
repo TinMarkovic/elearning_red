@@ -15,8 +15,8 @@
        
              <li><ul class="breadcrumb">
             <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
-            <li><a href={% url "elearning:listCourse" %} class="btn btn-default"><b>List of courses</b></a></li>
-            <li><a href={% url "elearning:CourseStudentview" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
+            <li><a href={% url "elearning:listCourses" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li><a href={% url "elearning:showStudentsInCourse" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
             <li class="active" class="btn btn-danger"><b>{{section.name}}</b></li>
             </ul></li>
             
@@ -46,7 +46,7 @@
 <div class="wrapper">
 {% block content %}
 
-<a href="{% url "elearning:CourseStudentview" course_id %}">Back to course</a>
+<a href="{% url "elearning:showStudentsInCourse" course_id %}">Back to course</a>
 <h1> Content </h1>
 
 <div class="col-md-8">
@@ -82,6 +82,17 @@
 						
 								<h3 class="panel-title">{{item.name}}</h3></div>
 								<div class="panel-body">{{item.content}}</div>
+				
+				{% endfor %}
+				{% endif %}		
+
+				{% if quiz %}
+				{% for item in quiz %}
+
+				 <div id="{{item.id}}">
+						
+								<h3 class="panel-title">{{item.name}}</h3></div>
+								<div class="panel-body">{{item.serialQuestions}}</div>
 				
 				{% endfor %}
 				{% endif %}		

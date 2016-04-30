@@ -22,12 +22,32 @@
         <td>{{ item.name }}</td>
         <td>{{ item.avgRating }}</td>
         <td><a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Edit</a>
-        <td><a href="" class="btn btn-raised btn-info">Details</a> </td>
+
+        <td><a href="" class="btn btn-raised btn-info" id="show">Details</a> </td>
         <td><a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-danger">Enter</a> </td>
         <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+
     </tr>
     {% endfor %}
 </table>
+
+
+<button id="hide">Hide</button>
+
+  <div class="col-sm-8" id="info">
+<h3> Programme info</h3>
+  {% for item in programmes %}
+   <div class="well" id="sections">
+   <h4>Name: {{ item.name }}</h4>
+   <h4>Description:</h4>
+   <p>{{ item.desc }}</p>
+   <h4>Avrerage rating: {{ item.avgRating }} </h4>
+   {% endfor %} 
+  
+   </div>
+        </div>
+
+
 
 {% endblock %}
 
@@ -35,20 +55,6 @@
 
 {% block script %}
 <script>
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie != '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
 $(document).ready( function () {
     $('#table_1').DataTable({"aoColumnDefs": [ { "bSortable": false, "aTargets": [ -1, -2, -3 ] } ]})
     
@@ -80,4 +86,61 @@ $(document).on('click','.deleteBlock',function () {
     
 } );
 </script>
+
+<script>
+$(document).ready(function(){
+    
+
+    $("#hide").click(function(){
+        $("#info").hide();
+    });
+
+    $("#show").click(function(){
+        $("#info").show();
+    });
+});
+</script>
+
 {% endblock script %}
+
+{% block navigation %}
+<div class="navbar navbar-danger">
+
+
+  <div class="container-fluid">
+ 
+    
+
+
+    <div class="navbar-collapse collapse navbar-danger-collapse">
+      <ul class="nav navbar-nav" id="menu">
+       
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li class="active"><b>Programmes</b></a></li>
+           
+            </ul></li>
+            
+
+          
+        
+      </ul>
+      
+          
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid">
+
+          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+          <span class="hamb-top"></span>
+          <span class="hamb-middle"></span>
+          <span class="hamb-bottom"></span>
+          </button>
+         
+          </div>
+{% endblock navigation %}
