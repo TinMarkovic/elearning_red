@@ -95,7 +95,7 @@
         <h4><i class="material-icons">face</i>Welcome, {{ user.get_username }}</h4>
         <a href={% url "elearning:logout"  %} class="btn btn-raised btn-xs">Logout</a>
     {% else %}
-         <a href={% url "elearning:register" %} class="btn btn-raised btn-success">Sign Up</a>
+         <a href={% url "redux:registration_register" %} class="btn btn-raised btn-success">Sign Up</a>
         <a href={% url "redux:auth_login" %} class="btn btn-raised btn-primary">Login</a>
     {% endif %}
     </div>
