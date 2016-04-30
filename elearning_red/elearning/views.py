@@ -196,8 +196,8 @@ def course_reorder_sections(request, course_id):
     return HttpResponse('')
 
 
-#@login_required
-#@D.admin_or_course_related_prof
+@login_required
+@D.admin_or_course_related_prof
 def course_students(request, course_id):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -213,7 +213,7 @@ def course_students(request, course_id):
     else:
         form = F.StudentToCourse(instance=course)
 
-    return render(request, 'courseStudentList.html', {'form': form})
+    return render(request, 'courseStudentList.html', {'form': form,'course':course})
 
 
 @login_required
@@ -282,18 +282,21 @@ def section_modify(request, course_id, section_id=None):
         }
         form = F.SectionForm(instance=section, initial=initialDict)
 
-    return render(request, 'sectionEdit.html', {'form': form})
+    return render(request, 'sectionEdit.html', {'form': form, 'course':course, 'section':section})
 
 
 @login_required
 @D.admin_or_course_related_prof
 def section_manage(request, course_id, section_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
     section = get_object_or_404(M.Section, id=int(section_id))
     query_results = M.Block.objects.filter(sections__id=section_id)
     if query_results is not None:
         return render(request, 'sectionMng.html', {"query_results": query_results,
                                                    "course_id": course_id,
-                                                   "section_id": section_id,})
+                                                   "section_id": section_id,
+                                                   "course":course,
+                                                   "section":section,})
     else:
         return render(request, 'sectionMng.html', {"course_id": course_id,
                                                    "section_id": section_id,})
@@ -368,6 +371,7 @@ def blocks_studentview(request, course_id, section_id):
     
     return render(request, 'sectionShow.html', {"course_id": course_id,
                                             "section": section,
-                                            "blocks": blocks})
+                                            "blocks": blocks,
+                                            "course":course})
 
 
