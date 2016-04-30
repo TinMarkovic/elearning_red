@@ -2,12 +2,11 @@
 {% block title %} Course {% endblock title %}
 {% block content %}
 {% csrf_token %}
-<h1> Course Management </h1>
-<a href="{% url "elearning:listCourses" %}">Back to course list</a> <br><br>
-<a href="{% url "elearning:manageStudents" course_id=course_id %}">Add/remove students</a>
+<div class="col-md-8">
+<h1> {{ course.name }}  </h1>
+<h2> Course Management </h2>
 <h2> Sections: <a href="javascript:void(0)" class="btn btn-raised btn-success" id="confirmSort">CONFIRM SORT ORDER</a></h2>
 
-<div class="col-md-8">
         <div id="sortable">
                 {% if not query_results %}
                 <div class="panel panel-default">
@@ -21,11 +20,11 @@
                                 <h3 class="panel-title">{{item.name}} 
                                 <a href="#"><i class="material-icons pull-right deleteSection">delete</i></a>
                                 <span class="col-md-1 pull-right"></span>  
-                                <a href="{% url "elearning:editSection" course_id item.id %}"> 
+                                <a href="{% url "elearning:editSection" course.id item.id %}"> 
                                     <i class="material-icons pull-right">edit</i>
                                 </a>
                                 <span class="col-md-1 pull-right"></span>  
-                                <a href="{% url "elearning:manageSection" course_id item.id %}">
+                                <a href="{% url "elearning:manageSection" course.id item.id %}">
                                     <i class="material-icons pull-right">playlist_add</i>
                                 </a></h3>
                         </div>
@@ -39,10 +38,35 @@
         </div>
         <div class="panel panel-default">
                 <div class="panel-body">
-                    <a href="{% url "elearning:newSection" course_id %}" class="btn btn-default btn-lg btn-block btn-raised">New Section</a>
+                    <a href="{% url "elearning:newSection" course.id %}" class="btn btn-default btn-lg btn-block btn-raised">New Section</a>
                 </div>
         </div>
 </div>
+
+<div class="col-sm-4">
+    <a class="btn btn-raised btn-danger pull-right" href={% url "elearning:listCourses" %}>Back to courses</a>
+    <br><br><h3> Info </h3>
+    <div class="well">
+       <p>{{ course.desc }}</p>
+       <h4>Beginning date: {{ course.beginDate }} </h4>
+       <h4>Course duration: {{ course.duration }} days </h4>
+    </div>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Enrolled students</h3>
+    </div>
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">  
+            {% for user in course.users.all %}
+            <li>{{ user }}</li>
+            {% endfor %}
+            <a class="btn btn-raised btn-primary" 
+            href={% url "elearning:manageStudents" course.id %}>Update students</a>
+        </ul>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 
 {% block navigation %}
@@ -114,9 +138,8 @@ $(document).ready(function () {
         var sortedIDs = $( "#sortable" ).sortable( "toArray" );
             $.ajax({
                  type:"POST",
-                 url:"/ajax/modify-section-order/",
+                 url:"/ajax/modify-section-order/{{course.id}}",
                  data: {
-                        'course_id' : {{course_id}},
                         'neworder': JSON.stringify(sortedIDs)
                         },
                  success: function(){
@@ -130,7 +153,7 @@ $(document).ready(function () {
             $(this).attr('loaded', true);
             request = $.ajax({
                  type:"POST",
-                 url:"/ajax/get-blocks-list/",
+                 url:"/ajax/get-blocks-list/{{course.id}}",
                  data: {
                         'section_id' : section_id
                         }
@@ -141,7 +164,6 @@ $(document).ready(function () {
                 $listSelector = $(listID);
                 for(item of itemset) {
                     $listSelector.append('<li class="list-group-item"> '+item.fields.index + '. '+item.fields.name+'</li>');
-                    console.log('<li class="list-group-item"> '+item.fields.index + '. '+item.fields.name+'</li>');
                 }
         });}
         $(this).children(".selection-item-body").toggle();
@@ -149,15 +171,14 @@ $(document).ready(function () {
     $( ".deleteSection" ).on( "click", function( event, ui ) {
         $element = $(this).parents(".panel-success");
         var section_id = $element.attr("id");
-        console.log("Deleting " + section_id);
         if(confirm("Are you certain you want to delete this section?")){
             $.ajax({
                  type:"DELETE",
-                 url:"/manage/courses/" + {{course_id}} + 
+                 url:"/manage/courses/" + {{course.id}} + 
                  "/sections/edit/" + section_id,
                  data: {},
                  success: function(response){
-                    console.log(response);
+                    console.log("Server: " + response);
                     $element.remove();
                 }
             });

@@ -167,15 +167,14 @@ def course_manage(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'courseMng.html', {"query_results": query_results, "course_id": course_id,"course":course})
+        return render(request, 'courseMng.html', {"query_results": query_results, "course":course})
     else:
-        return render(request, 'courseMng.html', {"course_id": course_id,"course":course})
+        return render(request, 'courseMng.html', {"course":course})
 
 
 @login_required
 @D.admin_or_course_related_prof
-def course_reorder_sections(request):
-    course_id = request.POST['course_id']
+def course_reorder_sections(request, course_id):
     new_order = loads(request.POST['neworder'])
     for i in range(len(new_order)):
         section = get_object_or_404(M.Section, id=int(new_order[i]), course=int(course_id))
@@ -201,7 +200,7 @@ def course_students(request, course_id):
     else:
         form = F.StudentToCourse(instance=course)
 
-    return render(request, 'addstudents.html', {'form': form})
+    return render(request, 'courseStudentList.html', {'form': form})
 
 
 @login_required
@@ -287,9 +286,9 @@ def section_manage(request, course_id, section_id):
                                                    "section_id": section_id,})
 
 
-@csrf_exempt
-def section_reorder_blocks(request):
-    section_id = request.POST['section_id']
+@login_required
+@D.admin_or_course_related_prof
+def section_reorder_blocks(request, section_id):
     new_order = loads(request.POST['neworder'])
     for i in range(len(new_order)):
         block = get_object_or_404(M.Block, id=int(new_order[i]), sections=int(section_id))
@@ -298,9 +297,9 @@ def section_reorder_blocks(request):
     return HttpResponse('')
 
 
-@csrf_exempt
-def section_list_blocks(request):
-    section_id = request.POST['section_id']
+@login_required
+@D.admin_or_course_related_prof
+def section_list_blocks(request, section_id):
     section = get_object_or_404(M.Section, id=int(section_id))
     query_results = M.Block.objects.filter(sections__id=section_id)
     response = serialize("json", query_results.order_by("index"))
