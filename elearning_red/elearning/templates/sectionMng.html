@@ -1,5 +1,19 @@
 {% extends "base.html" %}
 {% block title %} Section {% endblock title %}
+
+{% block breadcrumbs %}
+
+      <ul class="nav navbar-nav" id="menu">
+       
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourses" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li><a href={% url "elearning:manageCourse" course_id %} class="btn btn-default"><b>{{course.name}}</b></a></li>
+            <li class="active"><b>{{section.name}}</b></a></li>    
+            </ul></li>
+            </ul>
+{% endblock breadcrumbs %}
+
 {% block content %}
 <h1> Section Management </h1>
 <a href="{% url "elearning:manageCourse" course_id %}">Back to section list</a>
