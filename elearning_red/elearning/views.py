@@ -58,23 +58,6 @@ def user_create(request):
 
     return render(request, 'registration.html', {'form': form, 'users': users})
 
-
-def user_login(request):
-    if request.method == "POST":
-        form = F.LoginForm(request.POST)
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                return HttpResponseRedirect('')
-    else:
-        form = F.LoginForm()
-
-    return render(request, 'index.html', {'form': form})
-
-
 @login_required
 @D.admin_only
 def user_modify(request, customUser_id=None):
@@ -134,7 +117,7 @@ def course_modify(request, course_id=None):
     else:
         form = F.CourseForm(instance=course)
 
-    return render(request, 'course.html', {'form': form, 'courses': courses})
+    return render(request, 'courseEdit.html', {'form': form, 'courses': courses})
 
 
 def course_show(request, course_id=None):
@@ -142,7 +125,6 @@ def course_show(request, course_id=None):
         course = get_object_or_404(M.Course, id=int(course_id))
         sections = M.Section.objects.filter(course_id=course.id)
         rating = M.Rating.objects.filter(user=request.user).filter(course=course_id)
-
         if len(rating) == 0:
             rating = M.Rating(user=M.CustomUser.objects.get(id=request.user.id),
                               course=M.Course.objects.get(id=course_id))
@@ -151,7 +133,8 @@ def course_show(request, course_id=None):
         else:
             rating = get_object_or_404(M.Rating, user=M.CustomUser.objects.get(id=request.user.id),
                                        course=M.Course.objects.get(id=course_id))
-
+        
+        
         if request.method == "POST":
             form = F.RatingForm(request.POST, instance=rating)
             if form.is_valid():
@@ -165,6 +148,7 @@ def course_show(request, course_id=None):
                 return HttpResponseRedirect('')
         else:
             form = F.RatingForm(instance=rating)
+            
         return render(request, 'courses_view.html', {"sections": sections, "form": form, "course": course})
 
     elif request.user.is_authenticated():
@@ -220,12 +204,6 @@ def course_students(request, course_id):
     return render(request, 'addstudents.html', {'form': form})
 
 
-#za profesora
-def course_details(request, course_id):
-    course = get_object_or_404(M.Course, id=int(course_id))
-    return render(request, 'course_details.html', {"course": course})
-
-
 @login_required
 @D.admin_only
 def programme_modify(request, programme_id=None):
@@ -253,7 +231,7 @@ def programme_modify(request, programme_id=None):
     else:
         form = F.ProgrammeForm(instance=programme)
 
-    return render(request, 'programmes_edit.html', {'form': form, 'programmes': programmes})
+    return render(request, 'programmeEdit.html', {'form': form, 'programmes': programmes})
 
                             
 def programmes_show(request, programme_id=None):
@@ -336,9 +314,9 @@ def section_studentview(request, course_id):
     courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'course_sections.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
+        return render(request, 'courseShow.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
     else:
-        return render(request, 'course_sections.html', {"course_id": course_id})
+        return render(request, 'courseShow.html', {"course_id": course_id})
 
 
 @login_required
@@ -387,7 +365,7 @@ def blocks_studentview(request, course_id, section_id):
     for block in blocks:
         block.type = type(block).__name__
     
-    return render(request, 'blocks.html', {"course_id": course_id,
+    return render(request, 'sectionShow.html', {"course_id": course_id,
                                             "section": section,
                                             "blocks": blocks})
 
