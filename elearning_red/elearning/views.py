@@ -161,8 +161,8 @@ def course_show(request, course_id=None):
                 return HttpResponseRedirect('')
         else:
             form = F.RatingForm(instance=rating)
-            
-        return render(request, 'courses_view.html', {"sections": sections, "form": form, "course": course})
+               
+        return render(request, 'showCourse.html', {"sections": sections, "form": form, "course": course, "course_id": course_id})
 
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
@@ -318,17 +318,6 @@ def section_list_blocks(request, section_id):
     response = serialize("json", query_results.order_by("index"))
     print response
     return HttpResponse(response)
-
-
-def section_studentview(request, course_id):
-    course = get_object_or_404(M.Course, id=int(course_id))
-    courses_inscribed = M.Course.objects.filter(users=request.user.id)
-    courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
-    query_results = M.Section.objects.filter(course__id=course_id)
-    if query_results is not None:
-        return render(request, 'courseShow.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
-    else:
-        return render(request, 'courseShow.html', {"course_id": course_id})
 
 
 @login_required
