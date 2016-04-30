@@ -1,3 +1,4 @@
+from django.apps import AppConfig
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.core.serializers import serialize
@@ -344,29 +345,16 @@ def section_studentview(request, course_id):
 @D.admin_or_course_related_prof
 def block_modify(request, course_id, section_id, block_type=None, block_id=None):
     section = get_object_or_404(M.Section, id=int(section_id))
-
     if block_id is not None:
-        block = get_object_or_404(M.Block, id=int(block_id))
-        if hasattr(block, 'htmlblock'):
-            block_type = "html"
-            block = block.htmlblock
-        elif hasattr(block, 'videoblock'):
-            block_type = "video"
-            block = block.videoblock
-        elif hasattr(block, 'quizblock'):
-            block_type = "quiz"
-            block = block.quizblock
-        elif hasattr(block, 'imageblock'):
-            block_type = "image"
-            block = block.imageblock
+        try:
+            block = M.Block.objects.get_subclass(id=int(block_id))
+        except M.Block.DoesNotExist:
+            raise Http404("The object does not exist.")
+        block_type = type(block).__name__
+        formClass = getattr(F, block_type+"Form")
     else:
         block = None
-    typeForm = {
-        'html': F.HTMLBlockForm,
-        'video': F.VideoBlockForm,
-        'image': F.ImageBlockForm,
-        'quiz': F.QuizBlockForm,
-    }
+        formClass = getattr(F, block_type+"BlockForm")
     if request.method == "DELETE":
         if block is not None:
             block.delete()
@@ -374,7 +362,7 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
         else:
             raise Http404("Section does not exist")
     if request.method == "POST":
-        form = typeForm[block_type](request.POST, request.FILES, instance=block)
+        form = formClass(request.POST, request.FILES, instance=block)
         if form.is_valid():
             form.save()
         return HttpResponseRedirect(reverse('elearning:manageSection', kwargs={'course_id': course_id, 'section_id': section_id}))
@@ -384,9 +372,9 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             'index': M.Block.objects.filter(sections__id=section_id).count()
         }
         if block is not None:
-            form = typeForm[block_type](instance=block)
+            form = formClass(instance=block)
         else:
-            form = typeForm[block_type](instance=block, initial=initialDict)
+            form = formClass(instance=block, initial=initialDict)
             
     return form.getRender(request, course_id, section_id)
 
@@ -394,22 +382,13 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
 def blocks_studentview(request, course_id, section_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     section = get_object_or_404(M.Section, id=int(section_id))
-    video = M.VideoBlock.objects.filter(sections__id=section_id)
-    image = M.ImageBlock.objects.filter(sections__id=section_id)
-    html = M.HTMLBlock.objects.filter(sections__id=section_id)
-    quiz = M.QuizBlock.objects.filter(sections__id=section_id)
-    if video is not None:
-        return render(request, 'blocks.html', {"video": video,
-                                                "image": image,
-                                                "html": html,
-                                                "course_id": course_id,
-                                                "section_id": section_id,
-                                                "course": course,
-                                                "section":section,
-                                                "quiz":quiz,
-                                                   })
-    else:
-        return render(request, 'blocks.html', {"course_id": course_id,
-                                                   "section_id": section_id,})
+    blocks = M.Block.objects.filter(sections__id=section_id).select_subclasses()
+    
+    for block in blocks:
+        block.type = type(block).__name__
+    
+    return render(request, 'blocks.html', {"course_id": course_id,
+                                            "section": section,
+                                            "blocks": blocks})
 
 
