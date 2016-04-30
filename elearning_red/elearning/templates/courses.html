@@ -13,7 +13,7 @@
         <th>Author:</th>
         <th>Tags:</th>
 	<th>Average rating:</th>
-    <th></th>
+    <th><a href="{% url "elearning:newCourse"  %}" class="btn btn-raised btn-info">Create course</a> </th>
 	<th></th>
 	<th></th>
     <th></th>
@@ -33,6 +33,7 @@
         <td><a href="{% url "elearning:detailsCourse" course_id=item.id %}" class="btn btn-raised btn-info">Details</a> </td>
         <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
         <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-warning">Delete</a> </td>
+
     </tr>
     {% endfor %}
 </table>
