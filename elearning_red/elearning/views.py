@@ -182,11 +182,11 @@ def course_show(request, course_id=None):
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
         courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
-        return render(request, 'courses_menu.html',
+        return render(request, 'courses.html',
                       {"courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
     else:
-        query_results = M.Course.objects.all()
-        return render(request, 'courses.html', {"query_results": query_results})
+        courses_uninscribed = M.Course.objects.all()
+        return render(request, 'courses.html', {"courses_uninscribed": courses_uninscribed})
 
 
 @login_required
