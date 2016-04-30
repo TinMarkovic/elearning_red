@@ -21,10 +21,10 @@
     </thead>
      {% for item in users|dictsort:"first_name" %}
     <tr  class="success success" id ="{{ item.id }}">
-        <td>{{ item.first_name }}</td>
-        <td>{{ item.last_name }}</td>
+        <td>{{ item.first_name|truncatechars:20 }}</td>
+        <td>{{ item.last_name|truncatechars:20 }}</td>
         <td>{{ item.role }}</td>        
-        <td>{{ item.email }} </td>
+        <td>{{ item.email|truncatechars:20 }} </td>
         <td><a href="{% url "elearning:editUser" customUser_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
         <td><a class="btn btn-raised btn-info deleteBlock">Delete</a></td>
     </tr>
