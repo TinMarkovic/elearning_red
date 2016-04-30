@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %} Course {% endblock title %}
+
+{% block navigation %}
+<div class="navbar navbar-danger">
+  <div class="container-fluid">
+    <div class="navbar-collapse collapse navbar-danger-collapse">
+      <ul class="nav navbar-nav" id="menu">
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listCourses" %} class="btn btn-default"><b>List of courses</b></a></li>
+            <li class="active"><b>Edit</b></a></li>
+            </ul></li>
+      </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+          <span class="hamb-top"></span>
+          <span class="hamb-middle"></span>
+          <span class="hamb-bottom"></span>
+          </button>
+         
+          </div>
+{% endblock navigation %}
+
+{% block content %}
+{% load bootstrap3 %}
+
+<form method="post" action="" >
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+    <input type="submit" class="btn btn-raised btn-success" value="Submit a course" />
+</form>
+
+<div><a href="{% url "elearning:listCourses" %}" class="btn btn-raised btn-danger">Back to course list</a> </div>
+
+{% endblock content %}
+
+

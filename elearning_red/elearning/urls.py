@@ -22,7 +22,6 @@ urlpatterns = [
     url(r"^manage/courses/new", views.course_modify, name="newCourse"),
     
     url(r"^courses/view/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.blocks_studentview, name="showBlocks"),
-    url(r'^courses/(?P<course_id>[0-9]+)/details', views.course_details, name="detailsCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)/students', views.section_studentview, name="showStudentsInCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)', views.course_show, name="showCourse"),
     url(r"^courses", views.course_show, name="listCourses"),
@@ -36,7 +35,6 @@ urlpatterns = [
     url(r'^users/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
     url(r'^users/edit', views.user_create, name="createUser"),
     
-    url(r'^login', views.user_login, name='login'),
     url(r'^logout', views.user_logout, name='logout'),
     url(r'^about', views.about, name='about'),
     
