@@ -10,7 +10,7 @@
   {% csrf_token %}
   {% bootstrap_form form layout='horizontal' %}
 
-  <input class='btn btn-block btn-primary' type="submit" value="{% trans 'Submit' %}" />
+  <input class='btn btn-block btn-primary' type="submit" value="{% trans 'Submit' %}"> 
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 </div>
