@@ -60,7 +60,7 @@
                     <li><a href="https://www.polytechnique.edu/">École Polytechnique</a></li>
                   </ul>
                 </li>
-                <li><a href={% url "elearning:register" %}>Sign Up</a></li>
+                <li><a href={% url "redux:registration_register" %}>Sign Up</a></li>
         {% if user.is_authenticated %}
         <li><a href={% url "elearning:logout" %}>Logout</a></li>
     {% else %}
@@ -90,7 +90,7 @@
     <div class="navbar-collapse collapse navbar-danger-collapse">
     
     <div class="box">
-    <a href={% url "elearning:register" %} class="btn btn-raised btn-success">Sign Up</a>
+    <a href={% url "redux:registration_register" %} class="btn btn-raised btn-success">Sign Up</a>
     {% if user.is_authenticated %}
         <a href={% url "elearning:logout"  %} class="btn btn-raised btn-primary">Logout</a>
     {% else %}
