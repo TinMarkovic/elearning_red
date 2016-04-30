@@ -34,6 +34,7 @@ urlpatterns = [
     url(r'^users/register', views.registration, name='register'),
     url(r'^users/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
     url(r'^users/edit', views.user_create, name="createUser"),
+    url(r'^users/', views.users_list, name="listUsers"),
     
 
     url(r'^logout', views.user_logout, name='logout'),

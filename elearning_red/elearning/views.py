@@ -21,7 +21,7 @@ def registration(request):
             new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'], role=M.Role.objects.get(name='student'))
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
-            return HttpResponseRedirect('')
+            return HttpResponseRedirect('/')
     else:
         form = F.CustomRegistrationForm()
 
@@ -61,7 +61,6 @@ def user_create(request):
 @login_required
 @D.admin_only
 def user_modify(request, customUser_id=None):
-    users = M.CustomUser.objects.all()
     if customUser_id is not None:
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
     else:
@@ -71,7 +70,7 @@ def user_modify(request, customUser_id=None):
     if request.method == "DELETE":
         if customUser is not None:
             customUser.delete()
-            return HttpResponse('Success!')
+            return HttpResponseRedirect('/users')  
         else:
             raise Http404("User does not exist")
     
@@ -86,8 +85,22 @@ def user_modify(request, customUser_id=None):
     else:
         form = F.UserForm(instance=customUser)
 
-    return render(request, 'registration.html', {'form': form, 'users': users})
+    return render(request, 'registration.html', {'form': form})
 
+
+def users_list(request):
+    users = M.CustomUser.objects.all()
+    
+    if request.method == "DELETE":
+        if customUser is not None:
+            customUser.delete()
+            return HttpResponse('Success!')
+        else:
+            raise Http404("User does not exist")
+
+        return HttpResponseRedirect('')
+
+    return render(request, 'users.html', {'users': users})
 
 def user_logout(request):
     logout(request)
@@ -154,11 +167,11 @@ def course_show(request, course_id=None):
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
         courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
-        return render(request, 'courses_menu.html',
+        return render(request, 'courses.html',
                       {"courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
     else:
-        query_results = M.Course.objects.all()
-        return render(request, 'courses.html', {"query_results": query_results})
+        courses_uninscribed = M.Course.objects.all()
+        return render(request, 'courses.html', {"courses_uninscribed": courses_uninscribed})
 
 
 @login_required

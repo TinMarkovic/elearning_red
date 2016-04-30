@@ -1,22 +1,35 @@
 {% extends "base.html" %}
-{% block title %} Account {% endblock title %}
+{% block title %} Create account {% endblock title %}
 {% block content %}
 {% load bootstrap3 %}
-
-<div>
-
-<form method="post" action="" class="form-horizontal">
-    <fieldset>
-
     {% csrf_token %}
 
-	{% bootstrap_form form layout='horizontal' %}
-     
- 
-    </fieldset>
-    <input type="submit" value="Submit" />
+<div><a href="{% url "elearning:register" %}" class="btn btn-raised btn-success">Create new user</a></div>
+<div>
+
+ <table class="table table-striped table-hover " id="table_1">
+    <thead>
+    <tr class="info">
+        <th>Name</th>
+        <th>Surname</th>
+        <th>Role</th>
+        <th>Email</th>
+    <th></th>
+    <th></th>
     
-</form>
+    </tr>
+    </thead>
+     {% for item in users|dictsort:"first_name" %}
+    <tr  class="success success" id ="{{ item.id }}">
+        <td>{{ item.first_name }}</td>
+        <td>{{ item.last_name }}</td>
+        <td>{{ item.role }}</td>        
+        <td>{{ item.email }} </td>
+        <td><a href="{% url "elearning:editUser" customUser_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
+        <td><a class="btn btn-raised btn-info deleteBlock">Delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
 </div>
 
 
