@@ -152,11 +152,8 @@ $(document).ready(function () {
         if ( !( $(this).attr('loaded') )){
             $(this).attr('loaded', true);
             request = $.ajax({
-                 type:"POST",
-                 url:"/ajax/get-blocks-list/{{course.id}}",
-                 data: {
-                        'section_id' : section_id
-                        }
+                 type:"GET",
+                 url:"/ajax/get-blocks-list/" + section_id
                 });
             request.done(function (response){
                 var itemset = JSON.parse(response);
