@@ -51,6 +51,11 @@
 
 {% block script %}
 <script>
+$(document).ready( function () {
+    $('#table_1').DataTable({"aoColumnDefs": [ { "bSortable": false, "aTargets": [ -1, -2, -3 ] } ]})
+    
+    
+} );
 $(document).on('click','.deleteBlock',function () {
     csrftoken = getCookie("csrftoken");
     $.ajaxSetup({
