@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_wysiwyg',
     'suit_ckeditor',
     'registration',
+    'bootstrap3',
 ]
 
 #redux
@@ -89,13 +90,16 @@ DJANGO_WYSIWYG_FLAVOR = "ckeditor"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'elearning',
+    'ENGINE': 'django.db.backends.mysql',
+    'NAME': 'elearning',
 	'USER': '',
 	'PASSWORD': '',
 	'HOST': 'localhost',
 	'PORT': '3306',
-    }
+	'OPTIONS': {
+            'charset': 'utf8',
+            'use_unicode': True, },
+    },
 }
 
 

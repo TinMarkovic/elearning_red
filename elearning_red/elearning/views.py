@@ -182,9 +182,9 @@ def course_manage(request, course_id):
     course = get_object_or_404(M.Course, id=int(course_id))
     query_results = M.Section.objects.filter(course__id=course_id)
     if query_results is not None:
-        return render(request, 'courseMng.html', {"query_results": query_results, "course_id": course_id})
+        return render(request, 'courseMng.html', {"query_results": query_results, "course_id": course_id,"course":course})
     else:
-        return render(request, 'courseMng.html', {"course_id": course_id})
+        return render(request, 'courseMng.html', {"course_id": course_id,"course":course})
 
 
 @login_required
@@ -199,8 +199,8 @@ def course_reorder_sections(request):
     return HttpResponse('')
 
 
-@login_required
-@D.admin_or_course_related_prof
+#@login_required
+#@D.admin_or_course_related_prof
 def course_students(request, course_id):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
@@ -397,6 +397,7 @@ def blocks_studentview(request, course_id, section_id):
     video = M.VideoBlock.objects.filter(sections__id=section_id)
     image = M.ImageBlock.objects.filter(sections__id=section_id)
     html = M.HTMLBlock.objects.filter(sections__id=section_id)
+    quiz = M.QuizBlock.objects.filter(sections__id=section_id)
     if video is not None:
         return render(request, 'blocks.html', {"video": video,
                                                 "image": image,
@@ -405,6 +406,7 @@ def blocks_studentview(request, course_id, section_id):
                                                 "section_id": section_id,
                                                 "course": course,
                                                 "section":section,
+                                                "quiz":quiz,
                                                    })
     else:
         return render(request, 'blocks.html', {"course_id": course_id,

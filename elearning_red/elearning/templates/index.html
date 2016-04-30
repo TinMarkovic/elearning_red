@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %} Courses {% endblock title %}
+{% load bootstrap3 %}
 
 
 {% block content %}
@@ -11,20 +12,7 @@
 <form method="post" action="" class="form-horizontal" >
     {% csrf_token %}
  <fieldset>
-     <div class="form-group">
-      <label for="inputUsername" class="col-md-2 control-label">Username</label>
-
-      <div class="col-md-10">
-        <input class="form-control" id="inputUsername" placeholder="Username" type="username">
-      </div>
-    </div>
-    <div class="form-group">
-      <label for="inputPassword" class="col-md-2 control-label">Password</label>
-
-      <div class="col-md-10">
-        <input class="form-control" id="inputPassword" placeholder="Password" type="password">
-        </div>
-        </div>
+      {% bootstrap_form form layout='horizontal' %}
         </fieldset>
 
 {% if form.errors %}
@@ -36,7 +24,7 @@ Please try again!</p>
     <button type="submit" class="btn btn-primary">Sign in</button>
 
 
-<form action="{% url "elearning:registration" %}">
+<form action="{% url "elearning:register" %}">
 <button type="submit" class="btn btn-primary">Sign up</button></form>  
 
 {% endif %}
