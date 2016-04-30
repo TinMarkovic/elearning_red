@@ -6,6 +6,7 @@
     {{ form.as_p }}
     <input type="submit" value="Submit a course" />
 </form>
+<h1>BLA</h1>
 <table class="table table-striped table-hover ", id="table_1">
     <thead>
     <tr class="info">
@@ -35,7 +36,7 @@
         <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
         <td><a href="{% url "elearning:detailsCourse" course_id=item.id %}" class="btn btn-raised btn-info">Details</a> </td>
         <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
-        <td> <a href="" class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+        <td> <a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
     </tr>
     {% endfor %}
 </table>
@@ -43,20 +44,41 @@
 
 {% block script %}
 <script>
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 $(document).ready( function () {
-    $('#table_1').DataTable({"aoColumnDefs": [ { "bSortable": false, "aTargets": [ -1, -2, -3, -4 ] } ]})  
+    $('#table_1').DataTable({"aoColumnDefs": [ { "bSortable": false, "aTargets": [ -1, -2, -3 ] } ]})
     
-});
-$(document).ready( function () {
     
-      $( ".deleteBlock" ).on( "click", function( event, ui ) {
+} );
+$(document).on('click','.deleteBlock',function () {
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+     
+    $( ".deleteBlock" ).on( "click", function( event, ui ) {
         $element = $(this).parents("tr");
         var course_id = $element.attr("id");
         event.stopPropagation();
-        if(confirm("Are you certain you want to delete this course?")){
+        if(confirm("Are you certain you want to delete this user?")){
             $.ajax({
                  type:"DELETE",
-                 url:"/courses/edit/" + course_id,
+                 url:"/programmes/edit/" + course_id,
                  data: {},
                  success: function(){
                         $element.remove();
@@ -64,6 +86,7 @@ $(document).ready( function () {
             });
         }
     });
-});
+    
+} );
 </script>
 {% endblock script %}
