@@ -58,11 +58,11 @@
     </thead>
     {% for item in courses_inscribed %}
     <tr  class="success">
-        <td>{{ item.name }}</td>
+        <td>{{ item.name|truncatechars:20  }}</td>
         <td>{{ item.beginDate }}</td>
         <td>{{ item.duration }}</td>        
-        <td>{{ item.desc }} </td>
-        <td>{{ item.author }}</td>
+        <td>{{ item.desc|truncatechars:20 }} </td>
+        <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
         <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
@@ -93,11 +93,11 @@
     </thead>
     {% for item in courses_uninscribed %}
     <tr  class="success">
-        <td>{{ item.name }}</td>
+        <td>{{ item.name|truncatechars:20 }}</td>
         <td>{{ item.beginDate }}</td>
         <td>{{ item.duration }}</td>        
-        <td>{{ item.desc }} </td>
-        <td>{{ item.author }}</td>
+        <td>{{ item.desc|truncatechars:20 }} </td>
+        <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
         <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
