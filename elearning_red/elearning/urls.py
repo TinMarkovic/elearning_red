@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^users/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
     url(r'^users/edit', views.user_create, name="createUser"),
     
+
     url(r'^logout', views.user_logout, name='logout'),
     url(r'^about', views.about, name='about'),
     
