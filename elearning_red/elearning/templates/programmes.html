@@ -25,11 +25,12 @@
 
         <td><a href="" class="btn btn-raised btn-info" id="show">Details</a> </td>
         <td><a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-danger">Enter</a> </td>
-        <td> <a href="" class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
 
     </tr>
     {% endfor %}
 </table>
+
 
 <button id="hide">Hide</button>
 
@@ -47,6 +48,7 @@
         </div>
 
 
+
 {% endblock %}
 
 
@@ -54,16 +56,23 @@
 {% block script %}
 <script>
 $(document).ready( function () {
-    $('#table_1').DataTable({"aoColumnDefs": [ { "bSortable": false, "aTargets": [ -1, -2, -3 ] } ]})  
+    $('#table_1').DataTable({"aoColumnDefs": [ { "bSortable": false, "aTargets": [ -1, -2, -3 ] } ]})
     
-});
-$(document).ready( function () {
     
-      $( ".deleteBlock" ).on( "click", function( event, ui ) {
+} );
+$(document).on('click','.deleteBlock',function () {
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+     
+    $( ".deleteBlock" ).on( "click", function( event, ui ) {
         $element = $(this).parents("tr");
         var programme_id = $element.attr("id");
         event.stopPropagation();
-        if(confirm("Are you certain you want to delete this programme?")){
+        if(confirm("Are you certain you want to delete this user?")){
             $.ajax({
                  type:"DELETE",
                  url:"/programmes/edit/" + programme_id,
@@ -74,7 +83,8 @@ $(document).ready( function () {
             });
         }
     });
-});
+    
+} );
 </script>
 
 <script>
