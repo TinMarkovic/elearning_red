@@ -30,8 +30,6 @@
 {% else %}
     <p>Welcome</p>
 
- 
-
 {% if form.errors %}
 <p>Your username and password didn't match!
 Please try again!</p>
@@ -40,17 +38,14 @@ Please try again!</p>
 
 {% endif %}
 
- 
     
     {% if user.is_authenticated %}
-     
-
-
+   
 	<a href={% url "elearning:listCourses" %} class="btn btn-raised btn-success">Courses</a>
     <a href={% url "elearning:listProgrammes" %} class="btn btn-raised btn-success">Programmes</a>
       
     {% else %}
-    	<p><h3><a href={% url "elearning:register" %}>Join today!</a></h3></p>
+    	<p><h3><a href={% url "redux:registration_register" %}>Join today!</a></h3></p>
     {% endif %}
     
 </div>
