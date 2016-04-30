@@ -1,0 +1,31 @@
+#!/bin/bash
+
+printf "### Converting MySQL character set ###\n\n"
+
+# Get the MySQL username
+printf "Enter mysql username: "
+read -r USERNAME
+
+# Get the MySQL password
+printf "Enter mysql password for user %s:" "$USERNAME"
+read -rs PASSWORD
+
+DBLIST=( "elearning_mysql" )
+
+printf "\n"
+
+
+for DB in "${DBLIST[@]}"
+do
+(
+    echo 'ALTER DATABASE `'"$DB"'` CHARACTER SET utf8 COLLATE utf8_unicode_ci;'
+    mysql "$DB" -u"$USERNAME" -p"$PASSWORD" -e "SHOW TABLES" --batch --skip-column-names \
+    | xargs -I{} echo 'ALTER TABLE `'{}'` CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;'
+) \
+| mysql "$DB" -u"$USERNAME" -p"$PASSWORD"
+
+echo "$DB database done..."
+done
+
+echo "### DONE ###"
+exit
