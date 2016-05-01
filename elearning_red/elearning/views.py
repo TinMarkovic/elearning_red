@@ -251,7 +251,7 @@ def programmes_show(request, programme_id=None):
         programme = get_object_or_404(M.Programme, id=int(programme_id))
         courses_in_programme = M.Course.objects.filter(programmes=programme)
         courses_elected = M.Course.objects.exclude(programmes=programme).filter(users=user)
-        return render(request, 'courses.html', {'courses_in_programme': courses_in_programme, 'courses_elected': courses_elected})
+        return render(request, 'courses.html', {'courses_in_programme': courses_in_programme, 'courses_elected': courses_elected, 'programme_id': programme_id})
     else:
         programmes = M.Programme.objects.all()
         return render(request, 'programmes.html', {'programmes': programmes})
@@ -268,10 +268,13 @@ def programme_students(request, programme_id):
         form = F.StudentToProgramme(request.POST, instance=programme)
         if form.is_valid():
             form.save()
-            students = request.POST.getlist('users[]')
-            print (students)
+            students = request.POST.getlist('users')
+    
             for course in M.Course.objects.filter(programmes=programme):
-                course.users.add(*students)         
+                for student in students:
+                    a = M.Course.objects.filter(id=course.id).filter(users=student)
+                    if len(a)==0:
+                        course.users.add(student)
             
         return HttpResponseRedirect('')
     else:
