@@ -141,9 +141,8 @@ def course_show(request, course_id=None):
         try:
             rating = M.Rating.objects.get(user=request.user, course=course_id)
         except ObjectDoesNotExist:
-            rating = M.Rating(user=M.CustomUser.objects.get(id=request.user.id),
+            rating = M.Rating(value=0, user=M.CustomUser.objects.get(id=request.user.id),
                               course=M.Course.objects.get(id=course_id))
-            rating.value = 0
             rating.save()
           
         if request.method == "POST":

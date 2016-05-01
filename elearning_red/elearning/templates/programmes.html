@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block title %} Programmes {% endblock title %}
-{% block content %}
 
 {% block breadcrumbs %}
       <ul class="nav navbar-nav" id="menu">
@@ -12,10 +11,13 @@
             </ul></li>    
       </ul>
         
-
 {% endblock breadcrumbs %}
+
+{% block content %}
     {% csrf_token %}
-    
+
+<div><a href="{% url "elearning:newProgramme" %}" class="btn btn-raised btn-success">Create new programme</a></div>
+  
     <h1> Programmes in offer: </h1>
 <table class="table table-striped table-hover ", id="table_1">
     <thead>
