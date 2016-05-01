@@ -69,49 +69,20 @@
 
 {% endblock content %}
 
-{% block navigation %}
-<div class="navbar navbar-danger">
+{% block breadcrumbs %}
 
-
-  <div class="container-fluid">
- 
-    
-
-
-    <div class="navbar-collapse collapse navbar-danger-collapse">
       <ul class="nav navbar-nav" id="menu">
        
              <li><ul class="breadcrumb">
             <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
             <li><a href={% url "elearning:listCourses" %} class="btn btn-default"><b>List of courses</b></a></li>
-            <li class="active"><b>{{course.name}}</b></a></li>
-           
+            <li class="active"><b>{{course.name}}</b></a></li>   
             </ul></li>
-            
-
+            </ul>
+{% endblock breadcrumbs %}
           
         
-      </ul>
-      
-          
-        </li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-
-<div class="container-fluid">
-
-          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
-          <span class="hamb-top"></span>
-          <span class="hamb-middle"></span>
-          <span class="hamb-bottom"></span>
-          </button>
-         
-          </div>
-{% endblock navigation %}
-
+     
 {% block script %}-
 <script>
 $(document).ready(function () {
