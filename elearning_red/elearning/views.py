@@ -76,11 +76,11 @@ def user_modify(request, customUser_id=None):
             raise Http404("User does not exist")
     
     if request.method == "POST":
-        form = F.UserForm(request.POST)
-
+        form = F.UserForm(request.POST, instance=customUser)
+        
         if form.is_valid():
             form.save()
-
+           
         return HttpResponseRedirect('')
 
     else:
@@ -91,15 +91,6 @@ def user_modify(request, customUser_id=None):
 
 def users_list(request):
     users = M.CustomUser.objects.all()
-    
-    if request.method == "DELETE":
-        if customUser is not None:
-            customUser.delete()
-            return HttpResponse('Success!')
-        else:
-            raise Http404("User does not exist")
-
-        return HttpResponseRedirect('')
 
     return render(request, 'users.html', {'users': users})
 
@@ -136,7 +127,7 @@ def course_modify(request, course_id=None):
 
     return render(request, 'courseEdit.html', {'form': form, 'courses': courses})
 
-
+@D.admin_or_course_related_prof_or_student
 def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
