@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %} Add Students {% endblock title %}
+{% block breadcrumbs %}
+
+      <ul class="nav navbar-nav" id="menu">
+       
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listProgrammes" %} class="btn btn-default"><b>Programmes</b></a></li>
+            <li class="active"><b>{{programme.name}}</b></a></li>
+           
+            </ul></li>
+      </ul>
+        
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+<form method="post" action="" class="form-horizontal">
+<fieldset>
+<div class="form-group">
+{% for field in form %}
+    {% csrf_token %}
+
+    {{ form.as_p}}
+    
+ {% endfor %}
+    <button type="submit" class="btn btn-raised btn-success">Update</button>
+</form>
+{% endblock content %}
+

@@ -20,7 +20,8 @@
     {% csrf_token %}
     
 <div><a href="{% url "elearning:newCourse" %}" class="btn btn-raised btn-success">Create new course</a></div>
-    
+
+{% if courses_inscribed %}
     <h1> Enrolled: </h1>  
      <table class="table table-striped table-hover ">
     <thead>
@@ -55,6 +56,8 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
+{% if courses_uninscribed %}
  <h1> Available: </h1>
     <table class="table table-striped table-hover" id="table_1">
     <thead>
@@ -88,7 +91,83 @@
         <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
     </tr>
     {% endfor %}
+    {% endif %}
 </table>
+
+{% if courses_in_programme %}
+    <h1> Enrolled: </h1>  
+     <table class="table table-striped table-hover ">
+    <thead>
+    <tr class="info">
+        <th>Name:</th>
+        <th>Begins:</th>
+        <th>Duration(days):</th>
+        <th>Description:</th>
+        <th>Author:</th>
+        <th>Tags:</th>
+    <th>Average rating:</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+
+    </tr>
+    </thead>
+    {% for item in courses_in_programme %}
+    <tr  class="success">
+        <td>{{ item.name|truncatechars:20  }}</td>
+        <td>{{ item.beginDate }}</td>
+        <td>{{ item.duration }}</td>        
+        <td>{{ item.desc|truncatechars:20 }} </td>
+        <td>{{ item.author|truncatechars:20 }}</td>
+        <td>{{ item.tagList }}</td>
+        <td>{{ item.avgRating }}</td>
+        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
+        <td><a href="{% url "elearning:showStudentsInCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> </td>
+        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
+        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% if courses_elected %}
+    <h1> Other enrolled courses: </h1>  
+     <table class="table table-striped table-hover ">
+    <thead>
+    <tr class="info">
+        <th>Name:</th>
+        <th>Begins:</th>
+        <th>Duration(days):</th>
+        <th>Description:</th>
+        <th>Author:</th>
+        <th>Tags:</th>
+    <th>Average rating:</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+
+    </tr>
+    </thead>
+    {% for item in courses_elected %}
+    <tr  class="success">
+        <td>{{ item.name|truncatechars:20  }}</td>
+        <td>{{ item.beginDate }}</td>
+        <td>{{ item.duration }}</td>        
+        <td>{{ item.desc|truncatechars:20 }} </td>
+        <td>{{ item.author|truncatechars:20 }}</td>
+        <td>{{ item.tagList }}</td>
+        <td>{{ item.avgRating }}</td>
+        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
+        <td><a href="{% url "elearning:showStudentsInCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> </td>
+        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
+        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
 {% endblock content %}
 
 {% block script %}

@@ -82,13 +82,7 @@ class QuizBlockForm(BlockForm):
 class ProgrammeForm(ModelForm):
     class Meta:
         model = M.Programme
-        fields = ('name', 'desc','tags','avgRating','users',)
-        widgets = {
-            'users': widgets.CheckboxSelectMultiple(),
-        }
-    def __init__(self, *args, **kwargs):
-        super(ProgrammeForm, self).__init__(*args, **kwargs)                
-        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")
+        fields = ('name', 'desc','tags','avgRating')
 
 class RatingForm(ModelForm):
     class Meta:
@@ -101,6 +95,17 @@ class StudentToCourse(ModelForm):
         self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")    
     class Meta:
         model = M.Course       
+        fields = ( 'users',)
+        widgets = {
+            'users': widgets.CheckboxSelectMultiple(),
+        }
+
+class StudentToProgramme(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(StudentToProgramme, self).__init__(*args, **kwargs)
+        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Student")    
+    class Meta:
+        model = M.Programme       
         fields = ( 'users',)
         widgets = {
             'users': widgets.CheckboxSelectMultiple(),

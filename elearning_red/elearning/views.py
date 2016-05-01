@@ -223,7 +223,6 @@ def programme_modify(request, programme_id=None):
         programme = get_object_or_404(M.Programme, id=int(programme_id))
     else:
         programme = None
-    programmes = M.Programme.objects.all()
     
     if request.method == "DELETE":
         if programme is not None:
@@ -243,17 +242,41 @@ def programme_modify(request, programme_id=None):
     else:
         form = F.ProgrammeForm(instance=programme)
 
-    return render(request, 'programmeEdit.html', {'form': form, 'programmes': programmes})
+    return render(request, 'programmeEdit.html', {'form': form })
 
                             
 def programmes_show(request, programme_id=None):
     if programme_id is not None:
+        user = request.user
         programme = get_object_or_404(M.Programme, id=int(programme_id))
-        query_results = M.Course.objects.filter(programmes=programme)
-        return render(request, 'courses.html', {'query_results': query_results})
+        courses_in_programme = M.Course.objects.filter(programmes=programme)
+        courses_elected = M.Course.objects.exclude(programmes=programme).filter(users=user)
+        return render(request, 'courses.html', {'courses_in_programme': courses_in_programme, 'courses_elected': courses_elected})
     else:
         programmes = M.Programme.objects.all()
         return render(request, 'programmes.html', {'programmes': programmes})
+    
+
+@login_required
+@D.admin_only
+def programme_students(request, programme_id):
+    if programme_id is not None:
+        programme = get_object_or_404(M.Programme, id=int(programme_id))
+    else:
+        programme = None
+    if request.method == "POST":
+        form = F.StudentToProgramme(request.POST, instance=programme)
+        if form.is_valid():
+            form.save()
+            students = form.cleaned_data['users']
+            for course in M.Course.objects.filter(programmes_id=programme_id):
+                course.users.add(students)         
+            
+        return HttpResponseRedirect('')
+    else:
+        form = F.StudentToProgramme(instance=programme)
+
+    return render(request, 'programmeStudentList.html', {'form': form,'programme':programme})
 
 
 @login_required
