@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 {% block title %} Account {% endblock title %}
+
+{% block breadcrumbs %}
+
+      <ul class="nav navbar-nav" id="menu">
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li><a href={% url "elearning:listUsers" %} class="btn btn-default"><b>Users</b></a></li>
+            <li class="active"><b>Edit</b></a></li>
+            </ul></li>
+      </ul>
+        
+{% endblock breadcrumbs %}
+
 {% block content %}
 {% load bootstrap3 %}
 
