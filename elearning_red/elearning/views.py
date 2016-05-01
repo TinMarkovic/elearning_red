@@ -268,9 +268,10 @@ def programme_students(request, programme_id):
         form = F.StudentToProgramme(request.POST, instance=programme)
         if form.is_valid():
             form.save()
-            students = form.cleaned_data['users']
-            for course in M.Course.objects.filter(programmes_id=programme_id):
-                course.users.add(students)         
+            students = request.POST.getlist('users[]')
+            print (students)
+            for course in M.Course.objects.filter(programmes=programme):
+                course.users.add(*students)         
             
         return HttpResponseRedirect('')
     else:
