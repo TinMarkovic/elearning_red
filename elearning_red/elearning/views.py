@@ -5,6 +5,7 @@ from django.core.serializers import serialize
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg
 from django.utils.translation import ugettext
 from django.views.decorators.csrf import csrf_exempt
@@ -137,17 +138,14 @@ def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
         sections = M.Section.objects.filter(course_id=course.id)
-        rating = M.Rating.objects.filter(user=request.user).filter(course=course_id)
-        if len(rating) == 0:
+        try:
+            rating = M.Rating.objects.get(user=request.user, course=course_id)
+        except ObjectDoesNotExist:
             rating = M.Rating(user=M.CustomUser.objects.get(id=request.user.id),
                               course=M.Course.objects.get(id=course_id))
             rating.value = 0
             rating.save()
-        else:
-            rating = get_object_or_404(M.Rating, user=M.CustomUser.objects.get(id=request.user.id),
-                                       course=M.Course.objects.get(id=course_id))
-        
-        
+          
         if request.method == "POST":
             form = F.RatingForm(request.POST, instance=rating)
             if form.is_valid():
