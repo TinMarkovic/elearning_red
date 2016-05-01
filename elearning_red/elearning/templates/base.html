@@ -93,7 +93,7 @@
     <div class="box">
 
     {% if user.is_authenticated %}
-        <h4><i class="material-icons">face</i>Welcome, {{ user.get_username }}</h4>
+        <a href = {% url "elearning:userProfile" %}><h4><i class="material-icons">face</i>Welcome, {{ user.get_username }}</h4></a>
         <a href={% url "elearning:logout"  %} class="btn btn-raised btn-xs">Logout</a>
     {% else %}
          <a href={% url "redux:registration_register" %} class="btn btn-raised btn-success">Sign Up</a>

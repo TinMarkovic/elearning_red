@@ -101,13 +101,16 @@ def users_list(request):
 
         return HttpResponseRedirect('')
 
-    return render(request, 'users.html', {'users': users})
+    
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/')
 
-
+@login_required
+def user_profile(request):
+    return render(request, 'userProfile.html')
+    
 @login_required
 @D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
