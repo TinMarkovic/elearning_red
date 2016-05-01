@@ -101,7 +101,7 @@ def users_list(request):
 
         return HttpResponseRedirect('')
 
-    
+    return render(request, 'users.html', {'users': users})
 
 def user_logout(request):
     logout(request)
