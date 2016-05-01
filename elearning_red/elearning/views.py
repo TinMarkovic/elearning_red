@@ -104,7 +104,7 @@ def users_list(request):
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/')
 
 
 @login_required
@@ -126,7 +126,7 @@ def course_modify(request, course_id=None):
         if form.is_valid():
             # TODO: Add the validated professor to the users - for editing
             form.save()
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('/courses/')
     else:
         form = F.CourseForm(instance=course)
 
@@ -238,7 +238,7 @@ def programme_modify(request, programme_id=None):
         if form.is_valid():
             form.save()
             
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('programme')
 
     else:
         form = F.ProgrammeForm(instance=programme)
