@@ -222,7 +222,11 @@ def course_students(request, course_id):
         if form.is_valid():
             course = form.save()
             course.save()
+<<<<<<< HEAD
         return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
+=======
+        return HttpResponseRedirect('')
+>>>>>>> parent of fe8cc83... adding prof to course
     else:
         form = F.StudentToCourse(instance=course)
 

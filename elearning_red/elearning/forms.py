@@ -130,15 +130,4 @@ class CustomRegistrationForm(RegistrationForm):
 
 class CustomRegistrationFormAdmin(CustomRegistrationForm):
     role = ModelChoiceField(queryset=M.Role.objects.all().order_by('name'))
-
-class ProfessorToCourse(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(ProfessorToCourse, self).__init__(*args, **kwargs)
-        self.fields['users'].queryset = self.fields['users'].queryset.filter(role__name__exact="Professor")    
-    class Meta:
-        model = M.Course       
-        fields = ( 'users',)
-        widgets = {
-            'users': widgets.CheckboxSelectMultiple(),
-        }
     
