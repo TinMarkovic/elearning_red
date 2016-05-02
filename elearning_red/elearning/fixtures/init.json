@@ -1,0 +1,573 @@
+[
+    {
+        "model":"elearning.role",
+        "pk":1,
+        "fields":{
+            "name":"admin",
+            "permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.role",
+        "pk":2,
+        "fields":{
+            "name":"professor",
+            "permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.role",
+        "pk":3,
+        "fields":{
+            "name":"student",
+            "permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.tag",
+        "pk":1,
+        "fields":{
+            "name":"Computer Science"
+        }
+    },
+    {
+        "model":"elearning.tag",
+        "pk":2,
+        "fields":{
+            "name":"Mechanical Engineer"
+        }
+    },
+    {
+        "model":"elearning.tag",
+        "pk":3,
+        "fields":{
+            "name":"Civil Engineering"
+        }
+    },
+    {
+        "model":"elearning.tag",
+        "pk":4,
+        "fields":{
+            "name":"Construction"
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":1,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":"2016-05-02T14:29:13Z",
+            "is_superuser":false,
+            "username":"OsnovniAdmin",
+            "first_name":"Lorem",
+            "last_name":"Ipsum",
+            "email":"test@gmail.com",
+            "is_staff":true,
+            "is_active":true,
+            "date_joined":"2016-04-22T12:46:59Z",
+            "groups":[
+                3
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":2,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":"2016-05-02T03:54:26Z",
+            "is_superuser":false,
+            "username":"OsnovniProfesor",
+            "first_name":"Lorem",
+            "last_name":"Ipsum Drugi",
+            "email":"test@gmail.com",
+            "is_staff":true,
+            "is_active":true,
+            "date_joined":"2016-04-22T12:46:59Z",
+            "groups":[
+
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":3,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":"2016-05-02T02:10:30Z",
+            "is_superuser":false,
+            "username":"OsnovniStudent",
+            "first_name":"Lorem",
+            "last_name":"Ipsum Tre\u0107i",
+            "email":"test@gmail.com",
+            "is_staff":false,
+            "is_active":true,
+            "date_joined":"2016-04-22T12:46:59Z",
+            "groups":[
+
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":8,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":null,
+            "is_superuser":false,
+            "username":"OsnovniStudent2",
+            "first_name":"Lorem",
+            "last_name":"Ipsum \u010cetvrti",
+            "email":"whatever@whatwhat.com",
+            "is_staff":false,
+            "is_active":true,
+            "date_joined":"2016-05-02T03:28:10Z",
+            "groups":[
+                1
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":9,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":null,
+            "is_superuser":false,
+            "username":"OsnovniStudent3",
+            "first_name":"Lorem",
+            "last_name":"Ipsum Peti",
+            "email":"whatever@whatwhat.com",
+            "is_staff":false,
+            "is_active":true,
+            "date_joined":"2016-05-02T03:28:40Z",
+            "groups":[
+                1
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":10,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":null,
+            "is_superuser":false,
+            "username":"OsnovniStudent4",
+            "first_name":"Lorem",
+            "last_name":"Ipsum \u0160esti",
+            "email":"whatever@whatwhat.com",
+            "is_staff":false,
+            "is_active":true,
+            "date_joined":"2016-05-02T03:29:36Z",
+            "groups":[
+                1
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"auth.user",
+        "pk":11,
+        "fields":{
+            "password":"pbkdf2_sha256$24000$n8opqhUxSajo$nsVrHY8xgfOLZxSVKi9HwsQV9Ef1QsSD8XQFeZoCt1M=",
+            "last_login":"2016-05-02T03:52:41Z",
+            "is_superuser":false,
+            "username":"OsnovniProfesor2",
+            "first_name":"Lorem",
+            "last_name":"Ipsum Sedmi",
+            "email":"whatever@whatwhat.com",
+            "is_staff":false,
+            "is_active":true,
+            "date_joined":"2016-05-02T03:30:09Z",
+            "groups":[
+                2
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":1,
+        "fields":{
+            "dob":"1990-05-29",
+            "role":1,
+            "groups":[
+                3
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":2,
+        "fields":{
+            "dob":"1990-05-29",
+            "role":2,
+            "groups":[
+
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":3,
+        "fields":{
+            "dob":"1990-05-29",
+            "role":3,
+            "groups":[
+
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":8,
+        "fields":{
+            "dob":"1926-01-01",
+            "role":3,
+            "groups":[
+                1
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":9,
+        "fields":{
+            "dob":"1926-01-01",
+            "role":3,
+            "groups":[
+                1
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":10,
+        "fields":{
+            "dob":"1926-01-01",
+            "role":3,
+            "groups":[
+                1
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.customuser",
+        "pk":11,
+        "fields":{
+            "dob":"1926-01-01",
+            "role":2,
+            "groups":[
+                2
+            ],
+            "user_permissions":[
+
+            ]
+        }
+    },
+    {
+        "model":"elearning.course",
+        "pk":1,
+        "fields":{
+            "name":"Osnove kori\u0161tenja elearningRed alata",
+            "desc":"Nau\u010dite kako spremiti svoje znanje sa na\u0161im novim alatom - jednostavno, brzo i lako za podijeliti s prijateljima i obitelji!",
+            "beginDate":"2016-05-14",
+            "duration":30,
+            "author":"Crveni tim za EE SpringCamp se sastoji od tri \u010dlana i jednog mentora:\r\nTin Markovi\u0107,\r\nTajana Ro\u017ei\u0107 i\r\nIvan Opa\u010dak\r\n\r\nTe njihov mentor:\r\nDino Cikati\u0107",
+            "avgRating":"0.00",
+            "tags":[
+                1
+            ],
+            "users":[
+                3,
+                8
+            ],
+            "programmes":[
+                1
+            ]
+        }
+    },
+    {
+        "model":"elearning.section",
+        "pk":1,
+        "fields":{
+            "name":"Introduction",
+            "desc":"Some starting pointers about this course, before we get to the meaty part!",
+            "beginDate":"2016-05-20",
+            "index":0,
+            "course":1
+        }
+    },
+    {
+        "model":"elearning.section",
+        "pk":2,
+        "fields":{
+            "name":"Main part!",
+            "desc":"This is the main part of the course, hope you'll enjoy learning with us.",
+            "beginDate":"2016-05-25",
+            "index":1,
+            "course":1
+        }
+    },
+    {
+        "model":"elearning.section",
+        "pk":3,
+        "fields":{
+            "name":"Conclusion",
+            "desc":"We are concluding this course now. Hope you've learned as much as we have.",
+            "beginDate":"2016-05-30",
+            "index":2,
+            "course":1
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":1,
+        "fields":{
+            "name":"Welcoming word",
+            "index":0,
+            "assessment":false,
+            "sections":1
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":2,
+        "fields":{
+            "name":"EE logo",
+            "index":1,
+            "assessment":false,
+            "sections":1
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":5,
+        "fields":{
+            "name":"Bridge to main",
+            "index":2,
+            "assessment":false,
+            "sections":1
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":6,
+        "fields":{
+            "name":"Uvod i osnovne funkcionalnosti",
+            "index":0,
+            "assessment":false,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":7,
+        "fields":{
+            "name":"Kviz I - osnove",
+            "index":4,
+            "assessment":false,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":9,
+        "fields":{
+            "name":"2. Osnove pravljenja coursea",
+            "index":1,
+            "assessment":false,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":10,
+        "fields":{
+            "name":"3. Blokovi",
+            "index":3,
+            "assessment":false,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":11,
+        "fields":{
+            "name":"4. Korisnici",
+            "index":2,
+            "assessment":false,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":12,
+        "fields":{
+            "name":"5. Kviz",
+            "index":5,
+            "assessment":false,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":13,
+        "fields":{
+            "name":"Kviz II - Sad malo ozbiljnije",
+            "index":6,
+            "assessment":true,
+            "sections":2
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":14,
+        "fields":{
+            "name":"Okon\u010danje",
+            "index":0,
+            "assessment":false,
+            "sections":3
+        }
+    },
+    {
+        "model":"elearning.block",
+        "pk":15,
+        "fields":{
+            "name":"Pitanja",
+            "index":1,
+            "assessment":false,
+            "sections":3
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":1,
+        "fields":{
+            "content":"<h1 style=\"font-style: italic; text-align: center;\">elearningRed</h1>\r\n\r\n<h4 style=\"text-align: center;\">Knowledge is power.</h4>\r\n\r\n<h2>Introduction</h2>\r\n\r\n<p>Welcome, users, &nbsp;to our website. It has been made as a part of the Spring Camp programme by our sponsors: the&nbsp;Extension Engine company. This course is a demonstration of all the functions our little web application is capable of.&nbsp;</p>\r\n\r\n<p>Hope you will have as much fun reviewing it, as we have had making it.&nbsp;<img alt=\"smiley\" height=\"20\" src=\"http://127.0.0.1:8000/static/suit-ckeditor/ckeditor/plugins/smiley/images/regular_smile.gif\" title=\"smiley\" width=\"20\" /></p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":5,
+        "fields":{
+            "content":"<p>Dakle, krenimo.</p>\r\n\r\n<p>U slijede\u0107em poglavlju \u0107e Vas \u010dekati pregled razli\u010ditih funkcionalnosti na&scaron;e web aplikacije, te demonstracija istih.&nbsp;</p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":6,
+        "fields":{
+            "content":"<h2 style=\"text-align: center;\">I. Osnovne funkcionalnosti</h2>\r\n\r\n<p>Funkcionalnost elearningRed aplikacije se osniva na par stvari.&nbsp;</p>\r\n\r\n<ul>\r\n\t<li>Mogu\u0107nosti profesora da dodaju predavanja za studente</li>\r\n\t<li>Mogu\u0107nosti profesora da pozivaju studente na predavanja</li>\r\n\t<li>Mogu\u0107nosti studenta da promatraju predavanja</li>\r\n\t<li>Jednostavnosti profesorovog su\u010delja za kreiranje predavanja</li>\r\n\t<li>Otvorenosti za razne oblike predavanja, razne izbore alata</li>\r\n\t<li>Skalabilnosti aplikacije, za eventualno pro&scaron;irenje iste s novim blokovima i alatima</li>\r\n</ul>\r\n\r\n<p>Tri su primarna korisnika aplikacije</p>\r\n\r\n<ol>\r\n\t<li>Administrator</li>\r\n\t<li>Profesor</li>\r\n\t<li>Student</li>\r\n</ol>\r\n\r\n<p>Naravno, postavljeni su temelji za vi&scaron;e razli\u010ditih vrsta korisnika, ali ova prezentacija koristi ovu trojku.</p>\r\n\r\n<p>Demonstrirati \u0107emo interakciju sva tri nivoa u ostatku prezentacije.&nbsp;</p>\r\n\r\n<p>&nbsp;</p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":9,
+        "fields":{
+            "content":"<h2 style=\"text-align: center;\">II. Osnove stvaranja course-a</h2>\r\n\r\n<p>Osnovni dio aplikacije je, naravno, stvaranje course-a koje profesori ure\u0111uju, a studenti poha\u0111aju. Na listi course-ova, je autoriziranim korisnicima postavljen gumb za stvaranje course-a, pa \u0107emo ga i iskoristiti. Vratit \u0107emo se ovdje nakon &scaron;to napravimo prvi course za testiranje, te \u0107emo odmah pregledati i strukturu cijelog course-a.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<hr />\r\n<p style=\"line-height: 20.8px;\">&nbsp;</p>\r\n\r\n<p style=\"line-height: 20.8px;\">Poprili\u010dno jednostavno, zar ne?</p>\r\n\r\n<p style=\"line-height: 20.8px;\">Tamo smo primjetili i osnovnu gra\u0111u jednog course-a.&nbsp;</p>\r\n\r\n<p style=\"line-height: 20.8px;\"><big>Course -&gt; Section -&gt; Block<br />\r\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -&gt; Block<br />\r\n&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</big><span style=\"font-size: 15.6px; line-height: 20.8px;\">-&gt; Section -&gt; Block</span><br style=\"font-size: 15.6px; line-height: 20.8px;\" />\r\n<span style=\"font-size: 15.6px; line-height: 20.8px;\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-&gt; Block</span></p>\r\n\r\n<p style=\"line-height: 20.8px;\">Uz to, postoji i struktura programa, koja dopu&scaron;ta sortiranje course-ova u srodne grupacije, gdje ih onda studenti mogu po svojoj volji koristiti. Samostalan course je nedostupan studentima koji u njega nisu izri\u010dito pozvani.</p>\r\n\r\n<p style=\"line-height: 20.8px;\">Sekcije su samo poglavlja koja odgovaraju cjelinama course-a, a blokovi su glavna gradivna jedinica sustava. O njima \u0107emo trenutno razgovarati.</p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":10,
+        "fields":{
+            "content":"<h2 style=\"text-align: center;\">III. Blokovi</h2>\r\n\r\n<p>Blokovi su osnovna gradivna jedinica aplikacije, te kao takvi imaju centralnu ulogu u infrastrukturi aplikacije. Sve gradivo je sagra\u0111eno od blokova, pa i ovo &scaron;to trenutno \u010ditamo je samo jedan blok - HTML blok. Uz njega su jo&scaron; 3, a napisat \u0107emo ih sve:</p>\r\n\r\n<ul>\r\n\t<li>HTML</li>\r\n\t<li>Video</li>\r\n\t<li>Image</li>\r\n\t<li>Quiz</li>\r\n</ul>\r\n\r\n<p>HTML blok je osnovni blok za sadr\u017eaj. Podr\u017eava veliku koli\u010dinu ure\u0111ivanja sadr\u017eaja u HTMLu, te se koristi za prezentiranje gradiva.</p>\r\n\r\n<p>Video i Image blokovi stvaraju mediju za korisnika da u\u017eiva, Video uzima embeddani link sa Youtube-a ili sli\u010dnog alata, dok Image podr\u017eava podizanje slika na servis i prezentiranje istih korisniku.</p>\r\n\r\n<p>Quiz blok je tu za ispitivanje studenata i odre\u0111ivanje njihovog znanja. Dolazi u dva oblika, za vje\u017ebu, te &quot;ozbiljniji&quot; oblik, gdje nema ponovnog odgovaranja. Primjetit \u0107ete i par quiz blokova ni\u017ee u prezentaciji.</p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":11,
+        "fields":{
+            "content":"<h2 style=\"text-align: center;\">IV. Korisnici</h2>\r\n\r\n<p>Jedini korisnici u aplikaciji koji se mogu sami prijaviti su studenti. Za ostale je zadu\u017een administrator, koji stvara druge administratore i profesorima pravi ra\u010dune...</p>\r\n\r\n<p>Pa \u010dekajte malo - ovaj blok je broj 4... presko\u010dili smo 3. blok... najbolje bi bilo to odmah ispraviti.&nbsp;<img alt=\"wink\" height=\"20\" src=\"http://127.0.0.1:8000/static/suit-ckeditor/ckeditor/plugins/smiley/images/wink_smile.gif\" title=\"wink\" width=\"20\" /></p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>Dakle, gdje smo bili stali.</p>\r\n\r\n<p>Profesori i administratori su napravljeni od strane administratora, koji ima pristup svemu, te jedini mo\u017ee stvarati nove korisnike. Profesori mogu stvarati nove course-ove, te mjenjati iste - bez pristupa upravljanju courseovima drugih profesora. Profesori imaju i privilegiju da gledaju sve course-ove.</p>\r\n\r\n<p>Idemo napraviti novog studenta, da testiramo i taj dio programa.</p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":12,
+        "fields":{
+            "content":"<h2 style=\"text-align: center;\">V. Kviz</h2>\r\n\r\n<p>Stvaranje kviza je jedan od najboljih djelova ove aplikacije, te \u0107emo nakon &scaron;to obavimo ovaj slijede\u0107i - ozbiljniji - i\u0107i i na taj dio. Kviz mo\u017ee imati dvije vrste pitanja (barem u ovoj verziji) - pitanja s jednim odgovorom, te pitanja s vi&scaron;e mogu\u0107ih odgovora.&nbsp;</p>\r\n\r\n<p>Pregledajmo slijede\u0107i kviz, i onda mo\u017eemo napraviti vlastiti&nbsp;<img alt=\"smiley\" height=\"20\" src=\"http://127.0.0.1:8000/static/suit-ckeditor/ckeditor/plugins/smiley/images/regular_smile.gif\" title=\"smiley\" width=\"20\" /></p>"
+        }
+    },
+    {
+        "model":"elearning.htmlblock",
+        "pk":14,
+        "fields":{
+            "content":"<h1 style=\"text-align: center;\">Zaklju\u010dak</h1>\r\n\r\n<p>Hvala Vam na pa\u017enji, i nadamo se da ste u\u017eivali u na&scaron;oj prezentaciji. Tu smo da odgovaramo na Va&scaron;a pitanja, te \u0107emo demonstrirati jo&scaron; par akcija koje nisu navedene striktno u predavanju.</p>\r\n\r\n<p>Do slijede\u0107eg puta, pozdravlja Vas</p>\r\n\r\n<p style=\"text-align: right;\"><big>Va&scaron; crveni tim</big></p>"
+        }
+    },
+    {
+        "model":"elearning.imageblock",
+        "pk":2,
+        "fields":{
+            "subtitle":"Our benefactors",
+            "image":"./ee-logo-pmf.png"
+        }
+    },
+    {
+        "model":"elearning.imageblock",
+        "pk":15,
+        "fields":{
+            "subtitle":"Slu\u0161amo bilo kakva pitanja :)",
+            "image":"./ask-question-1-ff9bc6fa5eaa0d7667ae7a5a4c61330c.jpg"
+        }
+    },
+    {
+        "model":"elearning.quizblock",
+        "pk":7,
+        "fields":{
+            "serialQuestions":"\"[{\\\"title\\\":\\\"Kako se zove poduze\u0107e koje je organiziralo ovaj Spring Camp?\\\",\\\"element\\\":[\\\"                      ExtremeEndurance                       \\\",\\\"                      ExtensionEngine                       \\\",\\\"                      EllipticElectrics                       \\\",\\\"                      ExplodingEngines                       \\\"],\\\"correct\\\":[\\\"                      ExtensionEngine                       \\\"],\\\"multiple\\\":false},{\\\"title\\\":\\\"Koje su osnovne uloge u na\u0161oj aplikaciji (uba\u010dene s po\u010detnim postavkama)?\\\",\\\"element\\\":[\\\"    Student     \\\",\\\"    Profesor     \\\",\\\"    Domar     \\\",\\\"    Tajnica     \\\",\\\"    Administrator     \\\",\\\"    Lektor     \\\"],\\\"correct\\\":[\\\"    Student     \\\",\\\"    Profesor     \\\",\\\"    Administrator     \\\"],\\\"multiple\\\":true},{\\\"title\\\":\\\"Koji programski jezik je kori\u0161ten na ovom Spring Campu?\\\",\\\"element\\\":[\\\"    Cobol     \\\",\\\"    C#     \\\",\\\"    Python     \\\",\\\"    Engleski     \\\",\\\"    LISP     \\\"],\\\"correct\\\":[\\\"    Python     \\\"],\\\"multiple\\\":true}]\""
+        }
+    },
+    {
+        "model":"elearning.quizblock",
+        "pk":13,
+        "fields":{
+            "serialQuestions":"\"[{\\\"title\\\":\\\"Kakvu vezu koristimo ako \u017eelimo povezati proizvoljan broj pojedinaca dvaju grupa, u proizvoljan broj veza?\\\",\\\"element\\\":[\\\" One-to-one  \\\",\\\" Foreign Key  \\\",\\\" Many-to-many  \\\"],\\\"correct\\\":[\\\" Many-to-many  \\\"],\\\"multiple\\\":false},{\\\"title\\\":\\\"Koje naredbe ovdje pripadaju gitu?\\\",\\\"element\\\":[\\\" runserver  \\\",\\\" commit  \\\",\\\" cat  \\\",\\\" push  \\\",\\\" makemigration  \\\",\\\" diff  \\\"],\\\"correct\\\":[\\\" commit  \\\",\\\" push  \\\",\\\" diff  \\\"],\\\"multiple\\\":true},{\\\"title\\\":\\\"Za \u0161to slu\u017ei git?\\\",\\\"element\\\":[\\\" Djeljenje koda i rad na istome sa timom.  \\\",\\\" Kompajliranje Python-a u strojni kod.  \\\",\\\" Spremanje podataka na organiziran na\u010din.  \\\"],\\\"correct\\\":[\\\" Djeljenje koda i rad na istome sa timom.  \\\"],\\\"multiple\\\":false}]\""
+        }
+    }
+]
