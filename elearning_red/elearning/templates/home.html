@@ -7,21 +7,28 @@
 <div class="container">
     <div class="col-sm-8 jumbotron">
         <h1>{{ message }}</h1>
-        <img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" alt="Cinque Terre" width="500" height="236">
+        Pozdrav,<br/>
+        Ova aplikacija je trenutno u testnoj fazi. Korisnici za testiranje su: <br/>
+        OsnovniAdmin<br/>
+        OsnovniProfesor<br/>
+        OsnovniProfesor2<br/>
+        OsnovniStudent<br/>
+        OsnovniStudent2...i još par studenata<br/><br/><br/>
+        Password za ove accounte je: rockandroll
     </div>
     <div class="col-sm-4">
          <div class="well">
             {% if user.is_authenticated %}
-                <p>Welcome, {{ user.get_username }}. Thanks for logging in. Your role: {{request.session.customUserRole}}</p>
+                <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
             {% else %}
                 <p>Welcome</p>
             {% endif %}
             {% if user.is_authenticated %}
                 {% if request.session.customUserRole == "admin" %}
-                    <a href="{% url "elearning:listUsers" %}" class="btn btn-raised btn-success">Users</a>
+                    <a href="{% url "elearning:listUsers" %}" class="btn btn-raised btn-success">Users</a><br/>
                 {% endif %}
-                    <a href={% url "elearning:listCourses" %} class="btn btn-raised btn-success">Courses</a>
-                    <a href={% url "elearning:listProgrammes" %} class="btn btn-raised btn-success">Programmes</a>
+                    <a href={% url "elearning:listCourses" %} class="btn btn-raised btn-success">Courses</a><br/>
+                    <a href={% url "elearning:listProgrammes" %} class="btn btn-raised btn-success">Programmes</a><br/>
                 {% else %}
                 <p><h3><a href={% url "redux:registration_register" %}>Join today!</a></h3></p>
             {% endif %}

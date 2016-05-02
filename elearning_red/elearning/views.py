@@ -33,7 +33,7 @@ def registration(request):
 
 
 def homepage(request):
-    message = ugettext('Welcome to ElearningRed!')
+    message = ugettext('Welcome to elearningRed!')
     if request.user.id: 
         customUser = get_object_or_404(M.CustomUser, id=int(request.user.id))
         request.session['customUserRole'] = customUser.getRole
