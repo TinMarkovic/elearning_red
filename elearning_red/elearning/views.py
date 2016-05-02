@@ -25,7 +25,7 @@ def registration(request):
                                  email=form.cleaned_data['email'], role=M.Role.objects.get(name='student'))
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(reverse('elearning:homepage'))
     else:
         form = F.CustomRegistrationForm()
 
@@ -102,9 +102,10 @@ def users_list(request):
     users = M.CustomUser.objects.all()
     return render(request, 'users.html', {'users': users})
 
+#mislim da je nepotreban
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(reverse('elearning:createUser'))
 
 
 @login_required
@@ -159,7 +160,7 @@ def course_show(request, course_id=None):
                 for programme in M.Programme.objects.filter(course__id=course_id):
                     programme.avgRating = M.Course.objects.filter(programmes__name=programme).aggregate(Avg('avgRating')).values()[0]
                     programme.save()
-                return HttpResponseRedirect('')
+                return HttpResponseRedirect(reverse('elearning:showCourse', kwargs={'course_id': course_id}))
         else:
             form = F.RatingForm(instance=rating)
                
@@ -210,7 +211,7 @@ def course_students(request, course_id):
             course = form.save()
             # TODO: Add the validated professor to the users - for editing
             course.save()
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
     else:
         form = F.StudentToCourse(instance=course)
 
@@ -282,7 +283,7 @@ def programme_students(request, programme_id):
                     if len(a)==0:
                         course.users.add(student)
             
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect(reverse('elearning:showProgramme', kwargs={'prorgamme_id': programme_id}))
     else:
         form = F.StudentToProgramme(instance=programme)
 
