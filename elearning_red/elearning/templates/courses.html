@@ -18,8 +18,14 @@
 
 {% block content %}
     {% csrf_token %}
-    
+
+{% if request.session.customUserRole == "admin" %}   
 <div><a href="{% url "elearning:newCourse" %}" class="btn btn-raised btn-success">Create new course</a></div>
+{% endif %}
+
+{% if request.session.customUserRole == "professor" %}   
+<div><a href="{% url "elearning:newCourse" %}" class="btn btn-raised btn-success">Create new course</a></div>
+{% endif %}
 
 {% if courses_inscribed %}
     <h1> Enrolled: </h1>  
@@ -82,7 +88,10 @@
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
-        <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
+        <td>
+        {% if request.session.customUserRole == "admin" %}    
+        <a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a>
+        {% endif %} 
         {% if request.session.customUserRole == "admin" %}
         <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
         {% endif %}

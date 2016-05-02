@@ -230,7 +230,7 @@ def programme_modify(request, programme_id=None):
         form = F.ProgrammeForm(request.POST, instance=programme)
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect('programme')
+        return HttpResponseRedirect(reverse('elearning:listProgrammes'))
     else:
         form = F.ProgrammeForm(instance=programme)
     return render(request, 'programmeEdit.html', {'form': form })
