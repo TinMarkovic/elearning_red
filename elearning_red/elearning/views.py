@@ -286,6 +286,7 @@ def programme_students(request, programme_id):
     return render(request, 'programmeStudentList.html', {'form': form,'programme':programme})
 
 
+
 @login_required
 @D.admin_or_course_related_prof
 def section_modify(request, course_id, section_id=None):
@@ -314,6 +315,19 @@ def section_modify(request, course_id, section_id=None):
 
     return render(request, 'sectionEdit.html', {'form': form, 'course':course, 'section':section})
 
+@login_required
+def add_student_to_programme(request, programme_id=None):
+    programme = get_object_or_404(M.Programme, id=int(programme_id))
+    user = get_object_or_404(M.CustomUser, id=request.user.id)
+    if request.method == 'POST':
+        for course in M.Course.objects.filter(programmes=programme):
+                    a = M.Course.objects.filter(id=course.id).filter(users=user)
+                    if len(a)==0:
+                        course.users.add(user)
+        programme.users.add(user)
+        
+    return HttpResponseRedirect(reverse('elearning:listProgrammes'))
+            
 
 @login_required
 @D.admin_or_course_related_prof

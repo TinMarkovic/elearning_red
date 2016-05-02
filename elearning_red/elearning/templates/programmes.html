@@ -60,7 +60,10 @@
         <td>{{ item.name|truncatechars:30 }}</td>
         <td>{{ item.avgRating }}</td>
         <td>
-         {% if request.session.customUserRole == "admin" %}
+        {% if request.session.customUserRole == "student" %}
+        <a class="btn btn-raised btn-info signUp">Sign up for programme</a> 
+        {% endif %}
+        {% if request.session.customUserRole == "admin" %}
         <a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Enter</a>
         <a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Edit</a>
         <a href={% url "elearning:manageCoursesProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Courses</a>
@@ -97,10 +100,36 @@ $(document).on('click','.deleteBlock',function () {
         if(confirm("Are you certain you want to delete this programme?")){
             $.ajax({
                  type:"DELETE",
-                 url:"/programmes/edit/" + programme_id,
+                 url:"/manage/programmes/" + programme_id,
                  data: {},
                  success: function(){
                         $element.remove();
+                }
+            });
+        }
+    });
+    
+} );
+
+$(document).on('click','.signUp',function () {
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+    
+    $( ".signUp" ).on( "click", function( event, ui ) {
+        $element = $(this).parents("tr");
+        var programme_id = $element.attr("id");
+        event.stopPropagation();
+        if(confirm("Are you certain you want to sign up for this programme?")){
+            $.ajax({
+                 type:"POST",
+                 url:"/ajax/add-student-to-programme/" + programme_id,
+                 data: {},
+                 success: function(){
+                 window.location.reload();
                 }
             });
         }
