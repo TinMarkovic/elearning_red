@@ -30,7 +30,7 @@
                                 <span class="col-md-1 pull-right"></span> 
                                 <a href="{% url "elearning:showBlocks" course_id item.id %}"> <i class="material-icons pull-right">search</i></a>
                                 </h3>
-                                <p class="list-group-item">{{item.desc}}</p>
+                                <p class="list-group-item">{{item.desc}}</p><hr>
  </div>
 {% endfor %}
 </div>
@@ -41,14 +41,14 @@
               
 
  <div class="col-sm-6">
-<h3> Course info</h3>
+<h3>Information</h3>
   
    <div class="well" id="sections">
-   <h4>Name: {{ course.name }}</h4>
-   <h4>Description:</h4>
+   <h4>{{ course.name }}</h4>
    <p>{{ course.desc }}</p>
-   <h4>Beginning date: {{ course.beginDate }} </h4>
-   <h4>Course duration (days): {{ course.duration }} </h4>
+   <hr>
+   <h4><i>Beginning date:</i> {{ course.beginDate }} </h4>
+   <h4><i>Course duration (days):</i> {{ course.duration }} </h4>
    </div>
         </div>
 </div>
@@ -58,6 +58,8 @@
     {{ form.value }}
     <input type="submit" value="Rate" />
 </form>
-<p>Average rating: {{ course.avgRating }}<p>
+<div class="box">
+<p>Average rating: {{ course.avgRating }}</p>
+</div>
 </div>
 {% endblock content %}

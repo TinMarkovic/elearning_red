@@ -207,33 +207,13 @@ def course_students(request, course_id):
     if request.method == "POST":
         form = F.StudentToCourse(request.POST, instance=course)
         if form.is_valid():
-            course = form.save()
-            # TODO: Add the validated professor to the users - for editing
-            course.save()
+            form.save()
+            
         return HttpResponseRedirect(reverse('elearning:listCourses'))
     else:
         form = F.StudentToCourse(instance=course)
 
     return render(request, 'courseStudentList.html', {'form': form,'course':course})
-
-@login_required
-@D.admin_only
-def course_professor(request, course_id):
-    if course_id is not None:
-        course = get_object_or_404(M.Course, id=int(course_id))
-    else:
-        course = None
-    if request.method == "POST":
-        form = F.ProfessorToCourse(request.POST, instance=course)
-        if form.is_valid():
-            form.save()
-            students = request.POST.getlist('users')
-
-        return HttpResponseRedirect(reverse('elearning:listCourses'))
-    else:
-        form = F.ProfessorToCourse(instance=course)
-
-    return render(request, 'courseProfessorList.html', {'form': form,'course':course})
 
 
 @login_required

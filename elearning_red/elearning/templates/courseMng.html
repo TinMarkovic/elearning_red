@@ -47,13 +47,13 @@
     <a class="btn btn-raised btn-warning pull-right" href={% url "elearning:listCourses" %}>Back to courses</a>
     <br><br><h3> Info </h3>
     <div class="well">
-       <p>{{ course.desc }}</p>
-       <h4>Beginning date: {{ course.beginDate }} </h4>
-       <h4>Course duration: {{ course.duration }} days </h4>
+       <p>{{ course.desc }}</p><hr>
+       <h4><i>Beginning date:</i> {{ course.beginDate }} </h4>
+       <h4><i>Course duration:</i> {{ course.duration }} days </h4>
     </div>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <h3 class="panel-title">Update students/professors</h3>
+            <h3 class="panel-title">Update students</h3>
         </div>
         <div class="panel-body">
                 <a class="btn btn-raised btn-primary" 
@@ -61,9 +61,6 @@
             </ul>
         </div>
         <div class="panel-body">
-                <a class="btn btn-raised btn-info" 
-                href={% url "elearning:manageProfessors" course.id %}>Update Professors</a>
-            </ul>
         </div>
     </div>
     <div class="btn btn-raised btn-danger pull-right" id="deleteSelf">Delete Course</div>

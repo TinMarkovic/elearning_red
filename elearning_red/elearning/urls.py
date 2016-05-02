@@ -12,7 +12,6 @@ urlpatterns = [
     url(r'^ajax/get-blocks-list/(?P<course_id>[0-9]+)', views.section_list_blocks, name='sectionListBlocks'),
     
     url(r'^manage/courses/(?P<course_id>[0-9]+)/students', views.course_students, name='manageStudents'),
-    url(r'^manage/courses/(?P<course_id>[0-9]+)/professor', views.course_professor, name='manageProfessors'),
     url(r"^manage/courses/(?P<course_id>[0-9]+)/sections/(?P<section_id>[0-9]+)/blocks/edit/(?P<block_id>[0-9]+)", views.block_modify, name="editBlock"),
     url(r"^manage/courses/(?P<course_id>[0-9]+)/sections/(?P<section_id>[0-9]+)/blocks/new/(?P<block_type>\w+)", views.block_modify, name="newBlock"),
     url(r"^manage/courses/(?P<course_id>[0-9]+)/sections/(?P<section_id>[0-9]+)", views.section_manage, name="manageSection"),
