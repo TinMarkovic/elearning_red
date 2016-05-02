@@ -54,9 +54,6 @@
 				</div>
 		</div>
 </div>
-
-
-
 {% endblock content %}
 
 {% block script %}
@@ -84,9 +81,8 @@ $(document).ready(function () {
         var sortedIDs = $( "#sortable" ).sortable( "toArray" );
             $.ajax({
                  type:"POST",
-                 url:"/ajax/modify-block-order/",
+                 url:"/ajax/modify-block-order/{{section_id}}",
                  data: {
-                        'section_id' : {{section_id}},
                         'neworder': JSON.stringify(sortedIDs)
                         },
                  success: function(){
