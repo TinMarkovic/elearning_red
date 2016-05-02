@@ -25,7 +25,7 @@ def registration(request):
                                  email=form.cleaned_data['email'], role=M.Role.objects.get(name='student'))
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect(reverse('elearning:homepage'))
     else:
         form = F.CustomRegistrationForm()
 
@@ -102,10 +102,6 @@ def users_list(request):
     users = M.CustomUser.objects.all()
     return render(request, 'users.html', {'users': users})
 
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect('/')
-
 
 @login_required
 def user_profile(request):
@@ -130,7 +126,7 @@ def course_modify(request, course_id=None):
         if form.is_valid():
             model = form.save()
             model.users.add(get_object_or_404(M.CustomUser, id=int(request.user.id)))
-        return HttpResponseRedirect(reverse('elearning:listCourses'))
+        return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
     else:
         form = F.CourseForm(instance=course)
 
@@ -142,6 +138,7 @@ def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
         sections = M.Section.objects.filter(course_id=course.id)
+        """
         try:
             rating = M.Rating.objects.get(user=request.user, course=course_id)
         except ObjectDoesNotExist:
@@ -159,11 +156,11 @@ def course_show(request, course_id=None):
                 for programme in M.Programme.objects.filter(course__id=course_id):
                     programme.avgRating = M.Course.objects.filter(programmes__name=programme).aggregate(Avg('avgRating')).values()[0]
                     programme.save()
-                return HttpResponseRedirect('')
+                return HttpResponseRedirect(reverse('elearning:showCourse', kwargs={'course_id': course_id}))
         else:
             form = F.RatingForm(instance=rating)
-               
-        return render(request, 'courseShow.html', {"sections": sections, "form": form, "course": course, "course_id": course_id})
+        """    
+        return render(request, 'courseShow.html', {"sections": sections, "course": course, "course_id": course_id})
 
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
@@ -183,7 +180,7 @@ def course_manage(request, course_id):
     if query_results is not None:
         return render(request, 'courseMng.html', {"query_results": query_results, "course":course})
     else:
-        return render(request, 'courseMng.html', {"course":course})
+        return render(request, 'courseMng.html', {"course":course })
 
 
 @login_required
@@ -197,6 +194,22 @@ def course_reorder_sections(request, course_id):
     return HttpResponse('Success')
 
 
+@D.admin_or_course_related_prof_or_student
+def course_rating(request, course_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+    if request.method == "POST":
+        rating = int(request.POST['rating'])
+        ratingObj = M.Rating.create(rating, request.user, course)
+        ratingObj.save()
+        return HttpResponse('Success')
+    if request.method == "GET":
+        ratingObj = M.Rating.objects.filter(course__id=course.id).filter(user__id=request.user.id)
+        if not ratingObj:
+            return HttpResponse(0)
+        rating = ratingObj[0].value
+        return HttpResponse(rating)
+
+
 @login_required
 @D.admin_or_course_related_prof
 def course_students(request, course_id):
@@ -207,9 +220,9 @@ def course_students(request, course_id):
     if request.method == "POST":
         form = F.StudentToCourse(request.POST, instance=course)
         if form.is_valid():
-            form.save()
-            
-        return HttpResponseRedirect(reverse('elearning:listCourses'))
+            course = form.save()
+            course.save()
+        return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
     else:
         form = F.StudentToCourse(instance=course)
 
@@ -233,7 +246,7 @@ def programme_modify(request, programme_id=None):
         form = F.ProgrammeForm(request.POST, instance=programme)
         if form.is_valid():
             form.save()
-        return HttpResponseRedirect('programme')
+        return HttpResponseRedirect(reverse('elearning:listProgrammes'))
     else:
         form = F.ProgrammeForm(instance=programme)
     return render(request, 'programmeEdit.html', {'form': form })
@@ -264,15 +277,16 @@ def programme_manage(request, programme_id=None):
     return render(request, 'programmeMng.html', {'courses': courses, "programme" : programme })
                             
 def programmes_show(request, programme_id=None):
+    user = get_object_or_404(M.CustomUser, id=request.user.id)
     if programme_id is not None:
-        user = request.user
         programme = get_object_or_404(M.Programme, id=int(programme_id))
         courses_in_programme = M.Course.objects.filter(programmes=programme)
         courses_elected = M.Course.objects.exclude(programmes=programme).filter(users=user)
         return render(request, 'courses.html', {'courses_in_programme': courses_in_programme, 'courses_elected': courses_elected, 'programme_id': programme_id})
-    else:
-        programmes = M.Programme.objects.all()
-        return render(request, 'programmes.html', {'programmes': programmes})
+    else:        
+        programmes_inscribed = M.Programme.objects.filter(users=user)
+        programmes_uninscribed = M.Programme.objects.exclude(users=user)
+        return render(request, 'programmes.html', {'programmes_inscribed': programmes_inscribed, 'programmes_uninscribed': programmes_uninscribed })
     
 
 @login_required
@@ -294,11 +308,12 @@ def programme_students(request, programme_id):
                     if len(a)==0:
                         course.users.add(student)
             
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect(reverse('elearning:showProgramme', kwargs={'programme_id': programme_id}))
     else:
         form = F.StudentToProgramme(instance=programme)
 
     return render(request, 'programmeStudentList.html', {'form': form,'programme':programme})
+
 
 
 @login_required
@@ -329,6 +344,19 @@ def section_modify(request, course_id, section_id=None):
 
     return render(request, 'sectionEdit.html', {'form': form, 'course':course, 'section':section})
 
+@login_required
+def add_student_to_programme(request, programme_id=None):
+    programme = get_object_or_404(M.Programme, id=int(programme_id))
+    user = get_object_or_404(M.CustomUser, id=request.user.id)
+    if request.method == 'POST':
+        for course in M.Course.objects.filter(programmes=programme):
+                    a = M.Course.objects.filter(id=course.id).filter(users=user)
+                    if len(a)==0:
+                        course.users.add(user)
+        programme.users.add(user)
+        
+    return HttpResponseRedirect(reverse('elearning:listProgrammes'))
+            
 
 @login_required
 @D.admin_or_course_related_prof
@@ -445,26 +473,9 @@ def blocks_studentview(request, course_id, section_id):
             except M.Block.DoesNotExist:
                 pass
             if answers:
-                answers = loads(loads(answers[0].serialAnswers))
-                questions = loads(loads(block.serialQuestions))
-                result = []
-                score = 0
-                scoreDivisor = 0
-                for q in range(len(questions)): 
-                    result.append( {"title" : answers[q]["title"], "points" : 0} )
-                    for a in questions[q]["correct"]:
-                        for b in answers[q]["answered"]:
-                            if a.strip() == b.strip():
-                                result[q]["points"] += 1
-                    if len(questions[q]["correct"]) != len(answers[q]["answered"]):
-                        result[q]["points"] = 0
-                    else:
-                        result[q]["points"] = int(100 * float(result[q]["points"])/float(len(questions[q]["correct"])))
-                    score += result[q]["points"]
-                    scoreDivisor += 1
-                score = int(score/scoreDivisor)
-                block.answers = result
-                block.score = score
+                result = answers[0].assess()
+                block.answers = result["result"]
+                block.score = result["score"]
             else:
                 block.answers = None
                 block.score = None

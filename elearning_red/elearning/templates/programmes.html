@@ -14,10 +14,11 @@
 {% endblock breadcrumbs %}
 {% block content %}
     {% csrf_token %}
-
+{% if request.session.customUserRole == "admin" %}
 <div><a href="{% url "elearning:newProgramme" %}" class="btn btn-raised btn-success">Create new programme</a></div>
-  
-    <h1> Programmes in offer: </h1>
+{% endif %}
+{% if programmes_inscribed %} 
+    <h1> Your programmes: </h1>
 <table class="table table-striped table-hover ", id="table_1">
     <thead>
     <tr class="info">
@@ -27,11 +28,42 @@
     </tr>
     </thead>
    
-    {% for item in programmes %}
+    {% for item in programmes_inscribed %}
     <tr class="success" id={{item.id}}>
         <td>{{ item.name|truncatechars:30 }}</td>
         <td>{{ item.avgRating }}</td>
         <td>
+        <a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Enter</a>
+        {% if request.session.customUserRole == "admin" %}
+        <a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Edit</a>
+        <a href={% url "elearning:manageCoursesProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Courses</a>
+        <a class="btn btn-raised btn-danger deleteBlock">Delete</a> 
+        {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+{% if programmes_uninscribed %} 
+ <h1> Available: </h1>
+<table class="table table-striped table-hover ", id="table_1">
+    <thead>
+    <tr class="info">
+        <th>Name</th>
+        <th>Average rating</th>
+        <th></th>
+    </tr>
+    </thead>
+   
+    {% for item in programmes_uninscribed %}
+    <tr class="success" id={{item.id}}>
+        <td>{{ item.name|truncatechars:30 }}</td>
+        <td>{{ item.avgRating }}</td>
+        <td>
+        {% if request.session.customUserRole == "student" %}
+        <a class="btn btn-raised btn-info signUp">Sign up for programme</a> 
+        {% endif %}
+        {% if request.session.customUserRole == "admin" %}
         <a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Enter</a>
         <a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Edit</a>
         {% if request.session.customUserRole == "admin" %}
@@ -39,10 +71,12 @@
         {% endif %}
         <a href={% url "elearning:manageCoursesProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Courses</a>
         <a class="btn btn-raised btn-danger deleteBlock">Delete</a> 
+        {% endif %}
         </td>
     </tr>
     {% endfor %}
 </table>
+{% endif %}
 {% endblock %}
 
 
@@ -69,10 +103,36 @@ $(document).on('click','.deleteBlock',function () {
         if(confirm("Are you certain you want to delete this programme?")){
             $.ajax({
                  type:"DELETE",
-                 url:"/programmes/edit/" + programme_id,
+                 url:"/manage/programmes/" + programme_id,
                  data: {},
                  success: function(){
                         $element.remove();
+                }
+            });
+        }
+    });
+    
+} );
+
+$(document).on('click','.signUp',function () {
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+    
+    $( ".signUp" ).on( "click", function( event, ui ) {
+        $element = $(this).parents("tr");
+        var programme_id = $element.attr("id");
+        event.stopPropagation();
+        if(confirm("Are you certain you want to sign up for this programme?")){
+            $.ajax({
+                 type:"POST",
+                 url:"/ajax/add-student-to-programme/" + programme_id,
+                 data: {},
+                 success: function(){
+                 window.location.reload();
                 }
             });
         }

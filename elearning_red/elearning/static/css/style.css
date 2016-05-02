@@ -49,3 +49,41 @@ ul#menu.nav.navbar-nav{
 #students.col-sm-4{
 	margin-top: 50px;
 }
+
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 300%;
+}
+
+.rating > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+   content: "\2605";
+   position: absolute;
+}
+
+
+.rated {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 300%;
+}
+
+.rated > span {
+  display: inline-block;
+  position: relative;
+  width: 1.1em;
+}
+
+.ratedPoints:before,
+.ratedPoints ~ .ratedPoints:before {
+   content: "\2605";
+   position: absolute;
+}
+

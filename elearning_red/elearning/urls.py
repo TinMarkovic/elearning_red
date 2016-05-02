@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^ajax/modify-block-order/(?P<course_id>[0-9]+)', views.section_reorder_blocks, name='sectionReorderBlocks'),
     url(r'^ajax/modify-section-order/(?P<course_id>[0-9]+)', views.course_reorder_sections, name='courseReorderSections'),
     url(r'^ajax/get-blocks-list/(?P<course_id>[0-9]+)', views.section_list_blocks, name='sectionListBlocks'),
+    url(r'^ajax/add-student-to-programme/(?P<programme_id>[0-9]+)', views.add_student_to_programme, name='studentsToprogramme'),
+    url(r'^ajax/course-rating/(?P<course_id>[0-9]+)', views.course_rating, name='courseRating'),
     
     url(r'^manage/courses/(?P<course_id>[0-9]+)/students', views.course_students, name='manageStudents'),
     url(r"^manage/courses/(?P<course_id>[0-9]+)/sections/(?P<section_id>[0-9]+)/blocks/edit/(?P<block_id>[0-9]+)", views.block_modify, name="editBlock"),
@@ -41,7 +43,6 @@ urlpatterns = [
     url(r'^users/', views.users_list, name="listUsers"),
     
 
-    url(r'^logout', views.user_logout, name='logout'),
     url(r'^about', views.about, name='about'),
     
     url(r'^$', views.homepage, name='homepage'),
