@@ -248,15 +248,16 @@ def programme_manage(request, programme_id=None):
             #Not finished
                             
 def programmes_show(request, programme_id=None):
+    user = get_object_or_404(M.CustomUser, id=request.user.id)
     if programme_id is not None:
-        user = request.user
         programme = get_object_or_404(M.Programme, id=int(programme_id))
         courses_in_programme = M.Course.objects.filter(programmes=programme)
         courses_elected = M.Course.objects.exclude(programmes=programme).filter(users=user)
         return render(request, 'courses.html', {'courses_in_programme': courses_in_programme, 'courses_elected': courses_elected, 'programme_id': programme_id})
-    else:
-        programmes = M.Programme.objects.all()
-        return render(request, 'programmes.html', {'programmes': programmes})
+    else:        
+        programmes_inscribed = M.Programme.objects.filter(users=user)
+        programmes_uninscribed = M.Programme.objects.exclude(users=user)
+        return render(request, 'programmes.html', {'programmes_inscribed': programmes_inscribed, 'programmes_uninscribed': programmes_uninscribed })
     
 
 @login_required
