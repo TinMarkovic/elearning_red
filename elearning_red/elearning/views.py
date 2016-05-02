@@ -5,6 +5,7 @@ from django.core.serializers import serialize
 from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseForbidden
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Avg
 from django.utils.translation import ugettext
 from django.views.decorators.csrf import csrf_exempt
@@ -75,11 +76,11 @@ def user_modify(request, customUser_id=None):
             raise Http404("User does not exist")
     
     if request.method == "POST":
-        form = F.UserForm(request.POST)
-
+        form = F.UserForm(request.POST, instance=customUser)
+        
         if form.is_valid():
             form.save()
-
+           
         return HttpResponseRedirect('')
 
     else:
@@ -90,23 +91,18 @@ def user_modify(request, customUser_id=None):
 
 def users_list(request):
     users = M.CustomUser.objects.all()
-    
-    if request.method == "DELETE":
-        if customUser is not None:
-            customUser.delete()
-            return HttpResponse('Success!')
-        else:
-            raise Http404("User does not exist")
-
-        return HttpResponseRedirect('')
 
     return render(request, 'users.html', {'users': users})
 
 def user_logout(request):
     logout(request)
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/')
 
 
+@login_required
+def user_profile(request):
+    return render(request, 'userProfile.html')
+    
 @login_required
 @D.admin_or_course_related_prof
 def course_modify(request, course_id=None):
@@ -126,28 +122,25 @@ def course_modify(request, course_id=None):
         if form.is_valid():
             # TODO: Add the validated professor to the users - for editing
             form.save()
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('/courses/')
     else:
         form = F.CourseForm(instance=course)
 
     return render(request, 'courseEdit.html', {'form': form, 'courses': courses})
 
 
+@D.admin_or_course_related_prof_or_student
 def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
         sections = M.Section.objects.filter(course_id=course.id)
-        rating = M.Rating.objects.filter(user=request.user).filter(course=course_id)
-        if len(rating) == 0:
-            rating = M.Rating(user=M.CustomUser.objects.get(id=request.user.id),
+        try:
+            rating = M.Rating.objects.get(user=request.user, course=course_id)
+        except ObjectDoesNotExist:
+            rating = M.Rating(value=0, user=M.CustomUser.objects.get(id=request.user.id),
                               course=M.Course.objects.get(id=course_id))
-            rating.value = 0
             rating.save()
-        else:
-            rating = get_object_or_404(M.Rating, user=M.CustomUser.objects.get(id=request.user.id),
-                                       course=M.Course.objects.get(id=course_id))
-        
-        
+          
         if request.method == "POST":
             form = F.RatingForm(request.POST, instance=rating)
             if form.is_valid():
@@ -161,8 +154,8 @@ def course_show(request, course_id=None):
                 return HttpResponseRedirect('')
         else:
             form = F.RatingForm(instance=rating)
-            
-        return render(request, 'courses_view.html', {"sections": sections, "form": form, "course": course})
+               
+        return render(request, 'courseShow.html', {"sections": sections, "form": form, "course": course, "course_id": course_id})
 
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
@@ -223,7 +216,6 @@ def programme_modify(request, programme_id=None):
         programme = get_object_or_404(M.Programme, id=int(programme_id))
     else:
         programme = None
-    programmes = M.Programme.objects.all()
     
     if request.method == "DELETE":
         if programme is not None:
@@ -238,22 +230,50 @@ def programme_modify(request, programme_id=None):
         if form.is_valid():
             form.save()
             
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('programme')
 
     else:
         form = F.ProgrammeForm(instance=programme)
 
-    return render(request, 'programmeEdit.html', {'form': form, 'programmes': programmes})
+    return render(request, 'programmeEdit.html', {'form': form })
 
                             
 def programmes_show(request, programme_id=None):
     if programme_id is not None:
+        user = request.user
         programme = get_object_or_404(M.Programme, id=int(programme_id))
-        query_results = M.Course.objects.filter(programmes=programme)
-        return render(request, 'courses.html', {'query_results': query_results})
+        courses_in_programme = M.Course.objects.filter(programmes=programme)
+        courses_elected = M.Course.objects.exclude(programmes=programme).filter(users=user)
+        return render(request, 'courses.html', {'courses_in_programme': courses_in_programme, 'courses_elected': courses_elected, 'programme_id': programme_id})
     else:
         programmes = M.Programme.objects.all()
         return render(request, 'programmes.html', {'programmes': programmes})
+    
+
+@login_required
+@D.admin_only
+def programme_students(request, programme_id):
+    if programme_id is not None:
+        programme = get_object_or_404(M.Programme, id=int(programme_id))
+    else:
+        programme = None
+    if request.method == "POST":
+        form = F.StudentToProgramme(request.POST, instance=programme)
+        if form.is_valid():
+            form.save()
+            students = request.POST.getlist('users')
+    
+            for course in M.Course.objects.filter(programmes=programme):
+                for student in students:
+                    a = M.Course.objects.filter(id=course.id).filter(users=student)
+                    if len(a)==0:
+                        course.users.add(student)
+            
+        return HttpResponseRedirect('')
+    else:
+        form = F.StudentToProgramme(instance=programme)
+
+    return render(request, 'programmeStudentList.html', {'form': form,'programme':programme})
 
 
 @login_required
@@ -321,17 +341,6 @@ def section_list_blocks(request, section_id):
     response = serialize("json", query_results.order_by("index"))
     print response
     return HttpResponse(response)
-
-
-def section_studentview(request, course_id):
-    course = get_object_or_404(M.Course, id=int(course_id))
-    courses_inscribed = M.Course.objects.filter(users=request.user.id)
-    courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
-    query_results = M.Section.objects.filter(course__id=course_id)
-    if query_results is not None:
-        return render(request, 'courseShow.html', {"query_results": query_results, "course_id": course_id, "course": course, "courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
-    else:
-        return render(request, 'courseShow.html', {"course_id": course_id})
 
 
 @login_required

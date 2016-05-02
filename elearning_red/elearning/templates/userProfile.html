@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %} Profile {% endblock title %}
+
+{% block breadcrumbs %}
+
+      <ul class="nav navbar-nav" id="menu">
+       
+             <li><ul class="breadcrumb">
+            <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+            <li class="active"><b>Profile</b></a></li>
+           
+            </ul></li>
+     
+      </ul>       
+        
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+    {% csrf_token %}
+<div>
+    {{ user.username }}
+    {{ user.first_name }}
+    {{ user.last_name }}
+    {{ user.email }}
+</div>
+<div><a href={% url "redux:auth_password_change" %} class="btn btn-raised btn-success">Change Password</a></div>
+    
+    
+{% endblock content %}
+
+
