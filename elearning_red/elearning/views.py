@@ -263,12 +263,25 @@ def programme_modify(request, programme_id=None):
 @D.admin_only
 def programme_manage(request, programme_id=None):
     programme = get_object_or_404(M.Programme, id=int(programme_id))
-    courses = M.Course.objects.all()
     if request.method == "POST":
         courseList = loads(request.POST['courseList'])
-        for course in courseList:
-            course.programmes.add(programme);
-            #Not finished
+        courses = M.Course.objects.filter(programmes__id=programme.id)
+        if courses:
+            for course in courses:
+                course.programmes.remove(programme)
+        for courseID in courseList:
+            course = get_object_or_404(M.Course, id=int(courseID))
+            course.programmes.add(programme)
+        return HttpResponse("Success")
+    
+    courses = M.Course.objects.all()
+    for course in courses:
+        if course.programmes.filter(id=programme.id).exists():
+            course.checked = True
+        else:
+            course.checked = False
+    
+    return render(request, 'programmeMng.html', {'courses': courses, "programme" : programme })
                             
 def programmes_show(request, programme_id=None):
     if programme_id is not None:
