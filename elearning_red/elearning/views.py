@@ -222,7 +222,9 @@ def course_students(request, course_id):
         if form.is_valid():
             course = form.save()
             course.save()
+
         return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
+
     else:
         form = F.StudentToCourse(instance=course)
 

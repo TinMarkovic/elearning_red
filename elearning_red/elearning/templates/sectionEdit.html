@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block title %} Block {% endblock title %}
+{% load bootstrap3 %}
+
 {% block breadcrumbs %}
 
       <ul class="nav navbar-nav" id="menu">
@@ -15,7 +17,7 @@
 {% block content %}
 <form method="post" action="">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% bootstrap_form form layout='horizontal' %}
     <input type="submit" value="Finish the section" />
 </form>
 {% endblock content %}
