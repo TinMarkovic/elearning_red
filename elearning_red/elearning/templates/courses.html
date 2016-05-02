@@ -32,7 +32,6 @@
         <th>Description:</th>
         <th>Author:</th>
         <th>Tags:</th>
-    <th>Average rating:</th>
     <th></th>
 
     </tr>
@@ -45,7 +44,6 @@
         <td>{{ item.desc|truncatechars:20 }} </td>
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
-        <td>{{ item.avgRating }}</td>
         <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
         {% if request.session.customUserRole == "admin" %}
         <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
@@ -68,7 +66,6 @@
         <th>Description:</th>
         <th>Author:</th>
         <th>Tags:</th>
-    <th>Average rating:</th>
     <th></th>
 
     </tr>
@@ -81,7 +78,6 @@
         <td>{{ item.desc|truncatechars:20 }} </td>
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
-        <td>{{ item.avgRating }}</td>
         <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
         {% if request.session.customUserRole == "admin" %}
         <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
@@ -102,7 +98,6 @@
         <th>Description:</th>
         <th>Author:</th>
         <th>Tags:</th>
-    <th>Average rating:</th>
     <th></th>
     </tr>
     </thead>
@@ -114,7 +109,6 @@
         <td>{{ item.desc|truncatechars:20 }} </td>
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
-        <td>{{ item.avgRating }}</td>
         <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
         {% if request.session.customUserRole == "admin" %}
         <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
@@ -135,7 +129,6 @@
         <th>Description:</th>
         <th>Author:</th>
         <th>Tags:</th>
-    <th>Average rating:</th>
     <th></th>
 
     </tr>
@@ -148,7 +141,6 @@
         <td>{{ item.desc|truncatechars:20 }} </td>
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
-        <td>{{ item.avgRating }}</td>
         <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
         {% if request.session.customUserRole == "admin" %}
         <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
