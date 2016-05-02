@@ -76,10 +76,8 @@ $(document).ready(function () {
     });
     if( $("#id_serialQuestions").val() ) { 
         generateViewFromForm();
-        var urlDestination = window.location.href;
-    } else {
-        var urlDestination = "/courses/manage/1/section/1/block/new/quiz";
     }
+    var urlDestination = window.location.href;
     var editOpen = false;
     $(function() {
         $( "#sortable" ).sortable({
@@ -136,8 +134,11 @@ $(document).ready(function () {
     $(document).on('blur keypress', '#editing', function(event, ui ){
         if ( event.which == 13 || event.type == "focusout") {
             var name = $(this).val();
-            if( name == "" ) name = "Please enter a value.";
-            $(this).parent(".editableElement").text(name);
+            if( name == "" ){
+                $(this).parent(".editableElement").parent("li").remove();
+            } else {
+                $(this).parent(".editableElement").text(name);
+            }
             $( '#editing' ).remove();
             editOpen = false;
         }
@@ -150,6 +151,7 @@ $(document).ready(function () {
             data[index].title = $(this).find(".panel-title").text();
             data[index].element = [];
             data[index].correct = [];
+            data[index].multiple = ($(this).closest('.questionMultipleChoice').length  > 0);
             $(this).find("ul").children("li").each(function( index2 ) {
                 data[index].element[index2] = $(this).text();
                 if($(this).children("input").is(':checked')) { 
@@ -187,7 +189,8 @@ function generateViewFromForm(){
     var answer = "";
     var multiple = false;
     for(item of data){
-        if(item.correct.length > 1) multiple = true;
+        multiple = item.multiple;
+        console.log(item.correct.length);
         if(multiple){
             $( "#emptyField" ).hide();
             $question = $( "#questionMultipleChoiceDefault" ).clone(true)
