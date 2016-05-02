@@ -58,7 +58,9 @@
         <div class="panel-body">
             <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">  
                 {% for user in course.users.all %}
+                {% if user.getRole == 'student' %}
                 <li>{{ user }}</li>
+                {% endif %}
                 {% endfor %}
                 <a class="btn btn-raised btn-primary" 
                 href={% url "elearning:manageStudents" course.id %}>Update students</a>
@@ -66,6 +68,7 @@
         </div>
     </div>
     <div class="btn btn-raised btn-danger pull-right" id="deleteSelf">Delete Course</div>
+    <a href="{% url "elearning:editCourse" course_id=course.id %}" class="btn btn-raised btn-success pull-right">Edit</a>
 </div>
 
 {% endblock content %}
