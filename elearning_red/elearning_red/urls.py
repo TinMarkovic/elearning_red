@@ -18,11 +18,13 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from elearning.views import registration
+from django.contrib.auth.views import password_change_done
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('elearning.urls', namespace='elearning')),
     url(r'^accounts/register/$', registration, name='registration'),
+    url(r'^accounts/password/change/done/$', password_change_done, name='auth_password_change_done'),
     url(r'^accounts/', include('registration.backends.simple.urls', namespace='redux')),
 ] 
 if settings.DEBUG:

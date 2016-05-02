@@ -1,66 +1,6 @@
 {% extends "base.html" %}
 {% block title %} Course {% endblock title %}
 
-
-<!-- Defaultni navigation bar od Bootstrapa, skinned for Material. -->
-{% block sidebar %}
-         <div id="wrapper">
-        <div class="overlay"></div>
-    
-        <!-- Sidebar -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
-            <ul class="nav sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                       Red Team
-                    </a>
-                </li>
-                <li>
-                    <a href={% url "elearning:homepage" %}>Home</a>
-                </li>
-                <li>
-                    <a href={% url "elearning:about" %}>About</a>
-                </li>
-                <li>
-                    <a href={% url "elearning:listProgrammes" %}>Programmes</a>
-                </li>
-               <li class"dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Enrolled courses <span class="caret"></span></a>
-                <ul class="dropdown-menu" role="menu">
-      
-                {% for item in courses_uninscribed %}
-                
-                    <li><a href={% url "elearning:showStudentsInCourse" course_id=item.id %}>{{item.name}}</a>
-                    </li>
-                    {% endfor %}
-                    </ul>
-                </li>
-                 
-                
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Useful links <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-      
-                    <li><a href="http://home.cern/">CERN</a></li>
-                    <li><a href="https://www.youtube.com/?hl=hr&gl=HR">YouTube</a></li>
-                    <li><a href="https://www.polytechnique.edu/">École Polytechnique</a></li>
-                  </ul>
-                </li>
-                <li>
-                    <a href="#">Contact</a>
-                </li>
-                <li><a href={% url "elearning:register" %}>Sign Up</a></li>
-        {% if user.is_authenticated %}
-        <li><a href={% url "elearning:logout" %}>Logout</a></li>
-    {% else %}
-        <li><a href={% url "elearning:login" %}>Login</a></li>
-    {% endif %}
-                
-            </ul>
-        </nav>
-        <!-- /#sidebar-wrapper -->
-{% endblock sidebar %}
-
 {% block breadcrumbs %}
 
       <ul class="nav navbar-nav" id="menu">
@@ -83,7 +23,7 @@
                  <div class="col-sm-6"  >
                  <h3> Sections</h3>
                  <div class="well">
-                 {% for item in query_results %}
+                 {% for item in sections %}
                  
                  <div class="list-group"><h3><a href="{% url "elearning:showBlocks" course_id item.id %}"> {{item.name}}</a>
                                 
@@ -109,8 +49,15 @@
    <p>{{ course.desc }}</p>
    <h4>Beginning date: {{ course.beginDate }} </h4>
    <h4>Course duration (days): {{ course.duration }} </h4>
-  
    </div>
         </div>
+</div>
+<div>
+    <form method="post" action="">
+    {% csrf_token %}
+    {{ form.value }}
+    <input type="submit" value="Rate" />
+</form>
+<p>Average rating: {{ course.avgRating }}<p>
 </div>
 {% endblock content %}
