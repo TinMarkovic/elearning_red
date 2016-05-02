@@ -1,55 +1,32 @@
 {% extends "base.html" %}
-{% block title %} Test home screen {% endblock title %}
+{% block title %} elearningRed {% endblock title %}
 {% block content %}
 {% load bootstrap3 %}
 
 
 <div class="container">
-
-<div class="col-sm-8">
-
-<div class="jumbotron">
-
-<h1>{{ message }}</h1>
-
-<img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" alt="Cinque Terre" width="500" height="236">
-
-<div>
- <a href="{% url "elearning:listUsers" %}" class="btn btn-raised btn-success">CREATE/EDIT USER</a>
- <a href="{% url "elearning:newCourse" %}" class="btn btn-raised btn-success">CREATE/EDIT COURSE</a>
- <a href="{% url "elearning:newProgramme" %}" class="btn btn-raised btn-success">CREATE/EDIT PROGRAMME</a>
-</div>
- 
-
-</div>
-</div>
-<div class="col-sm-4">
- <div class="well">
- {% if user.is_authenticated %}
-    <p>Welcome, {{ user.get_username }}. Thanks for logging in.</p>
-{% else %}
-    <p>Welcome</p>
-
-{% if form.errors %}
-<p>Your username and password didn't match!
-Please try again!</p>
-{% endif %}
-
-
-{% endif %}
-
-    
-    {% if user.is_authenticated %}
-   
-	<a href={% url "elearning:listCourses" %} class="btn btn-raised btn-success">Courses</a>
-    <a href={% url "elearning:listProgrammes" %} class="btn btn-raised btn-success">Programmes</a>
-      
-    {% else %}
-    	<p><h3><a href={% url "redux:registration_register" %}>Join today!</a></h3></p>
-    {% endif %}
-    
-</div>
- </div>
+    <div class="col-sm-8 jumbotron">
+        <h1>{{ message }}</h1>
+        <img src="http://www.go2uni.net/go/images/stories/choosingcoursehead.jpg" alt="Cinque Terre" width="500" height="236">
+    </div>
+    <div class="col-sm-4">
+         <div class="well">
+            {% if user.is_authenticated %}
+                <p>Welcome, {{ user.get_username }}. Thanks for logging in. Your role: {{request.session.customUserRole}}</p>
+            {% else %}
+                <p>Welcome</p>
+            {% endif %}
+            {% if user.is_authenticated %}
+                {% if request.session.customUserRole == "admin" %}
+                    <a href="{% url "elearning:listUsers" %}" class="btn btn-raised btn-success">Users</a>
+                {% endif %}
+                    <a href={% url "elearning:listCourses" %} class="btn btn-raised btn-success">Courses</a>
+                    <a href={% url "elearning:listProgrammes" %} class="btn btn-raised btn-success">Programmes</a>
+                {% else %}
+                <p><h3><a href={% url "redux:registration_register" %}>Join today!</a></h3></p>
+            {% endif %}
+        </div>
+    </div>
  </div>
 
 

@@ -34,9 +34,6 @@
         <th>Tags:</th>
     <th>Average rating:</th>
     <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
 
     </tr>
     </thead>
@@ -49,10 +46,13 @@
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
-        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
-        <td><a href="{% url "elearning:showStudentsInCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> </td>
-        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
-        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+        <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
+        {% if request.session.customUserRole == "admin" %}
+        <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
+        {% endif %}
+        {% if request.session.customUserRole == "professor" %}
+        <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
@@ -70,9 +70,6 @@
         <th>Tags:</th>
     <th>Average rating:</th>
     <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
 
     </tr>
     </thead>
@@ -85,10 +82,10 @@
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
-        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
-        <td><a href="{% url "elearning:showStudentsInCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> </td>
-        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
-        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+        <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
+        {% if request.session.customUserRole == "admin" %}
+        <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
+        {% endif %}
     </tr>
     {% endfor %}
     {% endif %}
@@ -108,10 +105,6 @@
         <th>Tags:</th>
     <th>Average rating:</th>
     <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
-
     </tr>
     </thead>
     {% for item in courses_in_programme %}
@@ -123,10 +116,10 @@
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
-        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
-        <td><a href="{% url "elearning:showStudentsInCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> </td>
-        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
-        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+        <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
+        {% if request.session.customUserRole == "admin" %}
+        <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>
@@ -145,9 +138,6 @@
         <th>Tags:</th>
     <th>Average rating:</th>
     <th></th>
-    <th></th>
-    <th></th>
-    <th></th>
 
     </tr>
     </thead>
@@ -160,10 +150,10 @@
         <td>{{ item.author|truncatechars:20 }}</td>
         <td>{{ item.tagList }}</td>
         <td>{{ item.avgRating }}</td>
-        <td><a href="{% url "elearning:editCourse" course_id=item.id %}" class="btn btn-raised btn-success">Edit</a> </td>
-        <td><a href="{% url "elearning:showStudentsInCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> </td>
-        <td> <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a> </td>
-        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
+        <td><a href="{% url "elearning:showCourse" course_id=item.id %}" class="btn btn-raised btn-info">Enter</a> 
+        {% if request.session.customUserRole == "admin" %}
+        <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>

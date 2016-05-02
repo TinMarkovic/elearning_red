@@ -19,10 +19,10 @@
 {% block content %}
     {% csrf_token %}
 <div>
-    {{ user.username }}
-    {{ user.first_name }}
-    {{ user.last_name }}
-    {{ user.email }}
+    {{ user.username }} <br>
+    {{ user.first_name }} <br>
+    {{ user.last_name }} <br>
+    {{ user.email }} <br>
 </div>
 <div><a href={% url "redux:auth_password_change" %} class="btn btn-raised btn-success">Change Password</a></div>
     

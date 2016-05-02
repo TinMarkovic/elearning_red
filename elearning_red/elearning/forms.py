@@ -93,7 +93,8 @@ class ProgressForm(BlockForm):
 class ProgrammeForm(ModelForm):
     class Meta:
         model = M.Programme
-        fields = ('name', 'desc','tags','avgRating')
+        fields = ('name', 'desc','tags')
+
 
 class RatingForm(ModelForm):
     class Meta:
