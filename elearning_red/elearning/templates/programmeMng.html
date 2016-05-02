@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %} Add Courses {% endblock title %}
+{% block content %}
+{% csrf_token %}
+<h1> Courses in programme "{{programme.name}}"</h1>
+<div class="list-group form-group">
+<div class="list-group-separator"></div>
+{% for course in courses %}
+<div class="list-group-item">
+    
+    <label><input type="checkbox" style="width:30px; height:30px;"
+    {% if course.checked %} checked {% endif %}
+    id="{{course.id}}"></label>
+    <div class="row-content">
+    <h4 class="list-group-item-heading">{{course.name}}</h4>
+
+    <p class="list-group-item-text">{{course.desc |truncatechars:60 }} </br> <i> {{course.author |truncatechars:30 }} </i> </p>
+  </div>
+</div>
+<div class="list-group-separator"></div>
+{% endfor %}
+</div>
+<div class="btn btn-raised btn-success" id="confirm">Update Programme</div>
+<a href="{% url "elearning:listProgrammes"%}" class="btn btn-raised btn-warning">Cancel</a>
+{% endblock content %}
+
+{% block script %}-
+<script>
+$(document).ready(function () {
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+    $( "#confirm" ).on( "click", function( event, ui ) {
+        var selected = [];
+        $('input:checked').each(function() {
+            selected.push($(this).attr('id'));
+        });
+            $.ajax({
+                 type:"POST",
+                 url: "{% url "elearning:manageCoursesProgramme" programme_id=programme.id %}",
+                 data: {
+                        'courseList': JSON.stringify(selected)
+                        },
+                 success: function(){
+                        window.location = "{% url "elearning:listProgrammes"%}";
+                        
+                    }
+            });
+    });
+});
+</script>
+{% endblock script %}
