@@ -60,15 +60,12 @@
                     <li><a href="https://www.polytechnique.edu/">École Polytechnique</a></li>
                   </ul>
                 </li>
+
         {% if user.is_authenticated %}
-        <li><a href={% url "elearning:logout" %}>Logout</a></li>
+        <li><a href={% url "redux:auth_logout" %}>Logout</a></li>
     {% else %}
         <li><a href={% url "redux:auth_login" %}>Login</a></li>
-<<<<<<< HEAD
-        <li><a href={% url "elearning:register" %}>Sign Up</a></li>
-=======
         <li><a href={% url "redux:registration_register" %}>Sign Up</a></li>
->>>>>>> ef784dd974b1865f3aecc6874c1388e2e7eac794
     {% endif %}
                 
             </ul>
@@ -94,12 +91,8 @@
     <div class="navbar-collapse collapse navbar-danger-collapse">
     
     <div class="box">
-<<<<<<< HEAD
-=======
-   
->>>>>>> ef784dd974b1865f3aecc6874c1388e2e7eac794
     {% if user.is_authenticated %}
-        <h4><i class="material-icons">face</i>Welcome, {{ user.get_username }}</h4>
+        <a href = {% url "elearning:userProfile" %}><h4><i class="material-icons">face</i>Welcome, {{ user.get_username }}</h4></a>
         <a href={% url "elearning:logout"  %} class="btn btn-raised btn-xs">Logout</a>
     {% else %}
          <a href={% url "redux:registration_register" %} class="btn btn-raised btn-success">Sign Up</a>

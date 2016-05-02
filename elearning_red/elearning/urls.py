@@ -22,18 +22,19 @@ urlpatterns = [
     url(r"^manage/courses/new", views.course_modify, name="newCourse"),
     
     url(r"^courses/view/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.blocks_studentview, name="showBlocks"),
-    url(r'^courses/(?P<course_id>[0-9]+)/students', views.section_studentview, name="showStudentsInCourse"),
+    url(r'^courses/(?P<course_id>[0-9]+)/students', views.course_show, name="showStudentsInCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)', views.course_show, name="showCourse"),
     url(r"^courses", views.course_show, name="listCourses"),
     
+    url(r'^programmes/(?P<programme_id>[0-9]+)/students', views.programme_students, name='manageStudentsProgramme'),
     url(r"^programmes/new", views.programme_modify, name="newProgramme"),
     url(r'^programmes/edit/(?P<programme_id>[0-9]+)', views.programme_modify, name="editProgramme"),
     url(r'^programmes/(?P<programme_id>[0-9]+)', views.programmes_show, name='showProgramme'),
     url(r'^programmes/', views.programmes_show, name='listProgrammes'),
     
-    url(r'^users/register', views.registration, name='register'),
     url(r'^users/edit/(?P<customUser_id>[0-9]+)', views.user_modify, name="editUser"),
     url(r'^users/edit', views.user_create, name="createUser"),
+    url(r'^users/profile', views.user_profile, name="userProfile"),
     url(r'^users/', views.users_list, name="listUsers"),
     
 
