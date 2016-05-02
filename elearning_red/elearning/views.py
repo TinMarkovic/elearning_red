@@ -138,6 +138,7 @@ def course_show(request, course_id=None):
     if course_id is not None:
         course = get_object_or_404(M.Course, id=int(course_id))
         sections = M.Section.objects.filter(course_id=course.id)
+        """
         try:
             rating = M.Rating.objects.get(user=request.user, course=course_id)
         except ObjectDoesNotExist:
@@ -158,8 +159,8 @@ def course_show(request, course_id=None):
                 return HttpResponseRedirect(reverse('elearning:showCourse', kwargs={'course_id': course_id}))
         else:
             form = F.RatingForm(instance=rating)
-               
-        return render(request, 'courseShow.html', {"sections": sections, "form": form, "course": course, "course_id": course_id})
+        """    
+        return render(request, 'courseShow.html', {"sections": sections, "course": course, "course_id": course_id})
 
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
@@ -193,6 +194,22 @@ def course_reorder_sections(request, course_id):
     return HttpResponse('Success')
 
 
+@D.admin_or_course_related_prof_or_student
+def course_rating(request, course_id):
+    course = get_object_or_404(M.Course, id=int(course_id))
+    if request.method == "POST":
+        rating = int(request.POST['rating'])
+        ratingObj = M.Rating.create(rating, request.user, course)
+        ratingObj.save()
+        return HttpResponse('Success')
+    if request.method == "GET":
+        ratingObj = M.Rating.objects.filter(course__id=course.id).filter(user__id=request.user.id)
+        if not ratingObj:
+            return HttpResponse(0)
+        rating = ratingObj[0].value
+        return HttpResponse(rating)
+
+
 @login_required
 @D.admin_or_course_related_prof
 def course_students(request, course_id):
@@ -204,7 +221,6 @@ def course_students(request, course_id):
         form = F.StudentToCourse(request.POST, instance=course)
         if form.is_valid():
             course = form.save()
-            # TODO: Add the validated professor to the users - for editing
             course.save()
         return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
     else:
@@ -240,12 +256,25 @@ def programme_modify(request, programme_id=None):
 @D.admin_only
 def programme_manage(request, programme_id=None):
     programme = get_object_or_404(M.Programme, id=int(programme_id))
-    courses = M.Course.objects.all()
     if request.method == "POST":
         courseList = loads(request.POST['courseList'])
-        for course in courseList:
-            course.programmes.add(programme);
-            #Not finished
+        courses = M.Course.objects.filter(programmes__id=programme.id)
+        if courses:
+            for course in courses:
+                course.programmes.remove(programme)
+        for courseID in courseList:
+            course = get_object_or_404(M.Course, id=int(courseID))
+            course.programmes.add(programme)
+        return HttpResponse("Success")
+    
+    courses = M.Course.objects.all()
+    for course in courses:
+        if course.programmes.filter(id=programme.id).exists():
+            course.checked = True
+        else:
+            course.checked = False
+    
+    return render(request, 'programmeMng.html', {'courses': courses, "programme" : programme })
                             
 def programmes_show(request, programme_id=None):
     user = get_object_or_404(M.CustomUser, id=request.user.id)
@@ -444,26 +473,9 @@ def blocks_studentview(request, course_id, section_id):
             except M.Block.DoesNotExist:
                 pass
             if answers:
-                answers = loads(loads(answers[0].serialAnswers))
-                questions = loads(loads(block.serialQuestions))
-                result = []
-                score = 0
-                scoreDivisor = 0
-                for q in range(len(questions)): 
-                    result.append( {"title" : answers[q]["title"], "points" : 0} )
-                    for a in questions[q]["correct"]:
-                        for b in answers[q]["answered"]:
-                            if a.strip() == b.strip():
-                                result[q]["points"] += 1
-                    if len(questions[q]["correct"]) != len(answers[q]["answered"]):
-                        result[q]["points"] = 0
-                    else:
-                        result[q]["points"] = int(100 * float(result[q]["points"])/float(len(questions[q]["correct"])))
-                    score += result[q]["points"]
-                    scoreDivisor += 1
-                score = int(score/scoreDivisor)
-                block.answers = result
-                block.score = score
+                result = answers[0].assess()
+                block.answers = result["result"]
+                block.score = result["score"]
             else:
                 block.answers = None
                 block.score = None

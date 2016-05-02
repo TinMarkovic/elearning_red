@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.functional import cached_property
 from model_utils.managers import InheritanceManager
+from json import loads
 # Commented out for now. Didn't see them used anywhere:
 #from django.db.models.signals import pre_save
 #from django.utils.text import slugify
@@ -101,12 +102,41 @@ class ImageBlock(Block):
 class QuizBlock(Block):
     serialQuestions = models.TextField(blank=False, null=False)
 
-class Progress(models.Model):
-    serialAnswers = models.TextField(blank=False, null=False)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    block = models.ForeignKey(Block, on_delete=models.CASCADE)
-
 class Rating(models.Model):
     value = models.PositiveSmallIntegerField(null=False, blank=False)
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    
+    @classmethod
+    def create(cls, value, user, course):
+        rating = cls(value=value, user = CustomUser.objects.get(id=int(user.id)), course = course)
+        return rating
+    
+class Progress(models.Model):
+    serialAnswers = models.TextField(blank=False, null=False)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    block = models.ForeignKey(Block, on_delete=models.CASCADE)
+    
+    def assess(self):
+        answers = loads(loads(self.serialAnswers))
+        questions = loads(loads(QuizBlock.objects.get(id=self.block.id).serialQuestions))
+        result = []
+        score = 0
+        scoreDivisor = 0
+        for q in range(len(questions)): 
+            result.append( {"title" : answers[q]["title"], "points" : 0} )
+            for a in questions[q]["correct"]:
+                for b in answers[q]["answered"]:
+                    if a.strip() == b.strip():
+                        result[q]["points"] += 1
+            if result[q]["points"] < len(answers[q]["answered"]):
+                result[q]["points"] -= (len(answers[q]["answered"]) - result[q]["points"])*0.5
+            if result[q]["points"] < 0:
+                result[q]["points"] = 0
+            
+            else:
+                result[q]["points"] = int(100 * float(result[q]["points"])/float(len(questions[q]["correct"])))
+            score += result[q]["points"]
+            scoreDivisor += 1
+        score = int(score/scoreDivisor)
+        return({"result" : result, "score" : score })   
