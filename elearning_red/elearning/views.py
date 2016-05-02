@@ -98,6 +98,7 @@ def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+
 @login_required
 def user_profile(request):
     return render(request, 'userProfile.html')
@@ -121,11 +122,12 @@ def course_modify(request, course_id=None):
         if form.is_valid():
             # TODO: Add the validated professor to the users - for editing
             form.save()
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('/courses/')
     else:
         form = F.CourseForm(instance=course)
 
     return render(request, 'courseEdit.html', {'form': form, 'courses': courses})
+
 
 @D.admin_or_course_related_prof_or_student
 def course_show(request, course_id=None):
@@ -153,7 +155,7 @@ def course_show(request, course_id=None):
         else:
             form = F.RatingForm(instance=rating)
                
-        return render(request, 'showCourse.html', {"sections": sections, "form": form, "course": course, "course_id": course_id})
+        return render(request, 'courseShow.html', {"sections": sections, "form": form, "course": course, "course_id": course_id})
 
     elif request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
@@ -228,7 +230,7 @@ def programme_modify(request, programme_id=None):
         if form.is_valid():
             form.save()
             
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect('programme')
 
     else:
         form = F.ProgrammeForm(instance=programme)
