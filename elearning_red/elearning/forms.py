@@ -79,6 +79,17 @@ class QuizBlockForm(BlockForm):
     def getRender(self, request, course_id = None, section_id = None):
         return render(request, 'quizEdit.html', {'form': self, "course_id": course_id, "section_id": section_id, })
 
+class ProgressForm(BlockForm):
+    class Meta:
+        model = M.Progress
+        fields = ('user', 'block', 'serialAnswers')
+        widgets = {
+            'user': widgets.HiddenInput(),
+            'block': widgets.HiddenInput(),
+            'serialAnswers': widgets.HiddenInput(),
+        }
+
+
 class ProgrammeForm(ModelForm):
     class Meta:
         model = M.Programme

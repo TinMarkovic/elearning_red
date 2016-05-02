@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.core.serializers import serialize
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseForbidden
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
 from django.db.models import Avg
@@ -371,6 +371,32 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             
     return form.getRender(request, course_id, section_id)
 
+def block_quiz(request, course_id, section_id, block_id):
+    quizBlock = get_object_or_404(M.QuizBlock, id=int(block_id))
+    try:
+        progress = M.Progress.objects.filter(user=request.user).filter(block=quizBlock.id)
+    except M.Block.DoesNotExist:
+        progress = None
+    if progress:
+        if quizBlock.assessment:
+            return HttpResponseForbidden()
+        else:
+            progress.delete()
+    if request.method == "POST":
+        form = F.ProgressForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponse("Success!")
+    else:
+        initialDict = {
+            'user': request.user.id,
+            'block': quizBlock.id
+        }
+        form = F.ProgressForm(initial=initialDict)
+        
+    return render(request, 'quizShow.html', {"form": form, 'course_id': course_id,
+                                              'section_id': section_id, 'block_id': block_id,
+                                              'serial_questions' : quizBlock.serialQuestions })
 
 def blocks_studentview(request, course_id, section_id):
     course = get_object_or_404(M.Course, id=int(course_id))
@@ -379,10 +405,36 @@ def blocks_studentview(request, course_id, section_id):
     
     for block in blocks:
         block.type = type(block).__name__
-    
+        if block.type == "QuizBlock":
+            try:
+                answers = M.Progress.objects.filter(user=request.user).filter(block=block.id)
+            except M.Block.DoesNotExist:
+                pass
+            if answers:
+                answers = loads(loads(answers[0].serialAnswers))
+                questions = loads(loads(block.serialQuestions))
+                result = []
+                score = 0
+                scoreDivisor = 0
+                for q in range(len(questions)): 
+                    result.append( {"title" : answers[q]["title"], "points" : 0} )
+                    for a in questions[q]["correct"]:
+                        for b in answers[q]["answered"]:
+                            if a.strip() == b.strip():
+                                result[q]["points"] += 1
+                    if len(questions[q]["correct"]) != len(answers[q]["answered"]):
+                        result[q]["points"] = 0
+                    else:
+                        result[q]["points"] = int(100 * float(result[q]["points"])/float(len(questions[q]["correct"])))
+                    score += result[q]["points"]
+                    scoreDivisor += 1
+                score = int(score/scoreDivisor)
+                block.answers = result
+                block.score = score
+            else:
+                block.answers = None
+                block.score = None
     return render(request, 'sectionShow.html', {"course_id": course_id,
                                             "section": section,
                                             "blocks": blocks,
                                             "course":course})
-
-

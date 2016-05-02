@@ -21,8 +21,9 @@ urlpatterns = [
     url(r"^manage/courses/edit/(?P<course_id>[0-9]+)", views.course_modify, name="editCourse"),
     url(r"^manage/courses/new", views.course_modify, name="newCourse"),
     
-    url(r"^courses/view/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.blocks_studentview, name="showBlocks"),
-    url(r'^courses/(?P<course_id>[0-9]+)/students', views.section_studentview, name="showStudentsInCourse"),
+    url(r"^courses/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)/block/(?P<block_id>[0-9]+)/quiz", views.block_quiz, name="showQuiz"),
+    url(r"^courses/(?P<course_id>[0-9]+)/section/(?P<section_id>[0-9]+)", views.blocks_studentview, name="showBlocks"),
+    url(r'^courses/(?P<course_id>[0-9]+)', views.section_studentview, name="showStudentsInCourse"),
     url(r'^courses/(?P<course_id>[0-9]+)', views.course_show, name="showCourse"),
     url(r"^courses", views.course_show, name="listCourses"),
     

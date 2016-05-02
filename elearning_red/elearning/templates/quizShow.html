@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %} --WIP-- {% endblock title %}
+{% block content %}
+{{ form.media }}
+{% csrf_token %}
+{{ form }}
+<div class="col-lg-8">
+     <div class="panel panel-primary questionMultipleChoice" id="questionMultipleChoiceDefault">
+        <div class="panel-heading">
+            <h3 class="panel-title">Question</h3>
+        </div>
+        <div class="panel-body">
+            <ul></ul>
+        </div>
+    </div>
+
+    <div class="panel panel-success questionSingleChoice" id="questionSingleChoiceDefault">
+        <div class="panel-heading">
+            <h3 class="panel-title">Question</h3>
+        </div>
+        <div class="panel-body">
+            <form>
+                <ul></ul>
+            </form>
+        </div>
+    </div>
+    <div id="questionsList">
+    </div>
+    <a href="#" class="btn btn-default btn-lg btn-block btn-raised" id="saveAnswers">SUBMIT</a>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+$("#questionMultipleChoiceDefault").hide();
+$("#questionSingleChoiceDefault").hide();
+$(document).ready(function () {
+    csrftoken = getCookie("csrftoken");
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    });
+    generateViewFromForm();
+    var urlDestination = window.location.href;
+    $( "#saveAnswers" ).on("click", function(event, ui ) {
+        var data = [];
+        $( "#questionsList" ).children(".panel").each(function( index ) {
+            data[index] = {};
+            data[index].title = $(this).find(".panel-title").text();
+            data[index].answered = [];
+            $(this).find("ul").children("li").each(function( index2 ) {
+                if($(this).children("input").is(':checked')) { 
+                    data[index].answered.push( $(this).text() );
+                }
+            });
+        });
+        console.log(JSON.stringify(data));
+        var formBlock = $("#id_block").val();
+        var formUser = $("#id_user").val();
+        $.ajax({
+            type:"POST",
+            url: urlDestination,
+            data: {
+                'block': formBlock, 
+                'user': formUser,
+                'serialAnswers': JSON.stringify(JSON.stringify(data))
+            },
+            success: function(){
+                window.location = "{% url "elearning:showBlocks" course_id section_id %}";
+            }
+        });
+    });
+});
+
+function generateViewFromForm(){
+    serialData =  {{serial_questions | safe}};
+    //littleLessSerialData = JSON.parse(serialData);
+    data = JSON.parse(serialData);
+    console.log(data);
+    var answer = "";
+    var multiple = false;
+    for(item of data){
+        if(item.multiple){
+            $question = $( "#questionMultipleChoiceDefault" ).clone(true)
+            .appendTo( "#questionsList" ).show();
+        }else{
+            $question = $( "#questionSingleChoiceDefault" ).clone(true)
+            .appendTo( "#questionsList" ).show();
+        }
+        $question.find(".panel-title").text(item.title);
+        for(option of item.element){ 
+            if (item.multiple) {
+                $question.find("ul")
+                .append("<li><input type='checkbox'>"+ 
+                "<span class='editableElement'>"+ option +"</span> </li>");
+            } else {
+                $question.find("ul")
+                .append("<li><input type='radio' name='choice'>"+ 
+                "<span class='editableElement'>"+option+"</span> </li>");
+            }
+        }     
+    }
+
+}
+
+
+</script>
+{% endblock script %}

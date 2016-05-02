@@ -160,7 +160,8 @@ $(document).ready(function () {
         data.splice(0,1);
         console.log(JSON.stringify(data));
         var formName = $("#id_name").val();
-        var formAssmnt = $("#id_assessment").val();
+        var formAssmnt = $("#id_assessment").is(":checked");
+        console.log("Assesment: " + formAssmnt);
         var formIndex = $("#id_index").val();
         $.ajax({
             type:"POST",
