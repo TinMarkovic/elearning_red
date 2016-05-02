@@ -24,9 +24,6 @@
         <th>Name</th>
         <th>Average rating</th>
         <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
     </tr>
     </thead>
    
@@ -34,36 +31,15 @@
     <tr class="success" id={{item.id}}>
         <td>{{ item.name|truncatechars:30 }}</td>
         <td>{{ item.avgRating }}</td>
-        <td><a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Edit</a>
-
-        <td><a href="" class="btn btn-raised btn-info" id="show" >Details</a> </td>
-        <td><a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-danger">Enter</a> </td>
-        <td><a class="btn btn-raised btn-warning deleteBlock">Delete</a> </td>
-
+        <td>
+        <a href={% url "elearning:showProgramme" programme_id=item.id %} class="btn btn-raised btn-success">Enter</a>
+        <a href={% url "elearning:editProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Edit</a>
+        <a href={% url "elearning:manageCoursesProgramme" programme_id=item.id %} class="btn btn-raised btn-warning">Courses</a>
+        <a class="btn btn-raised btn-danger deleteBlock">Delete</a> 
+        </td>
     </tr>
     {% endfor %}
 </table>
-
-
-<button id="hide">Hide</button>
-
-  <div class="col-sm-8" id="info">
-<h3> Programme info</h3>
-<div class="well" id="sections">
-  {% for item in programmes %}
-   <div class="row"> <span class="label label-default">Name:</span> {{ item.name }}</div>
-   <br>
-    <div class="row"><span class="label label-default">Description:</span> </div>
-   <p>{{ item.desc|truncatechars:40 }}</p>
-    <div class="row"><span class="label label-default">Avrerage rating:</span> </div> {{ item.avgRating }}<br></br>
-    
-   {% endfor %} 
-   </div>
-  
-        </div>
-
-
-
 {% endblock %}
 
 
@@ -101,21 +77,6 @@ $(document).on('click','.deleteBlock',function () {
     
 } );
 </script>
-
-<script>
-$(document).ready(function(){
-    
-
-    $("#hide").click(function(){
-        $("#info").hide();
-    });
-
-    $("#show").click(function(){
-        $("#info").show();
-    });
-});
-</script>
-
 {% endblock script %}
 
 

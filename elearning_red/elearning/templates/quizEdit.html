@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} --WIP-- {% endblock title %}
+{% block title %} Quiz {% endblock title %}
 {% block content %}
 {{ form.media }}
 {% csrf_token %}
@@ -162,7 +162,8 @@ $(document).ready(function () {
         data.splice(0,1);
         console.log(JSON.stringify(data));
         var formName = $("#id_name").val();
-        var formAssmnt = $("#id_assessment").val();
+        var formAssmnt = $("#id_assessment").is(":checked");
+        console.log("Assesment: " + formAssmnt);
         var formIndex = $("#id_index").val();
         $.ajax({
             type:"POST",

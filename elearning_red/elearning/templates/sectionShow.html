@@ -21,6 +21,7 @@
 <div class="col-md-12">
 	{% for block in blocks|dictsort:"index" %}
 	{% if block.type == "VideoBlock" %}
+    <div class="well well-lg" id="{{block.id}}">
 	 <div class="panel panel-default" id="{{block.id}}">
 		<div class="panel-heading"> 
 		  <h3 class="panel-title">{{block.name}}</h3>
@@ -29,6 +30,7 @@
 			<p><iframe width="100%" height="500px" src="{{block.url}}"></iframe></p>
         </div>
 	</div>
+    </div>
 	{% endif %}
     {% if block.type == "ImageBlock" %}
 	<div id="{{block.id}}" class="well well-sm">
@@ -42,11 +44,42 @@
     </div>
     {% endif %}
     {% if block.type == "QuizBlock" %}
-	<div id="{{block.id}}">
-	  TODO - WIP <br/>
-	  {{block.name}}<br/>
-	  {{block.serialQuestions}}
+    {% if block.answers %}
+    <div class="well well-lg" id="{{block.id}}">
+    
+    <div class="panel panel-primary" id="{{block.id}}">
+      <div class="panel-heading">
+        <h3 class="panel-title">Quiz results: {{block.name}} </h3>
+      </div>
+      <div class="panel-body">
+        {% for question in block.answers %}
+        <b> {{question.title}} </b> <br/> Points: {{question.points}}%
+        <div class="progress progress-striped">
+          <div class="progress-bar progress-bar-success" style="width: {{question.points}}%"></div>
+        </div>
+      {% endfor %}
+      <hr/>
+      <b> Total score: {{block.score}}% </b> 
+        <div class="progress progress-striped">
+          <div class="progress-bar progress-bar-danger" style="width: {{block.score}}%"></div>
+        </div>
+      <hr/>
+        {% if not block.assessment %}
+        <div class="text-center">
+            <b> This test is not assessed, you can retake it freely </b> 
+          <a href="{% url "elearning:showQuiz" course_id section.id block.id %}" 
+          class="btn btn-default btn-lg btn-block btn-raised">RETAKE QUIZ: {{block.name}}</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    </div>
+    {% else %}
+	<div class="well well-lg" id="{{block.id}}">
+	  <a href="{% url "elearning:showQuiz" course_id section.id block.id %}" 
+	  class="btn btn-default btn-lg btn-block btn-raised">ATTEMPT QUIZ: {{block.name}}</a>
 	</div>
+    {% endif %}
 	{% endif %}
     {% endfor %}
 </div>

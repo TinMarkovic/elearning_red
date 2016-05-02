@@ -1,133 +1,104 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {% load staticfiles %}
-    <link href="{% static "vendor/css/bootstrap.min.css" %}" rel="stylesheet">
-    <link href="{% static "vendor/css/ripples.min.css" %}" rel="stylesheet">
-    <link href="{% static "vendor/css/tether.min.css" %}" rel="stylesheet">
-    <link href="{% static "vendor/css/material.min.css" %}" rel="stylesheet">
-    <link href="{% static "css/style.css" %}" rel="stylesheet">
-    <link href="{% static "vendor/css/sidebar.css" %}" rel="stylesheet">
-
-      <!-- Material Design fonts -->
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
-    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
-    
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
-
-    <title>{% block title %}Crimson Elearning{% endblock title %}</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% load staticfiles %}
+<link href="{% static "vendor/css/bootstrap.min.css" %}" rel="stylesheet">
+<link href="{% static "vendor/css/ripples.min.css" %}" rel="stylesheet">
+<link href="{% static "vendor/css/tether.min.css" %}" rel="stylesheet">
+<link href="{% static "vendor/css/material.min.css" %}" rel="stylesheet">
+<link href="{% static "css/style.css" %}" rel="stylesheet">
+<link href="{% static "vendor/css/sidebar.css" %}" rel="stylesheet">
+<!-- Material Design fonts -->
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.11/css/jquery.dataTables.css">
+<title>{% block title %}Crimson Elearning{% endblock title %}</title>
 </head>
 <body>
-
 {% block sidebar %}
-<!-- Defaultni navigation bar od Bootstrapa, skinned for Material. -->
-
-         <div id="wrapper">
-        <div class="overlay"></div>
-    
-        <!-- Sidebar -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
-            <ul class="nav sidebar-nav">
-                <li class="sidebar-brand">
-                    <a href="#">
-                       Red Team
-                    </a>
-                </li>
-                <li>
-                    <a href={% url "elearning:homepage" %}>Home</a>
-                </li>
-                <li>
-                    <a href={% url "elearning:about" %}>About</a>
-                </li>
-                
-                 {% if user.is_authenticated %}
-                   <li><a href={% url "elearning:listProgrammes" %}>Programmes</a>
-                </li>
-                <li>
-                    <a href={% url "elearning:listCourses" %}>List of courses</a></li>
-                    
-  
-                 {% endif %}
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Useful links <span class="caret"></span></a>
-                  <ul class="dropdown-menu" role="menu">
-      
-                    <li><a href="http://home.cern/">CERN</a></li>
-                    <li><a href="https://www.youtube.com/?hl=hr&gl=HR">YouTube</a></li>
-                    <li><a href="https://www.polytechnique.edu/">École Polytechnique</a></li>
-                  </ul>
-                </li>
-
-        {% if user.is_authenticated %}
-        <li><a href={% url "redux:auth_logout" %}>Logout</a></li>
-    {% else %}
-        <li><a href={% url "redux:auth_login" %}>Login</a></li>
-        <li><a href={% url "redux:registration_register" %}>Sign Up</a></li>
-    {% endif %}
-                
-            </ul>
-        </nav>
-        <!-- /#sidebar-wrapper -->
-
-        
-{% endblock sidebar %}
-    
+<div id="wrapper">
+    <div class="overlay"></div>
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+        <ul class="nav sidebar-nav">
+            <li class="sidebar-brand">
+                <a href="#">
+                Red Team
+                </a>
+            </li>
+            <li>
+                <a href={% url "elearning:homepage" %}>Home</a>
+            </li>
+            <li>
+                <a href={% url "elearning:about" %}>About</a>
+            </li>
+            {% if user.is_authenticated %}
+            <li><a href={% url "elearning:listProgrammes" %}>Programmes</a>
+            </li>
+            <li>
+                <a href={% url "elearning:listCourses" %}>Courses</a>
+            </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            <li><a href={% url "redux:auth_logout" %}>Logout</a></li>
+            {% else %}
+            <li><a href={% url "redux:auth_login" %}>Login</a></li>
+            <li><a href={% url "redux:registration_register" %}>Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <!-- /#sidebar-wrapper -->
+    {% endblock sidebar %}
     <!-- /#wrapper -->
-
-
-
-{% block navigation %}
-<div class="navbar navbar-danger">
-
-
-  <div class="container-fluid">
- 
-    {% block breadcrumbs %}{% endblock breadcrumbs %}
-
-
-    <div class="navbar-collapse collapse navbar-danger-collapse">
-    
-    <div class="box">
-    {% if user.is_authenticated %}
-        <a href = {% url "elearning:userProfile" %}><h4><i class="material-icons">face</i>Welcome, {{ user.get_username }}</h4></a>
-        <a href={% url "elearning:logout"  %} class="btn btn-raised btn-xs">Logout</a>
-    {% else %}
-         <a href={% url "redux:registration_register" %} class="btn btn-raised btn-success">Sign Up</a>
-        <a href={% url "redux:auth_login" %} class="btn btn-raised btn-primary">Login</a>
-    <a href={% url "elearning:register" %} class="btn btn-raised btn-success">Sign Up</a>
-    {% endif %}
+    {% block navigation %}
+    <div class="navbar navbar-danger">
+        <div class="container-fluid">
+            {% block breadcrumbs %}
+            <ul class="nav navbar-nav" id="menu">
+                <li>
+                    <ul class="breadcrumb">
+                        <li><a href={% url "elearning:homepage" %} class="btn btn-default"><b>Home</b></a></li>
+                    </ul>
+                </li>
+            </ul>
+            {% endblock breadcrumbs %}
+            <div class="navbar-collapse collapse navbar-danger-collapse">
+                <div class="box">
+                    {% if user.is_authenticated %}
+                    <a href = {% url "elearning:userProfile" %}>
+                    <h4><i class="material-icons">face</i>{{ user.get_username }}</h4>
+                    </a>
+                    {% else %}
+                    <a href={% url "redux:registration_register" %} class="btn btn-raised btn-success">Sign Up</a>
+                    <a href={% url "redux:auth_login" %} class="btn btn-raised btn-primary">Login</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-            
+    <div class="container-fluid">
+        <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+        <span class="hamb-top"></span>
+        <span class="hamb-middle"></span>
+        <span class="hamb-bottom"></span>
+        </button>
     </div>
-  </div>
 </div>
-
-<div class="container-fluid">
-
-          <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
-          <span class="hamb-top"></span>
-          <span class="hamb-middle"></span>
-          <span class="hamb-bottom"></span>
-          </button>
-          </div>
-          </div>
 {% endblock navigation %}
-
-
-
 </div>
 </div>
-
 <div class="wrapper container">{% block content %}{% endblock content %}</div>
-
-
 <div class="push">
-<footer class="navbar navbar-fixed-bottom">{% block footer %}<p>Done by Team Red for Extension Engine Spring Camp </br> Members: Ivan Opacak, Tajana Rozic, Tin Markovic</p>{% endblock footer %}</footer>
+    <footer class="navbar navbar-fixed-bottom">
+        {% block footer %}
+        <p>Done by Team Red for Extension Engine Spring Camp </br> 
+        Members: Ivan Opacak, Tajana Rozic, Tin Markovic</p>
+        {% endblock footer %}
+    </footer>
 </div>
-
 <script src="{% static "vendor/js/jquery.min.js" %}"></script>
 <script src="{% static "vendor/js/bootstrap.min.js" %}"></script>
 <script src="{% static "vendor/js/ripples.min.js" %}"></script>
@@ -138,8 +109,6 @@
 <script src="{% static "js/script.js" %}"></script>
 <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>-->
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.11/js/jquery.dataTables.js"></script>
-
 {% block script %}{% endblock script %}
-
 </body>
-</html>                     
+</html>

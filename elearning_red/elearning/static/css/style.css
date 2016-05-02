@@ -3,7 +3,7 @@ body {
 }
 
 ul#menu.nav.navbar-nav{
-	margin-top:20px;
+	margin-top: 10px;
 	margin-left: 50px;
 }
 
@@ -20,7 +20,7 @@ ul#menu.nav.navbar-nav{
 }
 
 .breadcrumb {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     list-style: none;
     background-color: transparent;
     border-radius: 4px;
@@ -38,7 +38,7 @@ ul#menu.nav.navbar-nav{
 .box{
 	display: block;
 	float: right;
-	margin: 0 60px 10px 10px;
+	margin: 0 60px 0 0;
 	background-color: 
 }
 

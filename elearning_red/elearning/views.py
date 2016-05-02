@@ -2,7 +2,7 @@ from django.apps import AppConfig
 from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.core.serializers import serialize
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseForbidden
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,7 +19,10 @@ def registration(request):
     if request.method == "POST":
         form = F.CustomRegistrationForm(request.POST)
         if form.is_valid():
-            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'], role=M.Role.objects.get(name='student'))
+            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'],
+                                 first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'],
+                                 password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], 
+                                 email=form.cleaned_data['email'], role=M.Role.objects.get(name='student'))
             new_student.backend = 'django.contrib.auth.backends.ModelBackend'
             login(request, new_student)
             return HttpResponseRedirect('/')
@@ -31,11 +34,15 @@ def registration(request):
 
 def homepage(request):
     message = ugettext('Welcome to ElearningRed!')
+    if request.user.id: 
+        customUser = get_object_or_404(M.CustomUser, id=int(request.user.id))
+        request.session['customUserRole'] = customUser.getRole
     if request.user.is_authenticated():
         courses_inscribed = M.Course.objects.filter(users=request.user.id)
         courses_uninscribed = M.Course.objects.exclude(users=request.user.id)
         return render(request, 'home.html',
-                      {'message': message,"courses_inscribed": courses_inscribed, "courses_uninscribed": courses_uninscribed})
+                      {'message': message,"courses_inscribed": courses_inscribed,
+                        "courses_uninscribed": courses_uninscribed})
     else:
         query_results = M.Course.objects.all()
         return render(request, 'home.html', {'message': message, "query_results": query_results})
@@ -45,15 +52,18 @@ def about(request):
     return render(request, 'about.html')
 
 
-@login_required
+@login_required 
 @D.admin_only
 def user_create(request):
     users = M.CustomUser.objects.all()
     if request.method == "POST":
         form = F.CustomRegistrationFormAdmin(request.POST)
         if form.is_valid():
-            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], email=form.cleaned_data['email'], role=M.Role.objects.get(name=form.cleaned_data['role']))
-            return HttpResponseRedirect('')
+            new_student = M.CustomUser.objects.create_user(username=form.cleaned_data['username'], 
+                                first_name=form.cleaned_data['first_name'], last_name=form.cleaned_data['last_name'], 
+                                password=form.cleaned_data['password1'], dob=form.cleaned_data['dob'], 
+                                email=form.cleaned_data['email'], role=M.Role.objects.get(name=form.cleaned_data['role']))
+            return HttpResponseRedirect(reverse('elearning:listUsers'))
     else:
         form = F.CustomRegistrationFormAdmin()
 
@@ -65,13 +75,12 @@ def user_modify(request, customUser_id=None):
     if customUser_id is not None:
         customUser = get_object_or_404(M.CustomUser, id=int(customUser_id))
     else:
-        customUser = None
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(reverse('elearning:createUser'))
     
     if request.method == "DELETE":
         if customUser is not None:
             customUser.delete()
-            return HttpResponseRedirect('/users')  
+            return HttpResponse('Success, user deleted.')  
         else:
             raise Http404("User does not exist")
     
@@ -81,7 +90,7 @@ def user_modify(request, customUser_id=None):
         if form.is_valid():
             form.save()
            
-        return HttpResponseRedirect('')
+        return HttpResponseRedirect(reverse('elearning:listUsers'))
 
     else:
         form = F.UserForm(instance=customUser)
@@ -91,7 +100,6 @@ def user_modify(request, customUser_id=None):
 
 def users_list(request):
     users = M.CustomUser.objects.all()
-
     return render(request, 'users.html', {'users': users})
 
 def user_logout(request):
@@ -114,15 +122,15 @@ def course_modify(request, course_id=None):
     if request.method == "DELETE":
         if course is not None:
             course.delete()
-            return HttpResponse('')
+            return HttpResponse('Success. Course deleted.')
         else:
             raise Http404("Course does not exist")
     if request.method == "POST":
         form = F.CourseForm(request.POST, instance=course)
         if form.is_valid():
-            # TODO: Add the validated professor to the users - for editing
-            form.save()
-        return HttpResponseRedirect('/courses/')
+            model = form.save()
+            model.users.add(get_object_or_404(M.CustomUser, id=int(request.user.id)))
+        return HttpResponseRedirect(reverse('elearning:listCourses'))
     else:
         form = F.CourseForm(instance=course)
 
@@ -186,7 +194,7 @@ def course_reorder_sections(request, course_id):
         section = get_object_or_404(M.Section, id=int(new_order[i]), course=int(course_id))
         section.index = i
         section.save()
-    return HttpResponse('')
+    return HttpResponse('Success')
 
 
 @login_required
@@ -216,27 +224,32 @@ def programme_modify(request, programme_id=None):
         programme = get_object_or_404(M.Programme, id=int(programme_id))
     else:
         programme = None
-    
     if request.method == "DELETE":
         if programme is not None:
             programme.delete()
             return HttpResponse('Success!')
         else:
             raise Http404("Programme does not exists!")
-    
     if request.method == "POST":
         form = F.ProgrammeForm(request.POST, instance=programme)
-    
         if form.is_valid():
             form.save()
-            
         return HttpResponseRedirect('programme')
-
     else:
         form = F.ProgrammeForm(instance=programme)
-
     return render(request, 'programmeEdit.html', {'form': form })
 
+
+@login_required
+@D.admin_only
+def programme_manage(request, programme_id=None):
+    programme = get_object_or_404(M.Programme, id=int(programme_id))
+    courses = M.Course.objects.all()
+    if request.method == "POST":
+        courseList = loads(request.POST['courseList'])
+        for course in courseList:
+            course.programmes.add(programme);
+            #Not finished
                             
 def programmes_show(request, programme_id=None):
     if programme_id is not None:
@@ -380,6 +393,32 @@ def block_modify(request, course_id, section_id, block_type=None, block_id=None)
             
     return form.getRender(request, course_id, section_id)
 
+def block_quiz(request, course_id, section_id, block_id):
+    quizBlock = get_object_or_404(M.QuizBlock, id=int(block_id))
+    try:
+        progress = M.Progress.objects.filter(user=request.user).filter(block=quizBlock.id)
+    except M.Block.DoesNotExist:
+        progress = None
+    if progress:
+        if quizBlock.assessment:
+            return HttpResponseForbidden()
+        else:
+            progress.delete()
+    if request.method == "POST":
+        form = F.ProgressForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return HttpResponse("Success!")
+    else:
+        initialDict = {
+            'user': request.user.id,
+            'block': quizBlock.id
+        }
+        form = F.ProgressForm(initial=initialDict)
+        
+    return render(request, 'quizShow.html', {"form": form, 'course_id': course_id,
+                                              'section_id': section_id, 'block_id': block_id,
+                                              'serial_questions' : quizBlock.serialQuestions })
 
 def blocks_studentview(request, course_id, section_id):
     course = get_object_or_404(M.Course, id=int(course_id))
@@ -388,10 +427,36 @@ def blocks_studentview(request, course_id, section_id):
     
     for block in blocks:
         block.type = type(block).__name__
-    
+        if block.type == "QuizBlock":
+            try:
+                answers = M.Progress.objects.filter(user=request.user).filter(block=block.id)
+            except M.Block.DoesNotExist:
+                pass
+            if answers:
+                answers = loads(loads(answers[0].serialAnswers))
+                questions = loads(loads(block.serialQuestions))
+                result = []
+                score = 0
+                scoreDivisor = 0
+                for q in range(len(questions)): 
+                    result.append( {"title" : answers[q]["title"], "points" : 0} )
+                    for a in questions[q]["correct"]:
+                        for b in answers[q]["answered"]:
+                            if a.strip() == b.strip():
+                                result[q]["points"] += 1
+                    if len(questions[q]["correct"]) != len(answers[q]["answered"]):
+                        result[q]["points"] = 0
+                    else:
+                        result[q]["points"] = int(100 * float(result[q]["points"])/float(len(questions[q]["correct"])))
+                    score += result[q]["points"]
+                    scoreDivisor += 1
+                score = int(score/scoreDivisor)
+                block.answers = result
+                block.score = score
+            else:
+                block.answers = None
+                block.score = None
     return render(request, 'sectionShow.html', {"course_id": course_id,
                                             "section": section,
                                             "blocks": blocks,
                                             "course":course})
-
-

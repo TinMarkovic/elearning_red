@@ -44,27 +44,28 @@
 </div>
 
 <div class="col-sm-4">
-    <a class="btn btn-raised btn-danger pull-right" href={% url "elearning:listCourses" %}>Back to courses</a>
+    <a class="btn btn-raised btn-warning pull-right" href={% url "elearning:listCourses" %}>Back to courses</a>
     <br><br><h3> Info </h3>
     <div class="well">
        <p>{{ course.desc }}</p>
        <h4>Beginning date: {{ course.beginDate }} </h4>
        <h4>Course duration: {{ course.duration }} days </h4>
     </div>
-<div class="panel panel-primary">
-    <div class="panel-heading">
-        <h3 class="panel-title">Enrolled students</h3>
-    </div>
-    <div class="panel-body">
-        <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">  
-            {% for user in course.users.all %}
-            <li>{{ user }}</li>
-            {% endfor %}
-            <a class="btn btn-raised btn-primary" 
-            href={% url "elearning:manageStudents" course.id %}>Update students</a>
-        </ul>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Enrolled students</h3>
+        </div>
+        <div class="panel-body">
+            <ul class="nav nav-pills nav-stacked" style="max-width: 300px;">  
+                {% for user in course.users.all %}
+                <li>{{ user }}</li>
+                {% endfor %}
+                <a class="btn btn-raised btn-primary" 
+                href={% url "elearning:manageStudents" course.id %}>Update students</a>
+            </ul>
         </div>
     </div>
+    <div class="btn btn-raised btn-danger pull-right" id="deleteSelf">Delete Course</div>
 </div>
 
 {% endblock content %}
@@ -148,6 +149,20 @@ $(document).ready(function () {
                  success: function(response){
                     console.log("Server: " + response);
                     $element.remove();
+                }
+            });
+        }
+    });
+    $( "#deleteSelf" ).on( "click", function( event, ui ) {
+        $element = $(this).parents(".panel-success");
+        var section_id = $element.attr("id");
+        if(confirm("Are you certain you want to delete this course?")){
+            $.ajax({
+                 type:"DELETE",
+                 url:'{% url "elearning:editCourse" course.id %}',
+                 data: {},
+                 success: function(response){
+                    window.location = "{% url "elearning:listCourses" %}";
                 }
             });
         }
