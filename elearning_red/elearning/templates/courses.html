@@ -59,6 +59,7 @@
         {% if request.session.customUserRole == "professor" %}
         <a href="{% url "elearning:manageCourse" course_id=item.id %}" class="btn btn-raised btn-danger">Manage</a></td>
         {% endif %}
+        
     </tr>
     {% endfor %}
 </table>

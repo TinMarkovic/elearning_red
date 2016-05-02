@@ -126,7 +126,7 @@ def course_modify(request, course_id=None):
         if form.is_valid():
             model = form.save()
             model.users.add(get_object_or_404(M.CustomUser, id=int(request.user.id)))
-        return HttpResponseRedirect(reverse('elearning:listCourses'))
+        return HttpResponseRedirect(reverse('elearning:manageCourse', kwargs={'course_id': course_id}))
     else:
         form = F.CourseForm(instance=course)
 
@@ -179,7 +179,7 @@ def course_manage(request, course_id):
     if query_results is not None:
         return render(request, 'courseMng.html', {"query_results": query_results, "course":course})
     else:
-        return render(request, 'courseMng.html', {"course":course})
+        return render(request, 'courseMng.html', {"course":course })
 
 
 @login_required
