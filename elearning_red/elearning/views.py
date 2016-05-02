@@ -102,11 +102,6 @@ def users_list(request):
     users = M.CustomUser.objects.all()
     return render(request, 'users.html', {'users': users})
 
-#mislim da je nepotreban
-def user_logout(request):
-    logout(request)
-    return HttpResponseRedirect(reverse('elearning:createUser'))
-
 
 @login_required
 def user_profile(request):
@@ -283,7 +278,7 @@ def programme_students(request, programme_id):
                     if len(a)==0:
                         course.users.add(student)
             
-        return HttpResponseRedirect(reverse('elearning:showProgramme', kwargs={'prorgamme_id': programme_id}))
+        return HttpResponseRedirect(reverse('elearning:showProgramme', kwargs={'programme_id': programme_id}))
     else:
         form = F.StudentToProgramme(instance=programme)
 
