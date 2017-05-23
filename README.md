@@ -1,6 +1,6 @@
 ## Installation
 
-'''
+```
 pip install -r piprequirements
 cd elearning_red
 cp elearning_red/settings_default.txt elearning_red/settings.py
@@ -8,7 +8,7 @@ nano elearning_red/settings.py # Set up DB config
 python manage.py migrate
 python manage.py loaddata elearning/fixtures/init.json
 python manage.py runserver
-'''
+```
 
 
 ## Requirements
