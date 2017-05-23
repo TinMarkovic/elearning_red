@@ -46,4 +46,5 @@ urlpatterns = [
     url(r'^about', views.about, name='about'),
     
     url(r'^$', views.homepage, name='homepage'),
+    url(r'^elearning/$', views.homepage, name='homepage2'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
